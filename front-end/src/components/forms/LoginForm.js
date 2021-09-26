@@ -42,7 +42,7 @@ const LoginForm = () => {
             <button
               type="button"
               onClick={() => setIsRevealPassword((prevState) => !prevState)}
-              className="text-teal text-xs sm:text-sm hover:bg-opacity-75"
+              className="text-purple-dark hover:underline text-xs sm:text-sm hover:bg-opacity-75"
             >
               Show Password
             </button>
