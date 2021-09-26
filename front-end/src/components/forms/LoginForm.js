@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -63,20 +64,15 @@ const LoginForm = () => {
         >
           Log In
         </button>
-        <p className="text-sm pt-5 text-purple-dark flex justify-center">
-          <button type="button" onClick={""} className="hover:underline">
-            Forgot your password?
-          </button>
+        <p className="text-sm pt-5 hover:underline text-purple-dark flex justify-center">
+          <Link to="">Forgot your password?</Link>
         </p>
+
         <p className="text-sm flex justify-center">
           Do not have an account?
-          <button
-            type="button"
-            onClick={""}
-            className="text-purple-dark pl-1 hover:underline"
-          >
+          <Link className="text-purple-dark pl-1 hover:underline" to="/signup">
             Register here
-          </button>
+          </Link>
         </p>
       </form>
     </div>
