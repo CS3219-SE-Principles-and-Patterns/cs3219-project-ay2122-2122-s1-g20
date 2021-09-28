@@ -6,6 +6,8 @@ import Header from "./components/header/Header";
 import SignUpConfirmation from "./pages/start/signupConfirmation";
 import ResetPasswordPage from "./pages/start/resetPassword";
 import EmailConfirmationPage from "./pages/start/emailConfirmation";
+import SetProfilePicPage from "./pages/firstLogin/setProfilePic";
+import AddModulesPage from "./pages/firstLogin/addModules";
 
 function App() {
   return (
@@ -27,6 +29,14 @@ function App() {
           </Route>
           <Route path="/emailConfirmation">
             <EmailConfirmationPage />
+          </Route>
+
+          {/* After first login - account customization */}
+          <Route path="/setProfilePic">
+            <SetProfilePicPage />
+          </Route>
+          <Route path="/addModules">
+            <AddModulesPage />
           </Route>
         </Switch>
       </BrowserRouter>
