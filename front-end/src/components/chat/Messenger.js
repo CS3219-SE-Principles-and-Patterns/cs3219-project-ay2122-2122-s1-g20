@@ -6,18 +6,19 @@ const Messenger = () => {
   };
 
   return (
-    <div className="flex flex-col">
-      <div>Label</div>
-      <ChatBubble />
-      <ChatBubble />
+    <div className="flex flex-col h-screen relative md:w-auto">
+      <div className="pr-10 pl-2">
+        Label
+        <ChatBubble />
+        <ChatBubble />
+      </div>
 
-      <div>
-        <form action="#" method="POST" className="absolute bottom-0 right-10">
-          <input
-            onChange={handleSendMessage}
-            placeholder="Write a message"
-          ></input>
-        </form>
+      <div className="absolute bottom-0 left-0 border-black border-2 ">
+        <input
+          onChange={handleSendMessage}
+          placeholder="Write a message"
+          className="placeholder-white bg-purple w-full"
+        ></input>
       </div>
     </div>
   );
