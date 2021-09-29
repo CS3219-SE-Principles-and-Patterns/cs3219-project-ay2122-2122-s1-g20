@@ -46,22 +46,18 @@ const SignUpForm = () => {
 
         const responseData = await response.json();
 
-        console.log(responseData.token);
-
-        if (response.status !== 200 || response.status != 201) {
+        if (response.status !== 200) {
           setErrorSignUp(true);
-          console.log("In response != 200");
           throw new Error(responseData.message);
         }
 
-        if (response.status == 200 || response.status === 201) {
-          console.log("In response == 200");
+        if (response.status == 200) {
           console.log(responseData.message);
         }
       }
     } catch (error) {
+      setErrorSignUp(true);
       console.log(error.message);
-      console.log("In catch clause");
       console.log(errorSignUp);
     }
   };

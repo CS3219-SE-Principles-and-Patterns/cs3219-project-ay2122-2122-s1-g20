@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorLogin, setErrorLogin] = useState(false);
   const [isRevealPassword, setIsRevealPassword] = useState(false);
 
   const handleEmailChange = (event) => {
@@ -14,20 +15,42 @@ const LoginForm = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      console.log(email);
-      console.log(password);
-    } catch (err) {
-      print(err);
+      const response = await fetch("http://localhost:8080/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      const responseData = await response.json();
+
+      if (response.status !== 200) {
+        setErrorLogin(true);
+        throw new Error(responseData.message);
+      }
+
+      if (response.status == 200) {
+        // Route to home page
+        console.log(responseData.message);
+      }
+    } catch (error) {
+      setErrorLogin(true);
+      console.log(error.message);
+      console.log(errorLogin);
     }
   };
 
   return (
     <div className="py-6 align-middle justify-center mt-5">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
         className="space-y-6"
         action="#"
         method="POST"

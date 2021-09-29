@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
   try {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
-    res.json({token: token, message: "User successfully logged in!" });
+    res.status(200).json({token: token, message: "User successfully logged in!" });
   } catch (err) {
     return res.status(422).json({ message: "Invalid password or email entered." });
   }
