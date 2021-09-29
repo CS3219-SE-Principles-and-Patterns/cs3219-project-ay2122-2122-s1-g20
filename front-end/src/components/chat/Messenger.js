@@ -1,3 +1,4 @@
+import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "./Bubble.js/ChatBubble";
 
 const Messenger = () => {
@@ -7,8 +8,8 @@ const Messenger = () => {
 
   return (
     <div className="flex flex-col h-screen relative md:w-auto">
+      <StudyHeader />
       <div className="pr-10 pl-2">
-        Label
         <ChatBubble />
         <ChatBubble />
       </div>
