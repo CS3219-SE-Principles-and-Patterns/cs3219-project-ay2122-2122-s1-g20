@@ -1,5 +1,5 @@
 import StudyHeader from "../header/StudyHeader";
-import ChatBubble from "./Bubble.js/ChatBubble";
+import ChatBubble from "../bubble/ChatBubble";
 
 const Messenger = () => {
   const handleSendMessage = () => {

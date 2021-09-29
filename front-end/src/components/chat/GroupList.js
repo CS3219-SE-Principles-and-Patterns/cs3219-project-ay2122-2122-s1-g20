@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import GroupBubble from "./Bubble.js/GroupBubble";
+import GroupBubble from "../bubble/GroupBubble";
 
 const GroupList = () => {
   const [filter, setFilterName] = useState("");
