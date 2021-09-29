@@ -13,9 +13,25 @@ const LoginForm = () => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      console.log(email);
+      console.log(password);
+    } catch (err) {
+      print(err);
+    }
+  };
+
   return (
     <div className="py-6 align-middle justify-center mt-5">
-      <form className="space-y-6" action="#" method="POST">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6"
+        action="#"
+        method="POST"
+      >
         <div>
           <label
             htmlFor="email"
@@ -25,7 +41,7 @@ const LoginForm = () => {
           </label>
           <input
             onChange={handleEmailChange}
-            type="text"
+            type="email"
             name="email"
             id="email"
             value={email}

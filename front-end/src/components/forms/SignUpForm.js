@@ -6,6 +6,7 @@ const SignUpForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [errorSignUp, setErrorSignUp] = useState(false);
   const [isRevealPassword, setIsRevealPassword] = useState(false);
 
   const handleEmailChange = (event) => {
@@ -23,9 +24,56 @@ const SignUpForm = () => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
+
+  const handleSignUp = async (event) => {
+    event.preventDefault();
+    try {
+      if (password !== passwordConfirmation) {
+        setErrorSignUp(true);
+        throw new Error("Passwords do not match!");
+      } else {
+        const response = await fetch("http://localhost:8080/api/user/signup", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            username: username,
+          }),
+        });
+
+        const responseData = await response.json();
+
+        console.log(responseData.token);
+
+        if (response.status !== 200 || response.status != 201) {
+          setErrorSignUp(true);
+          console.log("In response != 200");
+          throw new Error(responseData.message);
+        }
+
+        if (response.status == 200 || response.status === 201) {
+          console.log("In response == 200");
+          console.log(responseData.message);
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+      console.log("In catch clause");
+      console.log(errorSignUp);
+    }
+  };
+
   return (
     <div className="py-6 align-middle justify-center mt-5">
-      <form className="space-y-6" action="#" method="POST">
+      <form
+        onSubmit={handleSignUp}
+        className="space-y-6"
+        action="#"
+        method="POST"
+      >
         <div>
           <label
             htmlFor="email"
