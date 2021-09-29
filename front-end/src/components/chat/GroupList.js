@@ -24,7 +24,7 @@ const GroupList = () => {
                 id="filter"
                 value={filter}
                 placeholder="Search for chat groups"
-                className="mt-1 placeholder-white appearance-none w-64 py-3 sm:w-96 border-none block pl-3 py-2 sm:py-4 rounded-md bg-purple-misc focus:outline-none focus:ring-purple-dark text-xs focus:border-purple-dark sm:text-sm"
+                className="mt-1 placeholder-white appearance-none py-3 sm:w-96 border-none  pl-3 py-2 sm:py-4 rounded-md bg-purple-misc focus:outline-none focus:ring-purple-dark text-xs focus:border-purple-dark sm:text-sm"
               />
             </div>
           </form>
