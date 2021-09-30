@@ -8,39 +8,47 @@ import ResetPasswordPage from "./pages/start/resetPassword";
 import EmailConfirmationPage from "./pages/start/emailConfirmation";
 import SetProfilePicPage from "./pages/firstLogin/setProfilePic";
 import AddModulesPage from "./pages/firstLogin/addModules";
+import ProfilePage from "./pages/profile";
+import { AccountProvider } from "./context/AccountContext";
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-      <BrowserRouter>
-        <Switch>
-          <Route path="/login">
-            <LoginPage />
-          </Route>
-          <Route exact path="/signup">
-            <SignUpPage />
-          </Route>
-          <Route path="/signup/confirmation">
-            <SignUpConfirmation />
-          </Route>
-          <Route path="/resetPassword">
-            <ResetPasswordPage />
-          </Route>
-          <Route path="/emailConfirmation">
-            <EmailConfirmationPage />
-          </Route>
+    <AccountProvider>
+      <div className="App">
+        <Header />
+        <BrowserRouter>
+          <Switch>
+            <Route path="/login">
+              <LoginPage />
+            </Route>
+            <Route exact path="/signup">
+              <SignUpPage />
+            </Route>
+            <Route path="/signup/confirmation">
+              <SignUpConfirmation />
+            </Route>
+            <Route path="/resetPassword">
+              <ResetPasswordPage />
+            </Route>
+            <Route path="/emailConfirmation">
+              <EmailConfirmationPage />
+            </Route>
 
-          {/* After first login - account customization */}
-          <Route path="/setProfilePic">
-            <SetProfilePicPage />
+            {/* After first login - account customization */}
+            <Route path="/setProfilePic">
+              <SetProfilePicPage />
+            </Route>
+            <Route path="/addModules">
+              <AddModulesPage />
+            </Route>
+          </Switch>
+
+          <Route path="/profile">
+            <ProfilePage />
           </Route>
-          <Route path="/addModules">
-            <AddModulesPage />
-          </Route>
-        </Switch>
-      </BrowserRouter>
-    </div>
+        </BrowserRouter>
+      </div>
+    </AccountProvider>
   );
 }
 
