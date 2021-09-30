@@ -13,7 +13,11 @@ module.exports = {
           light: "#EFF0F6",
         },
         blue: {
+<<<<<<< HEAD
           light: "#F3F7FB",
+=======
+          light: "#B4CBE3",
+>>>>>>> 080f625742a27e706b3f051e582cba98c711374b
           dark: "#B4CBE3",
         },
         yellow: {
