@@ -24,13 +24,14 @@ module.exports = {
         },
         grey: {
           light: "#e5e6e4",
+          whitetinge: "#f3f7fb",
         },
         red: {
           warning: "#9D174D",
-        },
       },
     },
   },
+},
   variants: {
     extend: {},
   },
