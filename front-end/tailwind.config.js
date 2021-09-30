@@ -13,7 +13,8 @@ module.exports = {
           light: "#EFF0F6",
         },
         blue: {
-          light: "#B4CBE3",
+          light: "#F3F7FB",
+          dark: "#B4CBE3",
         },
         yellow: {
           dark: "#FBEEB5",
@@ -24,6 +25,9 @@ module.exports = {
         grey: {
           light: "#e5e6e4",
           whitetinge: "#f3f7fb",
+        },
+        red: {
+          warning: "#9D174D",
         },
       },
     },
