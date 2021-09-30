@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import GroupBubble from "../bubble/GroupBubble";
+import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 
 const GroupList = () => {
   const [filter, setFilterName] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleFilter = (event) => {
     setFilterName(event.target.value);
@@ -31,9 +33,15 @@ const GroupList = () => {
         </div>
 
         <div className="pl-4 pt-2">
-          <button className="text-3xl rounded-full bg-purple-dark h-10 w-10 flex items-center justify-center">
+          <button
+            className="text-3xl rounded-full bg-purple-dark h-10 w-10 flex items-center justify-center"
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
             +
           </button>
+          <ChatGroupCreationForm setOpen={setOpen} open={open} />
         </div>
       </div>
 
