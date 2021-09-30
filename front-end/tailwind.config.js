@@ -12,7 +12,6 @@ module.exports = {
           DEFAULT: "#C4C1DE",
           light: "#EFF0F6",
           misc: "#BBBFDB",
-
         },
         blue: {
           light: "#F3F7FB",
@@ -27,6 +26,7 @@ module.exports = {
         },
         grey: {
           light: "#e5e6e4",
+          whitetinge: "#f3f7fb",
           DEFAULT: "#C4C4C4",
         },
         red: {
@@ -35,6 +35,7 @@ module.exports = {
       },
     },
   },
+
   variants: {
     extend: {},
   },
