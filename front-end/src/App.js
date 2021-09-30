@@ -9,6 +9,7 @@ import EmailConfirmationPage from "./pages/start/emailConfirmation";
 import SetProfilePicPage from "./pages/firstLogin/setProfilePic";
 import AddModulesPage from "./pages/firstLogin/addModules";
 import ProfilePage from "./pages/profile";
+import ChatPage from "./pages/chat";
 import { AccountProvider } from "./context/AccountContext";
 
 function App() {
@@ -45,6 +46,9 @@ function App() {
 
           <Route path="/profile">
             <ProfilePage />
+          </Route>
+          <Route path="/chat">
+            <ChatPage />
           </Route>
         </BrowserRouter>
       </div>
