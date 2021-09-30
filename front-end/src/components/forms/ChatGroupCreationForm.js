@@ -46,7 +46,7 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
     <div className="w-1">
       <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
         <form method="POST">
-          <div className="bg-blue-light p-20">
+          <div className="bg-blue-dark p-20">
             <button
               className="bg-white absolute top-1 right-1 p-0.5 rounded-full"
               onClick={() => {
