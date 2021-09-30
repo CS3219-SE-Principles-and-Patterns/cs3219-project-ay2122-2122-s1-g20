@@ -53,7 +53,7 @@ const LoginForm = () => {
   return (
     <div className="mt-5">
       {errorLogin ? (
-        <ErrorMessage authType="logging in:" message={alertMessage} />
+        <ErrorMessage authType="logging in" message={alertMessage} />
       ) : undefined}
       <div className="py-6 align-middle justify-center mt-5">
         <form
