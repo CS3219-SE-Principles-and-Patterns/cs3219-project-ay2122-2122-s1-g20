@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
+require("dotenv").config();
 
 const User = require("../model/user");
 
@@ -87,11 +88,10 @@ exports.postReset = (req, res, next) => {
     ).then(result => {
       transporter.sendMail({
         to: req.body.email,
-        from: 'studybuddy@cs3219.com',
         subject: 'Password reset',
         html: `
-          <p>You requested a password reset</p>
-          <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
+          <p>You requested a password reset for your StudyBuddy account!</p>
+          <p>Click this <a href="http://localhost:3000/resetPassword/${token}">link</a> to set a new password.</p>
         `
       })
       console.log(token);

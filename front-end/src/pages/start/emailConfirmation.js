@@ -31,8 +31,8 @@ const EmailConfirmationPage = () => {
       }
 
       if (response.status == 200) {
-        // Route to home page
         console.log(responseData.message);
+        // Route to login page
       }
     } catch (error) {
       console.log(error.message);
