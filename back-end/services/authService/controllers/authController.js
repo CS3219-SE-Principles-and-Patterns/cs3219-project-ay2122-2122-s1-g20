@@ -61,15 +61,8 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.getReset = (req, res, next) => {
-  res.render('auth/reset', {
-    path: '/reset',
-    pageTitle: 'Reset Password',
-    errorMessage: message 
-  })
-}
 
-exports.postReset = (req, res, next) => {
+exports.postReset = (req, res, next) => { // Email verification for sending password reset link
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
       console.log(err);
@@ -103,3 +96,32 @@ exports.postReset = (req, res, next) => {
     })
   })
 }
+
+exports.postNewPassword = (req, res, next) => {
+  const newPassword = req.body.password;
+  const userId = req.body.userId;
+  const passwordToken = req.body.passwordToken;
+  let resetUser;
+
+  User.findOne({
+    resetToken: passwordToken,
+    resetTokenExpiration: { $gt: Date.now() },
+    _id: userId
+  })
+    .then(user => {
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12);
+    })
+    .then(hashedPassword => {
+      resetUser.password = hashedPassword;
+      resetUser.resetToken = undefined;
+      resetUser.resetTokenExpiration = undefined;
+      return resetUser.save();
+    })
+    .then(result => {
+      res.status(200).json({token: token, message: "Password reset successful!"});
+    })
+    .catch(err => {
+      res.status(422).json({message: "Your token is invalid or has expired."});
+    });
+};

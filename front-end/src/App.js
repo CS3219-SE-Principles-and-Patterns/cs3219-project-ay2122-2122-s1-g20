@@ -28,9 +28,7 @@ function App() {
             <Route path="/signup/confirmation">
               <SignUpConfirmation />
             </Route>
-            <Route path="/resetPassword">
-              <ResetPasswordPage />
-            </Route>
+            <Route path="/resetPassword/:token" component={ResetPasswordPage} />
             <Route path="/emailConfirmation">
               <EmailConfirmationPage />
             </Route>

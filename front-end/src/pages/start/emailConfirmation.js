@@ -12,7 +12,7 @@ const EmailConfirmationPage = () => {
     console.log(email);
     try {
       const response = await fetch(
-        "http://localhost:8080/api/user/resetPassword",
+        "http://localhost:8080/api/user/emailConfirmation",
         {
           method: "POST",
           headers: {
