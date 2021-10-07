@@ -1,8 +1,24 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
 
 const User = require("../model/user");
+
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    type: "OAuth2",
+    user: process.env.EMAIL,
+    pass: process.env.WORD,
+    clientId: process.env.OAUTH_CLIENTID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+  },
+ });
+
 
 exports.signup = async (req, res) => {
   const { email, username, password } = req.body;
@@ -43,3 +59,47 @@ exports.login = async (req, res) => {
     return res.status(422).json({ message: "Invalid password or email entered." });
   }
 };
+
+exports.getReset = (req, res, next) => {
+  res.render('auth/reset', {
+    path: '/reset',
+    pageTitle: 'Reset Password',
+    errorMessage: message 
+  })
+}
+
+exports.postReset = (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.status(422).json({ message: "Error generating bytes." });
+    }
+    const token = buffer.toString('hex');
+    User.findOne({email: req.body.email}).then(
+      user => {
+        if (!user) {
+          return res.status(422).json({ message: "No account with this email found." });
+        }
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
+      }
+    ).then(result => {
+      transporter.sendMail({
+        to: req.body.email,
+        from: 'studybuddy@cs3219.com',
+        subject: 'Password reset',
+        html: `
+          <p>You requested a password reset</p>
+          <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
+        `
+      })
+      console.log(token);
+      res.status(200).json({token: token, message: "Reset password email sent!"});
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(422).json({message: "Error with resetting password."});
+    })
+  })
+}
