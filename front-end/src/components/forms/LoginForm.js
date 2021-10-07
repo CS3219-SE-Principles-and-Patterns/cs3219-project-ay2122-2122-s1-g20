@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ErrorMessage from "../alerts/ErrorMessage";
+import { useHistory } from "react-router-dom";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -8,6 +9,8 @@ const LoginForm = () => {
   const [errorLogin, setErrorLogin] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isRevealPassword, setIsRevealPassword] = useState(false);
+
+  let history = useHistory();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -42,6 +45,7 @@ const LoginForm = () => {
       if (response.status == 200) {
         // Route to home page
         console.log(responseData.message);
+        history.push("/signup/verification");
       }
     } catch (error) {
       setErrorLogin(true);

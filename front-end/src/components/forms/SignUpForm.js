@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ErrorMessage from "../alerts/ErrorMessage";
+import { useHistory } from "react-router-dom";
 
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +11,8 @@ const SignUpForm = () => {
   const [errorSignUp, setErrorSignUp] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isRevealPassword, setIsRevealPassword] = useState(false);
+
+  let history = useHistory();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -57,6 +60,7 @@ const SignUpForm = () => {
 
         if (response.status == 200) {
           console.log(responseData.message);
+          history.push("/signup/confirmation");
         }
       }
     } catch (error) {

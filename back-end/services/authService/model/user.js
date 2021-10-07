@@ -16,6 +16,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  verified: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  uniqueString: {
+    type: String,
+    required: true,
+    unique: true
+  }
 });
 
 userSchema.pre("save", function (next) {
