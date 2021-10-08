@@ -13,6 +13,47 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
     setGroupName(event.target.value);
   };
 
+  const checkHashTag = async () => {
+    if (sports) {
+      return "sports";
+    } else if (makan) {
+      return "makan";
+    } else if (chitchat) {
+      return "chitchat";
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("HERE 1");
+    try {
+      //todo: pass in user
+      //const users = [user];
+      const value = await checkHashTag();
+      console.log(value);
+      const res = await fetch("http://localhost:9000/api/rooms", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          hashtag: value,
+          name: groupName,
+          uid: ["me"],
+          lastModified: Date.now(),
+        }),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (res.status == 200) {
+        handleReset();
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleReset = () => {
     setChitchat(false);
     setMakan(true);
@@ -45,7 +86,7 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
   return (
     <div className="w-1">
       <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
-        <form method="POST">
+        <form onSubmit={handleSubmit} action="#" method="POST">
           <div className="bg-blue-dark p-20">
             <button
               className="bg-white absolute top-1 right-1 p-0.5 rounded-full"
@@ -115,10 +156,6 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
               <button
                 className="w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium text-black bg-yellow-dark hover:bg-opacity-75 mt-6"
                 type="submit"
-                onSubmit={() => {
-                  handleReset();
-                  setOpen(false);
-                }}
               >
                 Create
               </button>

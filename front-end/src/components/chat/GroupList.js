@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 
-const GroupList = () => {
+const GroupList = (account) => {
   const [filter, setFilterName] = useState("");
   const [open, setOpen] = useState(false);
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    const getGroups = async () => {
+      const res = await fetch("http://localhost:9000/api/rooms");
+      const data = await res.json();
+      console.log(data.rooms);
+      setGroups(data.rooms);
+    };
+    getGroups();
+  }, []);
 
   const handleFilter = (event) => {
     setFilterName(event.target.value);
@@ -41,15 +52,17 @@ const GroupList = () => {
           >
             +
           </button>
-          <ChatGroupCreationForm setOpen={setOpen} open={open} />
+          <ChatGroupCreationForm
+            setOpen={setOpen}
+            open={open}
+            user={account.userName}
+          />
         </div>
       </div>
-
       <div>
-        <GroupBubble />
-      </div>
-      <div>
-        <GroupBubble />
+        {groups.map((group, index) => (
+          <GroupBubble key={index} group={group} />
+        ))}
       </div>
     </div>
   );
