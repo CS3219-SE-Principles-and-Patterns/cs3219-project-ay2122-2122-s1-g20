@@ -38,7 +38,7 @@ http.listen(PORT, ()=>{
     console.log("connected to port: " + PORT)
 });
 
-
+//todo: switch database
 const DB = "mongodb+srv://admin:admincs3219@cs3219.w1uxq.mongodb.net/chats?retryWrites=true&w=majority";
   
 mongoose
