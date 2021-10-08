@@ -99,27 +99,25 @@ exports.postReset = (req, res, next) => { // Email verification for sending pass
 
 exports.postNewPassword = (req, res, next) => {
   const newPassword = req.body.password;
-  const userId = req.body.userId;
-  const passwordToken = req.body.passwordToken;
+  const passwordToken = req.body.token;
   let resetUser;
 
   User.findOne({
     resetToken: passwordToken,
     resetTokenExpiration: { $gt: Date.now() },
-    _id: userId
   })
     .then(user => {
       resetUser = user;
-      return bcrypt.hash(newPassword, 12);
+      return newPassword
     })
-    .then(hashedPassword => {
-      resetUser.password = hashedPassword;
+    .then(pw => {
+      resetUser.password = pw;
       resetUser.resetToken = undefined;
       resetUser.resetTokenExpiration = undefined;
       return resetUser.save();
     })
     .then(result => {
-      res.status(200).json({token: token, message: "Password reset successful!"});
+      res.status(200).json({message: "Password reset successful!"});
     })
     .catch(err => {
       res.status(422).json({message: "Your token is invalid or has expired."});
