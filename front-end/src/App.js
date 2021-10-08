@@ -11,6 +11,7 @@ import AddModulesPage from "./pages/firstLogin/addModules";
 import ProfilePage from "./pages/profile";
 import ChatPage from "./pages/chat";
 import { AccountProvider } from "./context/AccountContext";
+import EmailVerification from "./pages/start/emailVerification";
 
 function App() {
   return (
@@ -28,6 +29,10 @@ function App() {
             <Route path="/signup/confirmation">
               <SignUpConfirmation />
             </Route>
+            <Route
+              path="/verified/:uniqueString"
+              component={EmailVerification}
+            />
             <Route path="/resetPassword/:token" component={ResetPasswordPage} />
             <Route path="/emailConfirmation">
               <EmailConfirmationPage />
@@ -41,7 +46,6 @@ function App() {
               <AddModulesPage />
             </Route>
           </Switch>
-
           <Route path="/profile">
             <ProfilePage />
           </Route>

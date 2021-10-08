@@ -29,10 +29,22 @@ exports.signup = async (req, res) => {
       return res.status(409).json({message: "This email is already registered. Please login instead."});
     }
 
-    const user = new User({ email, username, password });
+    const user = new User({ email, username, password, uniqueString });
     await user.save();
 
     const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
+
+    var uniqueString = crypto.randomBytes(20).toString('hex');
+    
+    transporter.sendMail({
+      to: email,
+      subject: 'Please verify your email for your StudyBuddy account.',
+      html: `
+        <p>Please verify your study buddy account!</p>
+        <p>Click this <a href="http://localhost:3000/verified/${uniqueString}">link</a> to verify your email.</p>
+      `
+    })
+
     res.status(200).json({token: token, message: "User successfully created!"});
   } catch (err) {
     res.status(422).json({message: "Error with creating user."});

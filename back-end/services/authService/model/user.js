@@ -16,8 +16,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  uniqueString: {
+    type: String,
+    required: true
+  },
   resetToken: String,
-  resetTokenExpiration: Date
+  resetTokenExpiration: Date,
+  isVerified: false
 });
 
 userSchema.pre("save", function (next) {
