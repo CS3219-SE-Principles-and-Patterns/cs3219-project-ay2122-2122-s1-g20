@@ -36,6 +36,7 @@ exports.signup = async (req, res) => {
 
     var uniqueString = crypto.randomBytes(20).toString('hex');
     
+    // send email to user upon sign up, when user clicks link, change isVerified attribute in db to true
     transporter.sendMail({
       to: email,
       subject: 'Please verify your email for your StudyBuddy account.',
@@ -67,6 +68,7 @@ exports.login = async (req, res) => {
   try {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
+    // Check that email is verified before logging in
     res.status(200).json({token: token, message: "User successfully logged in!" });
   } catch (err) {
     return res.status(422).json({ message: "Invalid password or email entered." });
