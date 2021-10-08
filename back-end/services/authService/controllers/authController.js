@@ -29,12 +29,13 @@ exports.signup = async (req, res) => {
       return res.status(409).json({message: "This email is already registered. Please login instead."});
     }
 
+    var uniqueString = crypto.randomBytes(20).toString('hex');
+
     const user = new User({ email, username, password, uniqueString });
     await user.save();
 
     const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
 
-    var uniqueString = crypto.randomBytes(20).toString('hex');
     
     // send email to user upon sign up, when user clicks link, change isVerified attribute in db to true
     transporter.sendMail({
