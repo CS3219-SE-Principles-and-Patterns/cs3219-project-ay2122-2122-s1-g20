@@ -1,21 +1,42 @@
 import React, { useState, useEffect } from "react";
 import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
+import { socket } from "./Socket";
 
 const Messenger = ({ displayChat }) => {
   //todo: fix positions so that there is no overlap in the UI
   const [message, setMessage] = useState("");
   const [oldMessages, setOldMessages] = useState([]);
+  const room = displayChat._id;
+  socket.on("connect", () => {
+    console.log(socket.id);
+  });
 
-  const handleSendMessage = async () => {
-    //to be done, sending message
-    //todo: sender name based on account context
+  socket.on("receive-message", (message) => {
     const newMessage = {
       room_id: displayChat._id,
       sender: "jay",
       timestamp: Date.now(),
       content: message,
     };
+    const originalMessages = oldMessages;
+    setOldMessages(originalMessages.concat(newMessage));
+    console.log(oldMessages);
+  });
+
+  const handleSendMessage = async () => {
+    //to be done, sending message
+    //todo: sender name based on account context
+    socket.emit("send-message", message, room);
+    const originalMessages = oldMessages;
+    const newMessage = {
+      room_id: displayChat._id,
+      sender: "jay",
+      timestamp: Date.now(),
+      content: message,
+    };
+    setOldMessages(originalMessages.concat(newMessage));
+
     const res = await fetch("http://localhost:9000/api/messages", {
       method: "POST",
       headers: {

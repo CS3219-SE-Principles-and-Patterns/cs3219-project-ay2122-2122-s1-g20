@@ -2,14 +2,22 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const GroupBubble = ({ group, setDisplayChat }) => {
+  const name = group.name;
+  const hashtag = group.hashtag;
+  const id = group._id;
+  const [join, setJoin] = useState(false);
+
   const handleJoinChat = () => {
     //TBD user to join chat groups
     console.log(id);
     setDisplayChat(group);
+    setJoin(true);
   };
-  const name = group.name;
-  const hashtag = group.hashtag;
-  const id = group._id;
+
+  const handleLeaveChat = () => {
+    setJoin(false);
+  }
+
 
   return (
     <div className=" flex flex-row">
@@ -23,7 +31,7 @@ const GroupBubble = ({ group, setDisplayChat }) => {
         className="rounded bg-gray-100 h-20 w-20 mt-5 text-xl"
         onClick={handleJoinChat}
       >
-        Join
+        { (join) ? "Join" : "Leave"}
       </button>
     </div>
   );

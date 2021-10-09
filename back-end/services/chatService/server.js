@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const io = require("socket.io");
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -23,17 +22,23 @@ app.get("/", (req, res) => {
   res.send("Server is up and running.");
 });
 
-const http = require("http").Server(app);
+const http = require("http").createServer(app);
+const options = {
+  cors: {
+    origin: "http://localhost:3000",
+  }
+}
 
-const socket = io(http);
-//create an event listener
+const io = require("socket.io")(http, options);
 
-//To listen to messages
-socket.on("connection", (socket)=>{
+io.on("connection", (socket)=>{
     console.log("user connected");
+    console.log(socket.id);
+    socket.on("send-message", (message, room) => {
+      socket.to(room).emit("receive-message", (message));
+    })
 });
 
-//wire up the server to listen to our port 500
 http.listen(PORT, ()=>{
     console.log("connected to port: " + PORT)
 });

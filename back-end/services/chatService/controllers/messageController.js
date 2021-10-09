@@ -24,7 +24,7 @@ exports.add = async (req, res) => {
 exports.retrieve = async (req, res) => {
     try {
         const id = req.params.room_id;
-        const data = await Message.find({room_id: id}).exec();
+        const data = await Message.find({room_id: id}).select("-_id -__v").exec();
         if (data) {
             res.status(200).send({messages: data, message: "Messages successfully loaded!"});
             return;
