@@ -1,23 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 
-const Messenger = () => {
+const Messenger = ({ displayChat }) => {
+  //todo: fix positions so that there is no overlap in the UI
   const [message, setMessage] = useState("");
+  const [oldMessages, setOldMessages] = useState([]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     //to be done, sending message
+    //todo: sender name based on account context
+    const newMessage = {
+      room_id: displayChat._id,
+      sender: "jay",
+      timestamp: Date.now(),
+      content: message,
+    };
+    const res = await fetch("http://localhost:9000/api/messages", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(newMessage),
+    });
+    console.log(res);
   };
+
+  useEffect(() => {
+    const getOldMessages = async () => {
+      const res = await fetch(
+        `http://localhost:9000/api/messages/${displayChat._id}`
+      );
+      const data = await res.json();
+      console.log(data.messages);
+      setOldMessages(data.messages);
+    };
+    getOldMessages();
+    console.log(oldMessages);
+  }, [displayChat]);
 
   const setMessageChange = (event) => {
     setMessage(event.target.value);
   };
   return (
     <div className="flex flex-col h-screen relative md:w-auto">
-      <StudyHeader />
-      <div className="pr-10 pl-2">
-        <ChatBubble />
-        <ChatBubble />
+      <StudyHeader group={displayChat} />
+      <div className="pr-10 pl-2 overflow-y-auto">
+        {oldMessages.map((message, index) => (
+          <ChatBubble key={index} message={message} />
+        ))}
       </div>
 
       <div className="absolute inset-x-0 bottom-0 flex flex-row">

@@ -2,8 +2,10 @@ import GroupList from "../components/chat/GroupList";
 import Category from "../components/chat/Category";
 import Messenger from "../components/chat/Messenger";
 import { AccountContext } from "../context/AccountContext";
+import { useState } from "react";
 
 const ChatPage = () => {
+  const [displayChat, setDisplayChat] = useState([]);
   return (
     <AccountContext.Consumer>
       {(context) => (
@@ -12,10 +14,10 @@ const ChatPage = () => {
             <Category />
           </div>
           <div className="bg-yellow-light col-span-3">
-            <GroupList account={context} />
+            <GroupList account={context} setDisplayChat={setDisplayChat} />
           </div>
           <div className="col-span-3">
-            <Messenger />
+            <Messenger displayChat={displayChat} />
           </div>
         </div>
       )}

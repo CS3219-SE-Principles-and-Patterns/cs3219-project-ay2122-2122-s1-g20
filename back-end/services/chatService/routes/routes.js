@@ -1,10 +1,15 @@
 const express = require("express");
-const controller = require("../controllers/roomController");
+const roomController = require("../controllers/roomController");
+const messageController = require("../controllers/messageController");
 
 const router = express.Router();
 
 router.route('/rooms')
-    .get(controller.get)
-    .post(controller.create);
+    .get(roomController.get)
+    .post(roomController.create);
+router.route('/messages')
+    .post(messageController.add);
+router.route('/messages/:room_id')
+    .get(messageController.retrieve);
 
 module.exports = router;

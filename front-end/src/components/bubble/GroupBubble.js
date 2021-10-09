@@ -1,12 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const GroupBubble = (group) => {
+const GroupBubble = ({ group, setDisplayChat }) => {
   const handleJoinChat = () => {
     //TBD user to join chat groups
+    console.log(id);
+    setDisplayChat(group);
   };
-  const name = group.group.name;
-  const hashtag = group.group.hashtag;
+  const name = group.name;
+  const hashtag = group.hashtag;
+  const id = group._id;
 
   return (
     <div className=" flex flex-row">

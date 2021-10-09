@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 
-const GroupList = (account) => {
+const GroupList = ({ account, setDisplayChat }) => {
   const [filter, setFilterName] = useState("");
   const [open, setOpen] = useState(false);
   const [groups, setGroups] = useState([]);
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     const getGroups = async () => {
@@ -15,7 +16,7 @@ const GroupList = (account) => {
       setGroups(data.rooms);
     };
     getGroups();
-  }, []);
+  }, [load]);
 
   const handleFilter = (event) => {
     setFilterName(event.target.value);
@@ -54,14 +55,20 @@ const GroupList = (account) => {
           </button>
           <ChatGroupCreationForm
             setOpen={setOpen}
+            setLoad={setLoad}
             open={open}
+            load={load}
             user={account.userName}
           />
         </div>
       </div>
       <div>
         {groups.map((group, index) => (
-          <GroupBubble key={index} group={group} />
+          <GroupBubble
+            key={index}
+            group={group}
+            setDisplayChat={setDisplayChat}
+          />
         ))}
       </div>
     </div>

@@ -3,7 +3,7 @@ import Popup from "reactjs-popup";
 import PropTypes from "prop-types";
 import { VscChromeClose } from "react-icons/vsc";
 
-const ChatGroupCreationForm = ({ setOpen, open }) => {
+const ChatGroupCreationForm = ({ setOpen, setLoad, open, load }) => {
   const [groupName, setGroupName] = useState("");
   const [chitchat, setChitchat] = useState(false);
   const [makan, setMakan] = useState(true);
@@ -47,6 +47,7 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
       console.log(data);
       if (res.status == 200) {
         handleReset();
+        setLoad(!load);
         setOpen(false);
       }
     } catch (error) {
@@ -170,6 +171,8 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
 ChatGroupCreationForm.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
+  setLoad: PropTypes.func,
+  load: PropTypes.bool,
 };
 
 export default ChatGroupCreationForm;
