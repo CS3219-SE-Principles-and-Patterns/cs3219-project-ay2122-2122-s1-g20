@@ -11,7 +11,7 @@ const SetProfilePicPage = () => {
         size="80"
         uploadButton="Upload"
         doneButton="Next"
-        nextPage="/"
+        nextPage="/addModules"
       />
     </div>
   );

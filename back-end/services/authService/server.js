@@ -2,10 +2,16 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const cloudinary = require("cloudinary");
+
+const userRoutes = require("./routes/userRoutes");
 
 dotenv.config({ path: "../../config.env" });
-
-const authRoutes = require("./routes/authRoutes");
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const app = express();
 const PORT = process.env.AUTH_PORT || config.port;
@@ -38,7 +44,7 @@ mongoose
   })
   .then(() => console.log("DB connection successful!"));
 
-app.use("/api/user", authRoutes);
+app.use("/api/user", userRoutes);
 
 app.get("/", (req, res) => {
   console.log("Test passed");
