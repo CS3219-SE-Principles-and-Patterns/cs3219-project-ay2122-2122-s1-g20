@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import LoginPage from "../src/pages/start/login";
 import SignUpPage from "../src/pages/start/signup";
 import Header from "./components/header/Header";
@@ -11,6 +11,7 @@ import AddModulesPage from "./pages/firstLogin/addModules";
 import ProfilePage from "./pages/profile";
 import ChatPage from "./pages/chat";
 import { AccountProvider } from "./context/AccountContext";
+import EmailVerification from "./pages/start/emailVerification";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <div className="App">
         <Header />
         <BrowserRouter>
+          <Redirect exact from="/" to="/login" />
           <Switch>
             <Route path="/login">
               <LoginPage />
@@ -28,10 +30,12 @@ function App() {
             <Route path="/signup/confirmation">
               <SignUpConfirmation />
             </Route>
+            <Route
+              path="signup/confirmation/verified/:uniqueString"
+              component={EmailVerification}
+            />
+            <Route path="/resetPassword/:token" component={ResetPasswordPage} />
             <Route path="/resetPassword">
-              <ResetPasswordPage />
-            </Route>
-            <Route path="/emailConfirmation">
               <EmailConfirmationPage />
             </Route>
 
@@ -43,7 +47,6 @@ function App() {
               <AddModulesPage />
             </Route>
           </Switch>
-
           <Route path="/profile">
             <ProfilePage />
           </Route>

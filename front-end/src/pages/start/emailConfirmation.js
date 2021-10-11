@@ -6,6 +6,38 @@ const EmailConfirmationPage = () => {
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
+
+  const handleEmailConfirmation = async (event) => {
+    event.preventDefault();
+    console.log(email);
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/user/emailConfirmation",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+          }),
+        }
+      );
+
+      const responseData = await response.json();
+
+      if (response.status !== 200) {
+        throw new Error(responseData.message);
+      }
+
+      if (response.status == 200) {
+        console.log(responseData.message);
+        // Route to login page
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div className="max-w-7xl mt-10 mb-10 flex flex-col h-full justify-center items-center w-full mx-auto">
       <div className="text-3xl sm:text-4xl font-bold pt-7">
@@ -14,7 +46,12 @@ const EmailConfirmationPage = () => {
       <p className="text-xl text-sm md:text-xl text-purple-dark p-7">
         You will receive an email to reset your password.
       </p>
-      <form className="space-y-6" action="#" method="POST">
+      <form
+        onSubmit={handleEmailConfirmation}
+        className="space-y-6"
+        action="#"
+        method="POST"
+      >
         <div>
           <div className="flex justify-between">
             <label
