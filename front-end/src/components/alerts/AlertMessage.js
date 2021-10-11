@@ -6,7 +6,7 @@ function AlertMessage(props) {
   console.log(props.isError);
   if (props.isError) {
     return (
-      <div className="rounded-md w-full bg-red-50 p-4 mb-8">
+      <div className="rounded-md w-full bg-red-50 p-4 mb-4">
         <div className="flex">
           <div className="flex-shrink-0">
             <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />

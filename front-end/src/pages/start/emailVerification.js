@@ -10,7 +10,7 @@ const EmailVerification = () => {
 
   useEffect(() => {
     async function verifyEmail() {
-      const response = await fetch("http://localhost:8080/api/user/verified/", {
+      const response = await fetch("http://localhost:8080/api/user/verified", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,7 +40,7 @@ const EmailVerification = () => {
   });
 
   return (
-    <div className="max-w-7xl pt-10 md:pt-48 mb-10 flex flex-col h-full justify-center items-center w-max mx-auto">
+    <div className="max-w-7xl mt-10 mb-10 flex flex-col h-full justify-center items-center w-max mx-auto">
       {alertMessage != "" ? (
         <AlertMessage isError={isError} message={alertMessage} />
       ) : undefined}
