@@ -7,10 +7,14 @@ export const AccountProvider = ({ children }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [modules, setModules] = useState([
-    "cs3219",
-    "cs2102",
-    "cs3103",
-    "cs3235",
+    {
+      moduleCode: "AC5001",
+      title: "Architectural History of Singapore",
+    },
+    {
+      moduleCode: "AC5002",
+      title: "Conservation Approaches and Philosophies",
+    },
   ]);
   const [profilePic, setProfilePic] = useState("");
 
@@ -25,14 +29,18 @@ export const AccountProvider = ({ children }) => {
   };
 
   const handleAddModules = (newModule) => {
-    if (newModule !== "") {
+    if (
+      newModule !== "" &&
+      !modules.find((mod) => mod.moduleCode === newModule.moduleCode)
+    ) {
       setModules([...modules, newModule]);
     }
   };
 
-  const handleDeleteModule = (currMod) => {
-    setModules(modules.filter((mod) => mod !== currMod));
+  const handleDeleteModule = (modCode) => {
+    setModules(modules.filter((mod) => mod.moduleCode !== modCode));
   };
+
   return (
     <AccountContext.Provider
       value={{

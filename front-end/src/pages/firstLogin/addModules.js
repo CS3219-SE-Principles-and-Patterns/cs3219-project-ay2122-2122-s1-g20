@@ -9,8 +9,7 @@ const AddModulesPage = () => {
         What modules are you taking this semester?
       </div>
       <EditModules
-        isEditable
-        nextPage="addModules" // update nextPage to home page
+        nextPage="/home" // update nextPage to home page
       />
     </div>
   );
