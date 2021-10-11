@@ -22,7 +22,11 @@ const userSchema = new mongoose.Schema({
   },
   resetToken: String,
   resetTokenExpiration: Date,
-  isVerified: false
+  isVerified: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
 });
 
 userSchema.pre("save", function (next) {

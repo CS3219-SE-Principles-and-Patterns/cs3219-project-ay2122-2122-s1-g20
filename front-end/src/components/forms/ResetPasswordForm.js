@@ -41,8 +41,6 @@ const ResetPasswordForm = () => {
           }
         );
 
-        console.log(token);
-
         const responseData = await response.json();
 
         if (response.status !== 200) {

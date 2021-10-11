@@ -112,6 +112,26 @@ exports.postReset = (req, res, next) => { // Email verification for sending pass
   })
 }
 
+exports.postVerifyEmail = (req, res, next) => {
+  const uniqueString = req.body.uniqueString;
+  User.findOne({
+    uniqueString: uniqueString
+  }).then(
+    user => {
+      if (user.isVerified === true) {
+        return res.status(422).json({message: "Your account is already verified."});
+      } else {
+        user.isVerified = true;
+        return user.save();
+      }
+    }).then(result => {
+      res.status(200).json({message: "Your email is verified!"});
+    })
+    .catch(err => {
+      res.status(422).json({message: "There is an error with verifying your account!"});
+    });
+}
+
 exports.postNewPassword = (req, res, next) => {
   const newPassword = req.body.password;
   const passwordToken = req.body.token;
