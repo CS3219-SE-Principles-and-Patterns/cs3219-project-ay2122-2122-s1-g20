@@ -47,7 +47,9 @@ const LoginForm = () => {
         // if first login, route to /profilePic, if not route to home page
         setAlertMessage(responseData.message);
         setisError(false);
-        handleNext(responseData.profilePic ? "/" : "/setProfilePic");
+        handleNext(
+          responseData.user.profilePic ? "/profile" : "/setProfilePic"
+        );
       }
     } catch (error) {
       setisError(true);

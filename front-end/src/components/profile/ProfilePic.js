@@ -7,7 +7,7 @@ import YellowButton from "../YellowButton";
 const ProfilePic = ({ uploadButton, doneButton, nextPage, size }) => {
   const { profilePic, setProfilePic } = useContext(AccountContext);
   const [error, setError] = useState("");
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const fileTypes = ["image/png", "image/jpeg"];
 

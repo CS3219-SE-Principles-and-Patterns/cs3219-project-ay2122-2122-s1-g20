@@ -71,7 +71,7 @@ const EditModules = ({ isProfilePage, nextPage }) => {
       {editable ? <SearchModules isProfilePage={isProfilePage} /> : null}
       <div
         className={`grid sm:grid-cols-3 grid-cols-2 gap-5 ${
-          isProfilePage ? "mb-12 " : "mx-14 mb-14"
+          isProfilePage ? "mb-12 " : "mx-36 mb-14"
         }`}
       >
         {renderModules}

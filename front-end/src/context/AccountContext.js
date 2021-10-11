@@ -28,7 +28,7 @@ export const AccountProvider = ({ children }) => {
   };
 
   const handleUpdateEmail = (newEmail) => {
-    setUsername(newEmail); // comment this line out after api integration is done
+    setEmail(newEmail); // comment this line out after api integration is done
     // await api call to update username in backend, change to async function
   };
 
