@@ -1,22 +1,40 @@
-import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import { AccountContext } from "../../context/AccountContext";
+import api from "../../utils/api";
 import YellowButton from "../YellowButton";
 
 const ProfilePic = ({ uploadButton, doneButton, nextPage, size }) => {
-  const { profilePic, setProfilePic } = useContext(AccountContext);
+  const { email, profilePic, setProfilePic } = useContext(AccountContext);
   const [error, setError] = useState("");
   const [isEditable, setIsEditable] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const fileTypes = ["image/png", "image/jpeg"];
+
+  const history = useHistory();
+  const handleOnClick = useCallback(
+    () => history.push(nextPage && !isLoading ? nextPage : "#"),
+    [history]
+  );
 
   const handleUpload = () => {
     document.getElementById("selectedFile").click();
   };
 
-  const handleDone = () => {
+  const handleDone = async () => {
     // => upload to cloudinary, button loads
-    // after await, call this
+    setIsLoading(true);
+    await api
+      .post("/user/profilePic", { profilePic, email })
+      .then((res) => console.log(res)) // res.data.updatedUser === null if cant find user to update.
+      .catch((err) => console.log(err));
+    handleUploadDone();
+  };
+
+  const handleUploadDone = () => {
     setIsEditable(false);
+    setIsLoading(false);
+    handleOnClick();
   };
 
   const handleImageChange = (event) => {
@@ -31,7 +49,12 @@ const ProfilePic = ({ uploadButton, doneButton, nextPage, size }) => {
         );
       } else {
         setError("");
-        setProfilePic(URL.createObjectURL(img));
+        var FR = new FileReader();
+        FR.addEventListener("load", function (e) {
+          setProfilePic(e.target.result);
+        });
+        FR.readAsDataURL(img);
+        setIsEditable(true);
       }
     }
   };
@@ -50,8 +73,8 @@ const ProfilePic = ({ uploadButton, doneButton, nextPage, size }) => {
       {error ? (
         <p className="text-sm md:text-xl text-red-warning pt-10">{error}</p>
       ) : null}
-      <div className="flex flex-row flex-wrap space-x-4">
-        <span className="mb-3">
+      <div className="flex flex-row flex-wrap space-x-4 mb-3">
+        <span>
           <input
             className="hidden"
             type="file"
@@ -67,14 +90,13 @@ const ProfilePic = ({ uploadButton, doneButton, nextPage, size }) => {
         </span>
 
         {profilePic && isEditable ? (
-          <Link to={nextPage ? nextPage : "#"}>
-            <YellowButton
-              text={doneButton}
-              onClick={handleDone}
-              textSize="text-sm"
-              px="px-4"
-            />
-          </Link>
+          <YellowButton
+            text={doneButton}
+            onClick={handleDone}
+            textSize="text-sm"
+            px="px-4"
+            isLoading={isLoading}
+          />
         ) : null}
       </div>
     </div>

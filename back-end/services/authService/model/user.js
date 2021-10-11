@@ -16,6 +16,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  profilePic: {
+    type: String,
+    required: false,
+  },
+  modules: {
+    type: [String],
+    required: false,
+  },
   uniqueString: {
     type: String,
     required: true
