@@ -4,8 +4,8 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 
 const navigation = [
-  { name: "StudySessions", href: "#", current: true },
-  { name: "Chats", href: "#", current: false },
+  { name: "StudySessions", href: "/studysessions", current: true },
+  { name: "Chats", href: "/chats", current: false },
 ];
 
 function classNames(...classes) {
@@ -45,7 +45,7 @@ export default function Header() {
                         className={classNames(
                           item.current
                             ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            : "text-gray-100 hover:bg-gray-700 hover:text-white",
                           "px-3 py-2 rounded-md text-sm font-medium"
                         )}
                         aria-current={item.current ? "page" : undefined}

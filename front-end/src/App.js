@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import LoginPage from "../src/pages/start/login";
 import SignUpPage from "../src/pages/start/signup";
 import Header from "./components/header/Header";
@@ -19,7 +19,6 @@ function App() {
       <div className="App">
         <Header />
         <BrowserRouter>
-          <Redirect exact from="/" to="/login" />
           <Switch>
             <Route path="/login">
               <LoginPage />
