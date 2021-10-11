@@ -95,7 +95,6 @@ exports.login = async (req, res) => {
   }
 };
 
-// Email verification for sending password reset link
 exports.postReset = (req, res, next) => { 
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
