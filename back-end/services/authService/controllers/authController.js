@@ -36,8 +36,6 @@ exports.signup = async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
 
-    
-    // send email to user upon sign up, when user clicks link, change isVerified attribute in db to true
     transporter.sendMail({
       to: email,
       subject: 'Please verify your email for your StudyBuddy account.',
@@ -63,14 +61,18 @@ exports.login = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.status(422).json({ message: "Invalid password or email entered." });
+    return res.status(422).json({ message: "This email is not registered with us." });
   }
 
   try {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
     // Check that email is verified before logging in
-    res.status(200).json({token: token, message: "User successfully logged in!" });
+    if (user.isVerified === false) {
+      return res.status(422).json({ message: "Your account is not yet verified." });
+    } else {
+      return res.status(200).json({token: token, message: "User successfully logged in!" });
+    }
   } catch (err) {
     return res.status(422).json({ message: "Invalid password or email entered." });
   }

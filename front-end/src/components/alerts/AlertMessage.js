@@ -3,6 +3,7 @@ import { XCircleIcon } from "@heroicons/react/solid";
 import { CheckCircleIcon, XIcon } from "@heroicons/react/solid";
 
 function AlertMessage(props) {
+  console.log(props.isError);
   if (props.isError) {
     return (
       <div className="rounded-md w-full bg-red-50 p-4 mb-8">
@@ -29,7 +30,7 @@ function AlertMessage(props) {
     );
   } else {
     return (
-      <div className="rounded-md w-full bg-green-50 p-4">
+      <div className="rounded-md w-full bg-green-50 p-4 mb-8">
         <div className="flex">
           <div className="flex-shrink-0">
             <CheckCircleIcon

@@ -5,7 +5,6 @@ import AlertMessage from "../alerts/AlertMessage";
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorLogin, setErrorLogin] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [isError, setisError] = useState(false);
@@ -36,25 +35,23 @@ const LoginForm = () => {
 
       if (response.status !== 200) {
         setAlertMessage(responseData.message);
-        setErrorLogin(true);
         setisError(true);
         throw new Error(responseData.message);
       }
 
       if (response.status == 200) {
         // Route to home page
-        console.log(responseData.message);
+        setAlertMessage(responseData.message);
+        setisError(false);
       }
     } catch (error) {
-      setErrorLogin(true);
-      console.log(error.message);
-      console.log(errorLogin);
+      setisError(true);
     }
   };
 
   return (
     <div className="py-6 align-middle justify-center mt-5">
-      {errorLogin ? (
+      {alertMessage !== "" ? (
         <AlertMessage isError={isError} message={alertMessage} />
       ) : undefined}
       <form

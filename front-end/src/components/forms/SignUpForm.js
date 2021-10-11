@@ -7,7 +7,6 @@ const SignUpForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [errorSignUp, setErrorSignUp] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [isError, setisError] = useState(false);
@@ -32,7 +31,6 @@ const SignUpForm = () => {
     event.preventDefault();
     try {
       if (password !== passwordConfirmation) {
-        setErrorSignUp(true);
         setisError(true);
         setAlertMessage("Passwords do not match!");
         throw new Error("Passwords do not match!");
@@ -52,7 +50,6 @@ const SignUpForm = () => {
         const responseData = await response.json();
 
         if (response.status !== 200) {
-          setErrorSignUp(true);
           setAlertMessage(responseData.message);
           setisError(true);
           throw new Error(responseData.message);
@@ -63,13 +60,13 @@ const SignUpForm = () => {
         }
       }
     } catch (error) {
-      setErrorSignUp(true);
+      setisError(true);
     }
   };
 
   return (
     <div className="py-6 align-middle justify-center mt-5">
-      {errorSignUp ? (
+      {alertMessage !== "" ? (
         <AlertMessage isError={isError} message={alertMessage} />
       ) : undefined}
       <form
