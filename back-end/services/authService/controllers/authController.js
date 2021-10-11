@@ -3,22 +3,46 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const { google } = require('googleapis');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 require("dotenv").config();
-
 const User = require("../model/user");
 
-let transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    type: "OAuth2",
-    user: process.env.EMAIL,
-    pass: process.env.WORD,
-    clientId: process.env.OAUTH_CLIENTID,
-    clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-  },
- });
+const oAuth2Client = new google.auth.OAuth2(
+  process.env.OAUTH_CLIENTID,
+  process.env.OAUTH_CLIENT_SECRET,
+  process.env.OAUTH_REDIRECT_URI
+);
+oAuth2Client.setCredentials({ refresh_token: process.env.OAUTH_REFRESH_TOKEN });
+
+async function sendVerificationMail(uniqueString, email) {
+  try {
+    const accessToken = await oAuth2Client.getAccessToken();
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: 'studybuddycs3219@gmail.com',
+        clientId: process.env.OAUTH_CLIENTID,
+        clientSecret: process.env.OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+        accessToken: accessToken,
+      },
+    });
+
+     const result = await transporter.sendMail({
+      to: email,
+      subject: 'Please verify your email for your StudyBuddy account.',
+      html: `
+        <p>Please verify your study buddy account!</p>
+        <p>Click this <a href="http://localhost:3000/signup/confirmation/verified/${uniqueString}">link</a> to verify your email.</p>
+      `
+    });
+    console.log(result);
+  } catch (error) {
+    return error;
+  }
+}
 
 
 exports.signup = async (req, res) => {
@@ -30,25 +54,18 @@ exports.signup = async (req, res) => {
     }
 
     var uniqueString = crypto.randomBytes(20).toString('hex');
-
+    
     const user = new User({ email, username, password, uniqueString });
     await user.save();
-
     const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
 
-    transporter.sendMail({
-      to: email,
-      subject: 'Please verify your email for your StudyBuddy account.',
-      html: `
-        <p>Please verify your study buddy account!</p>
-        <p>Click this <a href="http://localhost:3000/signup/confirmation/verified/${uniqueString}">link</a> to verify your email.</p>
-      `
-    })
+    sendVerificationMail(uniqueString, email);
 
     return res.status(200).json({token: token, message: "User successfully created!"});
   } catch (err) {
     return res.status(422).json({message: "Error with creating user."});
   }
+  
 };
 
 exports.login = async (req, res) => {
@@ -78,8 +95,7 @@ exports.login = async (req, res) => {
   }
 };
 
-
-exports.postReset = (req, res, next) => { // Email verification for sending password reset link
+exports.postReset = (req, res, next) => { 
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
       console.log(err);
@@ -96,6 +112,18 @@ exports.postReset = (req, res, next) => { // Email verification for sending pass
         return user.save();
       }
     ).then(result => {
+      const accessToken = oAuth2Client.getAccessToken();
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          type: 'OAuth2',
+          user: 'studybuddycs3219@gmail.com',
+          clientId: process.env.OAUTH_CLIENTID,
+          clientSecret: process.env.OAUTH_CLIENT_SECRET,
+          refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+          accessToken: accessToken,
+        },
+      });
       transporter.sendMail({
         to: req.body.email,
         subject: 'Password reset',
@@ -109,7 +137,7 @@ exports.postReset = (req, res, next) => { // Email verification for sending pass
     })
     .catch(err => {
       console.log(err);
-      res.status(422).json({message: "Error with resetting password."});
+      res.status(422).json({message: "There is an error with sending email!"});
     })
   })
 }
@@ -120,12 +148,8 @@ exports.postVerifyEmail = (req, res, next) => {
     uniqueString: uniqueString
   }).then(
     user => {
-      if (user.isVerified === true) {
-        return res.status(422).json({message: "Your account is already verified."});
-      } else {
         user.isVerified = true;
         return user.save();
-      }
     }).then(result => {
       res.status(200).json({message: "Your email is verified!"});
     })
