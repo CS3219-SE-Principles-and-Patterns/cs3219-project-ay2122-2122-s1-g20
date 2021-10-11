@@ -54,6 +54,7 @@ const ResetPasswordForm = () => {
 
         if (response.status == 200) {
           // Route to home page
+          setAlertMessage(responseData.message);
           console.log(responseData.message);
         }
       }

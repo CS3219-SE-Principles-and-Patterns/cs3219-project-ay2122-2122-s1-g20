@@ -29,10 +29,11 @@ const EmailVerification = () => {
 
         if (response.status == 200) {
           // Route to home page
+          setAlertMessage(responseData.message);
           console.log(responseData.message);
         }
       } catch (err) {
-        console.log(err.message);
+        setisError(true);
       }
     }
     verifyEmail();

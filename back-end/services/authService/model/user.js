@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     required: false,
   },
   modules: {
-    type: [String],
+    type: [Object],
     required: false,
   },
   uniqueString: {
