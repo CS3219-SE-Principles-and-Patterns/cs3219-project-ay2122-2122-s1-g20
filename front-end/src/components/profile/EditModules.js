@@ -16,15 +16,14 @@ const EditModules = ({ isProfilePage, nextPage }) => {
   };
   const handleConfirmUpdate = () => {
     // update backend database
-    // => upload to cloudinary, button loads
     if (isProfilePage) {
       setEditable(false);
     }
   };
   const renderModules = modules.map((mod) => (
-    <div key={mod}>
+    <div key={mod.moduleCode}>
       <ModuleCard
-        moduleName={mod}
+        mod={mod}
         onClose={handleDeleteModule}
         isEditable={editable}
       ></ModuleCard>
