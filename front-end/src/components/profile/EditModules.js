@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import ModuleCard from "../../components/ModuleCard";
 import { AccountContext } from "../../context/AccountContext";
 import YellowButton from "../YellowButton";
 import SearchModules from "./SearchModules";
+import api from "../../utils/api";
 
 const EditModules = ({ isProfilePage, nextPage }) => {
-  const { modules, handleDeleteModule } = useContext(AccountContext);
+  const { email, modules, handleDeleteModule } = useContext(AccountContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const textSize = isProfilePage ? "text-sm" : "text-base";
   const [editable, setEditable] = useState(isProfilePage ? false : true);
@@ -14,17 +16,35 @@ const EditModules = ({ isProfilePage, nextPage }) => {
   const handleEditModules = () => {
     setEditable(true);
   };
-  const handleConfirmUpdate = () => {
+  const handleConfirmUpdate = async () => {
     // update backend database
-    // => upload to cloudinary, button loads
+    setIsLoading(true);
+    await api
+      .post("/user/modules", { email, modules })
+      .then((res) => console.log(res)) // res.data.updatedUser === null if cant find user to update.
+      .catch((err) => console.log(err));
+    handleUploadDone();
+  };
+
+  const handleUploadDone = () => {
+    setIsLoading(false);
     if (isProfilePage) {
       setEditable(false);
+    } else {
+      handleOnClick();
     }
   };
+
+  const history = useHistory();
+  const handleOnClick = useCallback(
+    () => history.push(nextPage && !isLoading ? nextPage : "#"),
+    [history]
+  );
+
   const renderModules = modules.map((mod) => (
-    <div key={mod}>
+    <div key={mod.moduleCode}>
       <ModuleCard
-        moduleName={mod}
+        mod={mod}
         onClose={handleDeleteModule}
         isEditable={editable}
       ></ModuleCard>
@@ -59,14 +79,13 @@ const EditModules = ({ isProfilePage, nextPage }) => {
 
       <div>
         {editable ? (
-          <Link to={`${nextPage ? nextPage : "#"}`}>
-            <YellowButton
-              text="Confirm"
-              onClick={handleConfirmUpdate}
-              textSize={textSize}
-              px="px-10"
-            />
-          </Link>
+          <YellowButton
+            text="Confirm"
+            onClick={handleConfirmUpdate}
+            textSize={textSize}
+            px="px-10"
+            isLoading={isLoading}
+          />
         ) : null}
       </div>
     </div>
