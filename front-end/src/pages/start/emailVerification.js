@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import AlertMessage from "../../components/alerts/AlertMessage";
 
 const EmailVerification = () => {
   // Moment user enters this page, extract the uniqueString and compare with unique String stored in user model to find
   // unique user, then update verified to true
 
   const { uniqueString } = useParams();
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isError, setisError] = useState(false);
 
   useEffect(() => {
     async function verifyEmail() {
@@ -22,8 +25,8 @@ const EmailVerification = () => {
       try {
         const responseData = await response.json();
         if (response.status !== 200) {
-          // setAlertMessage(responseData.message);
-          // setErrorPasswordReset(true);
+          setAlertMessage(responseData.message);
+          setisError(true);
           throw new Error(responseData.message);
         }
 
@@ -39,7 +42,10 @@ const EmailVerification = () => {
   });
 
   return (
-    <div className="max-w-7xl pt-10 md:pt-48 mb-10 flex flex-col h-full justify-center items-center w-full mx-auto">
+    <div className="max-w-7xl pt-10 md:pt-48 mb-10 flex flex-col h-full justify-center items-center w-max mx-auto">
+      {alertMessage != "" ? (
+        <AlertMessage isError={isError} message={alertMessage} />
+      ) : undefined}
       <div className="bg-purple bg-opacity-50 px-32 py-20 rounded-md">
         <div className="text-3xl sm:text-4xl md:text-5xl font-bold pt-7">
           Email verified.

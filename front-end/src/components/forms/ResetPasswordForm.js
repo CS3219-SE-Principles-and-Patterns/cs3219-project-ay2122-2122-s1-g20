@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ErrorMessage from "../alerts/ErrorMessage";
+import AlertMessage from "../alerts/AlertMessage";
 import { useParams } from "react-router-dom";
 
 const ResetPasswordForm = () => {
@@ -8,6 +8,7 @@ const ResetPasswordForm = () => {
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [errorPasswordReset, setErrorPasswordReset] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [isError, setisError] = useState(false);
 
   const { token } = useParams();
 
@@ -24,6 +25,7 @@ const ResetPasswordForm = () => {
     try {
       if (password !== passwordConfirmation) {
         setErrorPasswordReset(true);
+        setisError(true);
         setAlertMessage("Passwords do not match!");
         throw new Error("Passwords do not match!");
       } else {
@@ -46,6 +48,7 @@ const ResetPasswordForm = () => {
         if (response.status !== 200) {
           setAlertMessage(responseData.message);
           setErrorPasswordReset(true);
+          setisError(true);
           throw new Error(responseData.message);
         }
 
@@ -64,7 +67,7 @@ const ResetPasswordForm = () => {
   return (
     <div className="py-6 align-middle justify-center mt-5">
       {errorPasswordReset ? (
-        <ErrorMessage authType="resetting password" message={alertMessage} />
+        <AlertMessage isError={isError} message={alertMessage} />
       ) : undefined}
       <form
         onSubmit={handlePasswordReset}
