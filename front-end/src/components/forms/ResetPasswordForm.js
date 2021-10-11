@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AlertMessage from "../alerts/AlertMessage";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 const ResetPasswordForm = () => {
   const [password, setPassword] = useState("");
@@ -71,7 +71,7 @@ const ResetPasswordForm = () => {
       ) : undefined}
       <form
         onSubmit={handlePasswordReset}
-        className="space-y-6"
+        className="space-y-6 mb-10"
         action="#"
         method="POST"
       >
@@ -127,6 +127,12 @@ const ResetPasswordForm = () => {
           Reset
         </button>
       </form>
+      <Link
+        className="w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium text-black bg-purple-dark hover:bg-opacity-75 mt-6"
+        to="/login"
+      >
+        Back to log in
+      </Link>
     </div>
   );
 };
