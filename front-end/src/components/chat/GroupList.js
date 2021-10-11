@@ -3,28 +3,28 @@ import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 
 const GroupList = () => {
-  const [filter, setFilterName] = useState("");
+  const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
 
-  const handleFilter = (event) => {
-    setFilterName(event.target.value);
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
   };
   return (
-    <div>
-      <div className="mt-5 ml-2 flex flex-row">
+    <div className="flex flex-col">
+      <div className="justify-center w-full flex flex-row">
         <div>
-          <form className="space-y-6" action="#" method="GET">
+          <form action="#" method="GET">
             <div>
               <label
-                htmlFor="filter"
-                className="block flex text-sm font-medium text-gray-700"
+                htmlFor="search"
+                className="text-sm font-medium text-gray-700"
               ></label>
               <input
-                onChange={handleFilter}
+                onChange={handleSearch}
                 type="text"
-                name="filter"
-                id="filter"
-                value={filter}
+                name="search"
+                id="search"
+                value={search}
                 placeholder="Search for chat groups"
                 className="mt-1 placeholder-white appearance-none py-3 sm:w-96 border-none  pl-3 py-2 sm:py-4 rounded-md bg-purple-misc focus:outline-none focus:ring-purple-dark text-xs focus:border-purple-dark sm:text-sm"
               />
@@ -45,10 +45,9 @@ const GroupList = () => {
         </div>
       </div>
 
-      <div>
+      <div className="justify-center w-full pl-4 flex flex-col">
         <GroupBubble />
-      </div>
-      <div>
+
         <GroupBubble />
       </div>
     </div>
