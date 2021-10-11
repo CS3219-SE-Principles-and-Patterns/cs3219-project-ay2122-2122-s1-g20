@@ -1,23 +1,27 @@
 import React, { useState } from "react";
+import { setTokenHeader } from "../utils/api";
 
 export const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
-  // const [token, setToken] = useState("");
+  const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [modules, setModules] = useState([
-    {
-      moduleCode: "AC5001",
-      title: "Architectural History of Singapore",
-    },
-    {
-      moduleCode: "AC5002",
-      title: "Conservation Approaches and Philosophies",
-    },
-  ]);
+  const [modules, setModules] = useState([]);
   const [profilePic, setProfilePic] = useState("");
 
+  const setUser = (user, token) => {
+    setToken(token);
+    setUsername(user.username);
+    setEmail(user.email);
+    if (user.modules) {
+      setModules(user.modules);
+    }
+    if (user.profilePic) {
+      setProfilePic(user.profilePic);
+    }
+    setTokenHeader(token);
+  };
   const handleUpdateUsername = (newUsername) => {
     setUsername(newUsername); // comment this line out after api integration is done
     // await api call to update username in backend, change to async function
@@ -44,6 +48,8 @@ export const AccountProvider = ({ children }) => {
   return (
     <AccountContext.Provider
       value={{
+        setUser,
+        token,
         username,
         setUsername,
         email,

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState, useCallback } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { AccountContext } from "../../context/AccountContext";
 import AlertMessage from "../alerts/AlertMessage";
 
 const LoginForm = () => {
+  const { setUser } = useContext(AccountContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
@@ -40,14 +42,23 @@ const LoginForm = () => {
       }
 
       if (response.status == 200) {
-        // Route to home page
+        // update user information in account context
+        setUser(responseData.user, responseData.token);
+        // if first login, route to /profilePic, if not route to home page
         setAlertMessage(responseData.message);
         setisError(false);
+        handleNext(responseData.profilePic ? "/" : "/setProfilePic");
       }
     } catch (error) {
       setisError(true);
     }
   };
+
+  const history = useHistory();
+  const handleNext = useCallback(
+    (nextPage) => history.push(nextPage),
+    [history]
+  );
 
   return (
     <div className="py-6 align-middle justify-center mt-5">

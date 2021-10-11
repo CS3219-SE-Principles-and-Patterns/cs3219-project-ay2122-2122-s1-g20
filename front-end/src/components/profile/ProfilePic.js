@@ -1,11 +1,11 @@
 import React, { useState, useContext, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { AccountContext } from "../../context/AccountContext";
-import api from "../../utils/api";
+import { api } from "../../utils/api";
 import YellowButton from "../YellowButton";
 
 const ProfilePic = ({ uploadButton, doneButton, nextPage, size }) => {
-  const { email, profilePic, setProfilePic } = useContext(AccountContext);
+  const { profilePic, setProfilePic } = useContext(AccountContext);
   const [error, setError] = useState("");
   const [isEditable, setIsEditable] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,8 +25,8 @@ const ProfilePic = ({ uploadButton, doneButton, nextPage, size }) => {
     // => upload to cloudinary, button loads
     setIsLoading(true);
     await api
-      .post("/user/profilePic", { profilePic, email })
-      .then((res) => console.log(res)) // res.data.updatedUser === null if cant find user to update.
+      .post("/profile/profilePic", { profilePic })
+      .then((res) => setProfilePic(res.data.profilePic))
       .catch((err) => console.log(err));
     handleUploadDone();
   };
