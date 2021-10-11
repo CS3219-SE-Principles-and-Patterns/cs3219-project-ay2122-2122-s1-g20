@@ -56,6 +56,8 @@ const SignUpForm = () => {
         }
 
         if (response.status == 200) {
+          setAlertMessage(responseData.message);
+          setisError(false);
           console.log(responseData.message);
         }
       }

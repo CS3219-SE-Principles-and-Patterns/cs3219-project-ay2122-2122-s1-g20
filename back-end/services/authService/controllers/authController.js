@@ -45,9 +45,9 @@ exports.signup = async (req, res) => {
       `
     })
 
-    res.status(200).json({token: token, message: "User successfully created!"});
+    return res.status(200).json({token: token, message: "User successfully created!"});
   } catch (err) {
-    res.status(422).json({message: "Error with creating user."});
+    return res.status(422).json({message: "Error with creating user."});
   }
 };
 
