@@ -33,6 +33,7 @@ const SignUpForm = () => {
     try {
       if (password !== passwordConfirmation) {
         setErrorSignUp(true);
+        setisError(true);
         setAlertMessage("Passwords do not match!");
         throw new Error("Passwords do not match!");
       } else {
