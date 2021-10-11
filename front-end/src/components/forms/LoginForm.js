@@ -112,7 +112,7 @@ const LoginForm = () => {
           Log In
         </button>
         <p className="text-sm pt-5 hover:underline text-purple-dark flex justify-center">
-          <Link to="/emailConfirmation">Forgot your password?</Link>
+          <Link to="/resetPassword">Forgot your password?</Link>
         </p>
 
         <p className="text-sm flex justify-center">

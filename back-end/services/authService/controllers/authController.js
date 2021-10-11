@@ -43,7 +43,7 @@ exports.signup = async (req, res) => {
       subject: 'Please verify your email for your StudyBuddy account.',
       html: `
         <p>Please verify your study buddy account!</p>
-        <p>Click this <a href="http://localhost:3000/verified/${uniqueString}">link</a> to verify your email.</p>
+        <p>Click this <a href="http://localhost:3000/signup/confirmation/verified/${uniqueString}">link</a> to verify your email.</p>
       `
     })
 

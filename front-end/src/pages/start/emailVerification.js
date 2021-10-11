@@ -4,9 +4,6 @@ import { useParams } from "react-router-dom";
 import AlertMessage from "../../components/alerts/AlertMessage";
 
 const EmailVerification = () => {
-  // Moment user enters this page, extract the uniqueString and compare with unique String stored in user model to find
-  // unique user, then update verified to true
-
   const { uniqueString } = useParams();
   const [alertMessage, setAlertMessage] = useState("");
   const [isError, setisError] = useState(false);

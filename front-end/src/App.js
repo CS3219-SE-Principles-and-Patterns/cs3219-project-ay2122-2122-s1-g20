@@ -30,11 +30,11 @@ function App() {
               <SignUpConfirmation />
             </Route>
             <Route
-              path="/verified/:uniqueString"
+              path="signup/confirmation/verified/:uniqueString"
               component={EmailVerification}
             />
             <Route path="/resetPassword/:token" component={ResetPasswordPage} />
-            <Route path="/emailConfirmation">
+            <Route path="/resetPassword">
               <EmailConfirmationPage />
             </Route>
 
