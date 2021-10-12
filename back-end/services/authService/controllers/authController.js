@@ -38,6 +38,7 @@ async function sendVerificationMail(uniqueString, email) {
         <p>Click this <a href="http://localhost:3000/signup/confirmation/verified/${uniqueString}">link</a> to verify your email.</p>
       `
     });
+    console.log("in send verification function");
     console.log(result);
   } catch (error) {
     return error;
@@ -45,28 +46,72 @@ async function sendVerificationMail(uniqueString, email) {
 }
 
 
-exports.signup = async (req, res) => {
-  const { email, username, password } = req.body;
-  try {
-    const oldUser = await User.findOne({ email });
-    if (oldUser) {
-      return res.status(409).json({message: "This email is already registered. Please login instead."});
-    }
+// exports.signup = async (req, res) => {
+//   const { email, username, password } = req.body;
+//   try {
+//     const oldUser = await User.findOne({ email });
+//     if (oldUser) {
+//       return res.status(409).json({message: "This email is already registered. Please login instead."});
+//     }
 
-    var uniqueString = crypto.randomBytes(20).toString('hex');
+//     var uniqueString = crypto.randomBytes(20).toString('hex');
     
-    const user = new User({ email, username, password, uniqueString });
-    await user.save();
-    const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
+//     const user = new User({ email, username, password, uniqueString });
+//     await user.save();
+//     const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
 
-    sendVerificationMail(uniqueString, email);
+//     sendVerificationMail(uniqueString, email);
 
-    return res.status(200).json({token: token, message: "User successfully created!"});
-  } catch (err) {
-    return res.status(422).json({message: "Error with creating user."});
-  }
+//     return res.status(200).json({token: token, message: "User successfully created!"});
+//   } catch (err) {
+//     return res.status(422).json({message: "Error with creating user."});
+//   }
   
-};
+// };
+
+exports.signup = (req, res) => {
+  const { email, username, password } = req.body;
+  User.findOne({email: email}).then(
+    user => {
+      if (user) {
+        return res.status(409).json({message: "This email is already registered. Please login instead."});
+      }
+      return crypto.randomBytes(20).toString('hex');
+    }
+  ).then(uniqueString => {
+    const user = new User({ email, username, password, uniqueString });
+    user.save();
+    const token = jwt.sign({ userId: user._id }, process.env.TOKEN_KEY);
+    const accessToken = oAuth2Client.getAccessToken();
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: 'studybuddycs3219@gmail.com',
+        clientId: process.env.OAUTH_CLIENTID,
+        clientSecret: process.env.OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+        accessToken: accessToken,
+      },
+    });
+
+     const result = transporter.sendMail({
+      to: email,
+      subject: 'Please verify your email for your StudyBuddy account.',
+      html: `
+        <p>Please verify your study buddy account!</p>
+        <p>Click this <a href="http://localhost:3000/signup/confirmation/verified/${uniqueString}">link</a> to verify your email.</p>
+      `
+    });
+    console.log("in sign up function");
+    console.log(result);
+    return res.status(200).json({token: token, message: "User successfully created!"});
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(422).json({message: "Error with creating user."});
+  })
+}
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
