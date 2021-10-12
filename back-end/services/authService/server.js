@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const cloudinary = require("cloudinary");
 
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 dotenv.config({ path: "../../config.env" });
 cloudinary.config({
@@ -45,6 +46,7 @@ mongoose
   .then(() => console.log("DB connection successful!"));
 
 app.use("/api/user", authRoutes);
+app.use("/api/user/account", userRoutes);
 
 app.get("/", (req, res) => {
   console.log("Test passed");

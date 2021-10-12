@@ -3,7 +3,7 @@ import Popup from "reactjs-popup";
 import PropTypes from "prop-types";
 import { VscChromeClose } from "react-icons/vsc";
 
-const ChatGroupCreationForm = ({ setOpen, setLoad, open, load }) => {
+const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
   const [groupName, setGroupName] = useState("");
   const [chitchat, setChitchat] = useState(false);
   const [makan, setMakan] = useState(true);
@@ -25,13 +25,10 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("HERE 1");
     try {
-      //todo: pass in user
-      //const users = [user];
       const value = await checkHashTag();
       console.log(value);
-      const res = await fetch("http://localhost:9000/api/rooms", {
+      const res = await fetch("http://localhost:9000/api/groups", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -39,8 +36,9 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load }) => {
         body: JSON.stringify({
           hashtag: value,
           name: groupName,
-          uid: ["me"],
+          uid: [userEmail],
           lastModified: Date.now(),
+          creator: userEmail,
         }),
       });
       const data = await res.json();

@@ -17,7 +17,7 @@ const ChatPage = () => {
             <GroupList account={context} setDisplayChat={setDisplayChat} />
           </div>
           <div className="col-span-3">
-            <Messenger displayChat={displayChat} />
+            <Messenger account={context} displayChat={displayChat} />
           </div>
         </div>
       )}

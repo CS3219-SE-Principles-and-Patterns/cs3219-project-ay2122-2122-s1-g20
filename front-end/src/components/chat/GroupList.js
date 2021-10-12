@@ -7,16 +7,23 @@ const GroupList = ({ account, setDisplayChat }) => {
   const [open, setOpen] = useState(false);
   const [groups, setGroups] = useState([]);
   const [load, setLoad] = useState(false);
+  console.log(account);
 
   useEffect(() => {
     const getGroups = async () => {
-      const res = await fetch("http://localhost:9000/api/rooms");
+      const res = await fetch("http://localhost:9000/api/groups");
       const data = await res.json();
-      console.log(data.rooms);
-      setGroups(data.rooms);
+      console.log(data.groups);
+      setGroups(data.groups);
     };
     getGroups();
   }, [load]);
+
+  const getGroupsUserIsIn = async () => {
+    const res = await fetch(`http://localhost:8080/api/user/account/groups/${account.email}`);
+    const data = await res.json();
+    
+  }
 
   const handleFilter = (event) => {
     setFilterName(event.target.value);
@@ -58,7 +65,7 @@ const GroupList = ({ account, setDisplayChat }) => {
             setLoad={setLoad}
             open={open}
             load={load}
-            user={account.userName}
+            userEmail={account.email}
           />
         </div>
       </div>
@@ -68,6 +75,7 @@ const GroupList = ({ account, setDisplayChat }) => {
             key={index}
             group={group}
             setDisplayChat={setDisplayChat}
+            userEmail={account.email}
           />
         ))}
       </div>

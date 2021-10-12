@@ -1,23 +1,90 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { socket } from "../chat/Socket";
 
-const GroupBubble = ({ group, setDisplayChat }) => {
+const GroupBubble = ({ group, setDisplayChat, userEmail }) => {
   const name = group.name;
   const hashtag = group.hashtag;
   const id = group._id;
   const [join, setJoin] = useState(false);
 
   const handleJoinChat = () => {
-    //TBD user to join chat groups
     console.log(id);
     setDisplayChat(group);
+    console.log(group);
     setJoin(true);
+
+    const newGroupJoined = {
+      email: userEmail,
+      groupId: id,
+    };
+    console.log(newGroupJoined);
+
+    try {
+      const res = fetch("http://localhost:8080/api/user/account/groups", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(newGroupJoined),
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+
+    try {
+      const res = fetch("http://localhost:9000/api/group/users", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(newGroupJoined),
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+
+    socket.emit("join-room", id); //same to be done when user clicks on name of joined chats
   };
 
   const handleLeaveChat = () => {
+    setDisplayChat("");
     setJoin(false);
-  }
+    const groupToLeave = {
+      email: userEmail,
+      groupId: id,
+    };
+    try {
+      const res = fetch(
+        "http://localhost:8080/api/user/account/groups/remove",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(groupToLeave),
+        }
+      );
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
 
+    try {
+      const res = fetch("http://localhost:9000/api/group/users/remove", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(groupToLeave),
+      });
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className=" flex flex-row">
@@ -29,9 +96,9 @@ const GroupBubble = ({ group, setDisplayChat }) => {
       </div>
       <button
         className="rounded bg-gray-100 h-20 w-20 mt-5 text-xl"
-        onClick={handleJoinChat}
+        onClick={!join ? handleJoinChat : handleLeaveChat}
       >
-        { (join) ? "Join" : "Leave"}
+        {!join ? "Join" : "Leave"}
       </button>
     </div>
   );

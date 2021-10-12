@@ -2,12 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
-
+const dotenv = require("dotenv");
 const routes = require("./routes/routes");
 
+dotenv.config({ path: "../../config.env" });
+
 const app = express();
-const PORT = 9000;
+const PORT = process.env.CHAT_PORT || config.port;
 
 app.use(cors());
 
@@ -34,8 +35,11 @@ const io = require("socket.io")(http, options);
 io.on("connection", (socket)=>{
     console.log("user connected");
     console.log(socket.id);
-    socket.on("send-message", (message, room) => {
-      socket.to(room).emit("receive-message", (message));
+    socket.on("send-message", (message, group) => {
+      socket.to(group).emit("receive-message", (message));
+    })
+    socket.on("join-room", group => {
+      socket.join(group);
     })
 });
 
@@ -43,8 +47,10 @@ http.listen(PORT, ()=>{
     console.log("connected to port: " + PORT)
 });
 
-//todo: switch database
-const DB = "mongodb+srv://admin:admincs3219@cs3219.w1uxq.mongodb.net/chats?retryWrites=true&w=majority";
+const DB = process.env.DATABASE.replace(
+  "<PASSWORD>",
+  process.env.DATABASE_PASSWORD
+);
   
 mongoose
     .connect(DB, {

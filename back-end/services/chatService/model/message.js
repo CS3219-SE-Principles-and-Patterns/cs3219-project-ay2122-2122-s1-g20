@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const messageSchema = mongoose.Schema({
-    room_id: {
+    group_id: {
         type: String,
         required: true
     },

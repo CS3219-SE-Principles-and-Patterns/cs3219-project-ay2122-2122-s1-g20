@@ -6,7 +6,7 @@ const Message = require("../model/message");
 exports.add = async (req, res) => {
     try {
         const message = new Message();
-        message.room_id = req.body.room_id;
+        message.group_id = req.body.group_id;
         message.sender = req.body.sender;
         message.timestamp = req.body.timestamp;
         message.content = req.body.content;
@@ -23,8 +23,8 @@ exports.add = async (req, res) => {
 
 exports.retrieve = async (req, res) => {
     try {
-        const id = req.params.room_id;
-        const data = await Message.find({room_id: id}).select("-_id -__v").exec();
+        const id = req.params.group_id;
+        const data = await Message.find({group_id: id}).select("-_id -__v").exec();
         if (data) {
             res.status(200).send({messages: data, message: "Messages successfully loaded!"});
             return;
