@@ -9,18 +9,16 @@ const GroupBubble = ({ group, setDisplayChat, userEmail }) => {
   const [join, setJoin] = useState(false);
 
   const handleJoinChat = () => {
-    console.log(id);
     setDisplayChat(group);
-    console.log(group);
     setJoin(true);
 
     const newGroupJoined = {
       email: userEmail,
       groupId: id,
     };
-    console.log(newGroupJoined);
 
     try {
+      //add group to user
       const res = fetch("http://localhost:8080/api/user/account/groups", {
         method: "POST",
         headers: {
@@ -34,6 +32,7 @@ const GroupBubble = ({ group, setDisplayChat, userEmail }) => {
     }
 
     try {
+      //add user to group
       const res = fetch("http://localhost:9000/api/group/users", {
         method: "POST",
         headers: {
@@ -57,6 +56,7 @@ const GroupBubble = ({ group, setDisplayChat, userEmail }) => {
       groupId: id,
     };
     try {
+      //remove group from user
       const res = fetch(
         "http://localhost:8080/api/user/account/groups/remove",
         {
@@ -73,6 +73,7 @@ const GroupBubble = ({ group, setDisplayChat, userEmail }) => {
     }
 
     try {
+      //remove user from group
       const res = fetch("http://localhost:9000/api/group/users/remove", {
         method: "POST",
         headers: {
@@ -105,8 +106,9 @@ const GroupBubble = ({ group, setDisplayChat, userEmail }) => {
 };
 
 GroupBubble.propTypes = {
-  groupName: PropTypes.string,
-  tag: PropTypes.string,
+  group: PropTypes.object,
+  setDisplayChat: PropTypes.func,
+  userEmail: PropTypes.string,
 };
 
 export default GroupBubble;

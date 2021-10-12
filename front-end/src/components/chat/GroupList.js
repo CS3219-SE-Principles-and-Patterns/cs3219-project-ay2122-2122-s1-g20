@@ -6,24 +6,25 @@ const GroupList = ({ account, setDisplayChat }) => {
   const [filter, setFilterName] = useState("");
   const [open, setOpen] = useState(false);
   const [groups, setGroups] = useState([]);
+  const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
   const [load, setLoad] = useState(false);
-  console.log(account);
 
   useEffect(() => {
-    const getGroups = async () => {
+    const getAllGroups = async () => {
       const res = await fetch("http://localhost:9000/api/groups");
       const data = await res.json();
-      console.log(data.groups);
       setGroups(data.groups);
     };
-    getGroups();
+    const getGroupsUserIsIn = async () => {
+      const res = await fetch(`
+      http://localhost:8080/api/user/account/groups/${account.email}`);
+      const data = await res.json();
+      setGroupsUserIsIn(data.groups);
+      console.log(groupsUserIsIn);
+    };
+    getAllGroups();
+    getGroupsUserIsIn();
   }, [load]);
-
-  const getGroupsUserIsIn = async () => {
-    const res = await fetch(`http://localhost:8080/api/user/account/groups/${account.email}`);
-    const data = await res.json();
-    
-  }
 
   const handleFilter = (event) => {
     setFilterName(event.target.value);
