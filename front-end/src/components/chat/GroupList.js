@@ -2,35 +2,54 @@ import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 
-const GroupList = ({ account, setDisplayChat }) => {
+const GroupList = ({ account, setDisplayChat, tag }) => {
   const [search, setSearchValue] = useState("");
   const [open, setOpen] = useState(false);
-  const [groups, setGroups] = useState([]);
-  const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
+  const [groups, setGroups] = useState([]); //view of the filtered group list
+  const [groupsUserIsIn, setGroupsUserIsIn] = useState([]); //based on the user
   const [load, setLoad] = useState(false);
 
   useEffect(() => {
-    const getAllGroups = async () => {
-      const res = await fetch("http://localhost:9000/api/groups");
-      const data = await res.json();
-      setGroups(data.groups);
-    };
+    if (tag == "All Chats") {
+      const getAllGroups = async () => {
+        const res = await fetch("http://localhost:9000/api/groups");
+        const data = await res.json();
+        setGroups(data.groups);
+      };
+
+      getAllGroups();
+    }
+
+    //moving on to groups user has joined
     const getGroupsUserIsIn = async () => {
       const res = await fetch(`
       http://localhost:8080/api/user/account/groups/${account.email}`);
       const data = await res.json();
       setGroupsUserIsIn(data.groups);
+      setGroups(data.groups);
       console.log(groupsUserIsIn);
     };
-    getAllGroups();
+
+    //tbd retrieve groups chats with given hashtag
     getGroupsUserIsIn();
-  }, [load]);
+    if (tag == "#chitchat") {
+      setGroups([]);
+    } else if (tag == "#makan") {
+      setGroups([]);
+    } else if (tag == "#sports") {
+      setGroups([]);
+    } else if (tag == "Study Groups") {
+      setGroups([]);
+    }
+  }, [tag]);
 
   const handleSearch = (event) => {
     setSearchValue(event.target.value);
   };
   return (
     <div>
+      <text>For testing purposes The tag is {tag}</text>
+
       <div className="pt-2 flex justify-center">
         <form action="#" method="GET">
           <div>
