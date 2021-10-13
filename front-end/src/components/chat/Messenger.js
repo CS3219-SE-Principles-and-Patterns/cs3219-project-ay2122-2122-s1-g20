@@ -77,14 +77,14 @@ const Messenger = ({ account, displayChat }) => {
             ))}
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 flex flex-row">
+          <div className="absolute inset-x-0 bottom-0 flex flex-row h-14">
             <input
               onChange={setMessageChange}
               value={message}
               placeholder="Write a message"
-              className="w-full placeholder-white bg-purple border-black border-2 "
+              className="w-full placeholder-white bg-purple border-black border-2 pl-2 text-lg"
             ></input>
-            <button className="pl-2 pr-2" onClick={handleSendMessage}>
+            <button className="pl-2 pr-2 bg-grey" onClick={handleSendMessage}>
               Send
             </button>
           </div>
