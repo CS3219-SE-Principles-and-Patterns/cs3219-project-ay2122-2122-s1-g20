@@ -2,11 +2,16 @@ import GroupList from "../components/chat/GroupList";
 import Category from "../components/chat/Category";
 import Messenger from "../components/chat/Messenger";
 import { AccountContext } from "../context/AccountContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ChatPage = () => {
   const [displayChat, setDisplayChat] = useState([]);
   const [tag, setTag] = useState("All Chats");
+
+  useEffect(() => {
+    setDisplayChat("");
+  }, [tag]);
+
   return (
     <AccountContext.Consumer>
       {(context) => (
