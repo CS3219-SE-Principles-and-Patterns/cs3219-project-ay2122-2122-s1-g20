@@ -1,10 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 
-const GroupList = () => {
+const GroupList = ({ account, setDisplayChat }) => {
   const [filter, setFilterName] = useState("");
   const [open, setOpen] = useState(false);
+  const [groups, setGroups] = useState([]);
+  const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
+  const [load, setLoad] = useState(false);
+
+  useEffect(() => {
+    const getAllGroups = async () => {
+      const res = await fetch("http://localhost:9000/api/groups");
+      const data = await res.json();
+      setGroups(data.groups);
+    };
+    const getGroupsUserIsIn = async () => {
+      const res = await fetch(`
+      http://localhost:8080/api/user/account/groups/${account.email}`);
+      const data = await res.json();
+      setGroupsUserIsIn(data.groups);
+      console.log(groupsUserIsIn);
+    };
+    getAllGroups();
+    getGroupsUserIsIn();
+  }, [load]);
 
   const handleFilter = (event) => {
     setFilterName(event.target.value);
@@ -41,15 +61,24 @@ const GroupList = () => {
           >
             +
           </button>
-          <ChatGroupCreationForm setOpen={setOpen} open={open} />
+          <ChatGroupCreationForm
+            setOpen={setOpen}
+            setLoad={setLoad}
+            open={open}
+            load={load}
+            userEmail={account.email}
+          />
         </div>
       </div>
-
       <div>
-        <GroupBubble />
-      </div>
-      <div>
-        <GroupBubble />
+        {groups.map((group, index) => (
+          <GroupBubble
+            key={index}
+            group={group}
+            setDisplayChat={setDisplayChat}
+            userEmail={account.email}
+          />
+        ))}
       </div>
     </div>
   );
