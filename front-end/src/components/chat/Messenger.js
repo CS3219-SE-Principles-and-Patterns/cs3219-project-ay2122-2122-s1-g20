@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
 
 const Messenger = ({ account, displayChat }) => {
-  //todo: fix positions so that there is no overlap in the UI
   const [message, setMessage] = useState("");
   const [oldMessages, setOldMessages] = useState([]);
   const username = account.username;
@@ -38,6 +37,7 @@ const Messenger = ({ account, displayChat }) => {
       timestamp: Date.now(),
       content: message,
     };
+    setMessage("");
     setOldMessages(originalMessages.concat(newMessage));
 
     const res = await fetch("http://localhost:9000/api/messages", {
@@ -49,6 +49,15 @@ const Messenger = ({ account, displayChat }) => {
     });
     console.log(res);
   };
+
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [oldMessages]);
 
   useEffect(() => {
     const getOldMessages = async () => {
@@ -69,15 +78,16 @@ const Messenger = ({ account, displayChat }) => {
       {displayChat.length == 0 ? (
         " "
       ) : (
-        <div className="flex flex-col h-screen relative md:w-auto">
+        <div className="flex flex-col h-screen relative pb-16  md:w-auto">
           <StudyHeader group={displayChat} />
           <div className="pr-10 pl-2 overflow-y-auto">
             {oldMessages.map((message, index) => (
               <ChatBubble key={index} message={message} />
             ))}
+            <div ref={messagesEndRef} />
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 flex flex-row h-14">
+          <div className="absolute inset-x-0 bottom-0 flex flex-row h-16">
             <input
               onChange={setMessageChange}
               value={message}

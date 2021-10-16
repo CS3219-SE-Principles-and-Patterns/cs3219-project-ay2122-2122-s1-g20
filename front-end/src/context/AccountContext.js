@@ -4,8 +4,8 @@ export const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
   // const [token, setToken] = useState("");
-  const [username, setUsername] = useState("hai");
-  const [email, setEmail] = useState("haishanlim@gmail.com");
+  const [username, setUsername] = useState(""); //to obtain from account context
+  const [email, setEmail] = useState("");
   const [modules, setModules] = useState([
     {
       moduleCode: "AC5001",

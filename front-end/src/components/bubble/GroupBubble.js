@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { socket } from "../chat/Socket";
 
-const GroupBubble = ({ group, setDisplayChat, userEmail }) => {
+const GroupBubble = ({ group, setDisplayChat, userEmail, joined }) => {
   const name = group.name;
   const hashtag = group.hashtag;
   const id = group._id;
-  const [join, setJoin] = useState(false);
+  const [join, setJoin] = useState(joined);
 
   const handlePreview = () => {
     setDisplayChat(group);

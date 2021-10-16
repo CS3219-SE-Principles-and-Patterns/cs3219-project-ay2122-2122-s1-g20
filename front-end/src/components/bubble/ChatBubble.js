@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const ChatBubble = ({ message }) => {
   return (
-    <div className="mt-5">
+    <div className="p-2">
       <div className="rounded-full h-16 w-16 flex items-center justify-center bg-grey">
         profile
       </div>

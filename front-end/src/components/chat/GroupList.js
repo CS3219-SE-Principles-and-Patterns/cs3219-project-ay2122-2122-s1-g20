@@ -5,8 +5,9 @@ import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 const GroupList = ({ account, setDisplayChat, tag }) => {
   const [search, setSearchValue] = useState("");
   const [open, setOpen] = useState(false);
-  const [groups, setGroups] = useState([]); //view of the filtered group list
-  const [groupsUserIsIn, setGroupsUserIsIn] = useState([]); //based on the user
+  const [groups, setGroups] = useState([]);
+  const [display, setDisplay] = useState([]);
+  const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
   const [load, setLoad] = useState(false);
 
   //loading data from group database
@@ -40,20 +41,34 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
 
   useEffect(() => {
     getGroupsUserIsIn();
-    setGroups(groupsUserIsIn);
+    setDisplay(groupsUserIsIn);
 
     if (tag == "All Chats") {
       getAllGroups();
+      setDisplay(groups);
     } else {
       if (tag != "Joined") {
         const temp = groupsUserIsIn.filter((x) => x.hashtag == tag);
-        setGroups(temp);
+        setDisplay(temp);
       }
     }
   }, [tag, load]);
 
   const handleSearch = (event) => {
     setSearchValue(event.target.value);
+    var temp;
+    if (tag == "All Chats") {
+      temp = groups.filter((x) => x.name.includes(search));
+    } else {
+      if (tag != "Joined") {
+        temp = groupsUserIsIn.filter(
+          (x) => x.hashtag == tag && x.name.includes(search)
+        );
+      } else {
+        temp = groupsUserIsIn.filter((x) => x.name.includes(search));
+      }
+    }
+    setDisplay(temp);
   };
   return (
     <div>
@@ -96,13 +111,13 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
       </div>
 
       <div className="w-full pl-4">
-        {groups.map((group, index) => (
+        {display.map((group, index) => (
           <GroupBubble
             key={index}
             group={group}
             setDisplayChat={setDisplayChat}
             userEmail={account.email}
-            groupsUserIsIn={groupsUserIsIn}
+            joined={groupsUserIsIn.includes(group)}
           />
         ))}
       </div>
