@@ -23,15 +23,19 @@ exports.uploadMedia = async (req, res, next) => {
               "http://dreamvilla.life/wp-content/uploads/2017/07/dummy-profile-pic.png")
         );
       if (!req.body.modules) {
-        const updatedUser = await User.findOneAndUpdate(
-          { email: req.body.email },
+        const updatedUser = await User.findByIdAndUpdate(
+          req.user._id,
           { profilePic: req.body.profilePic },
           { new: true }
         );
-        res.status(200).json({
-          status: "success",
-          updatedUser,
-        });
+        if (updatedUser) {
+          res.status(200).json({
+            status: "success",
+            profilePic: updatedUser.profilePic,
+          });
+        } else {
+          throw new Error({ message: "User not found." });
+        }
       } else {
         // for first login route: add profile pic and modules
         // next() --> add modules
@@ -53,15 +57,19 @@ exports.deleteMedia = async (req, res, next) => {
       async (error, result) => {
         if (result.result === "ok") {
           // console.log(result);
-          const updatedUser = await User.findOneAndUpdate(
-            { email: req.body.email },
+          const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
             { profilePic: "" },
             { new: true }
           );
-          res.status(200).json({
-            status: "success",
-            updatedUser,
-          });
+          if (updatedUser) {
+            res.status(200).json({
+              status: "success",
+              profilePic: "",
+            });
+          } else {
+            throw new Error({ message: "User not found." });
+          }
         } else if (error) {
           res.status(error.http_code).json({
             error,

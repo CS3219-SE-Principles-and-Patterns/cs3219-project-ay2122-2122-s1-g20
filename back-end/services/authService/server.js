@@ -5,7 +5,9 @@ const dotenv = require("dotenv");
 const cloudinary = require("cloudinary");
 
 const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
+const profileRoutes = require("./routes/profileRoutes");
+const { verifyToken } = require("./middlewares/requireAuth");
+const groupRoutes = require("./routes/groupRoutes");
 
 dotenv.config({ path: "../../config.env" });
 cloudinary.config({
@@ -29,7 +31,7 @@ app.use(
 
 app.use(
   cors({
-    exposedHeaders: ["Content-Range"],
+    exposedHeaders: ["x-access-token"],
   })
 );
 
@@ -46,7 +48,9 @@ mongoose
   .then(() => console.log("DB connection successful!"));
 
 app.use("/api/user", authRoutes);
-app.use("/api/user/account", userRoutes);
+app.use(verifyToken);
+app.use("/api/profile", profileRoutes);
+app.use("/api/user/account", groupRoutes);
 
 app.get("/", (req, res) => {
   console.log("Test passed");
