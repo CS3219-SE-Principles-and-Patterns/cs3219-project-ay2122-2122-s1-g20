@@ -1,5 +1,4 @@
 const express = require("express");
-const { signup, login } = require("../controllers/authController");
 const { uploadMedia, deleteMedia } = require("../controllers/mediaController");
 const {
   deleteModules,
@@ -9,12 +8,11 @@ const { getGroups, addGroup, removeGroup } = require("../controllers/groupsContr
 
 const router = express.Router();
 
-router.put("/signup", signup);
-router.post("/login", login);
-
+// Profile picture
 router.post("/profilePic", uploadMedia);
 router.delete("/profilePic", deleteMedia);
 
+// Modules
 router.post("/modules", addModules);
 router.delete("/modules", deleteModules);
 
