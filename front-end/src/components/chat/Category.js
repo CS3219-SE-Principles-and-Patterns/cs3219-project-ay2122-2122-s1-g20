@@ -31,8 +31,8 @@ const Category = ({ tag, setTag }) => {
       <div>
         <button
           type="button"
-          style={{ background: tag == "#chitchat" ? "#C4C1DE" : "#EFF0F6" }}
-          value="#chitchat"
+          style={{ background: tag == "chitchat" ? "#C4C1DE" : "#EFF0F6" }}
+          value="chitchat"
           onClick={handleFilterChange}
           className="w-5/6 h-10 text-sm sm:text-md justify-center border-transparent rounded-md shadow-sm font-medium text-gray bg-purple hover:bg-opacity-75 mt-6"
         >
@@ -42,8 +42,8 @@ const Category = ({ tag, setTag }) => {
       <div>
         <button
           type="button"
-          style={{ background: tag == "#makan" ? "#C4C1DE" : "#EFF0F6" }}
-          value="#makan"
+          style={{ background: tag == "makan" ? "#C4C1DE" : "#EFF0F6" }}
+          value="makan"
           onClick={handleFilterChange}
           className="w-5/6 h-10 text-sm sm:text-md justify-center border-transparent rounded-md shadow-sm font-medium text-gray bg-purple hover:bg-opacity-75 mt-6"
         >
@@ -53,8 +53,8 @@ const Category = ({ tag, setTag }) => {
       <div>
         <button
           type="button"
-          style={{ background: tag == "#sports" ? "#C4C1DE" : "#EFF0F6" }}
-          value="#sports"
+          style={{ background: tag == "sports" ? "#C4C1DE" : "#EFF0F6" }}
+          value="sports"
           onClick={handleFilterChange}
           className="w-5/6 h-10 text-sm sm:text-md justify-cente border-transparent rounded-md shadow-sm font-medium text-gray bg-purple hover:bg-opacity-75 mt-6"
         >

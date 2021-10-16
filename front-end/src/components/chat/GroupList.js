@@ -8,22 +8,21 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
   const [groups, setGroups] = useState([]); //view of the filtered group list
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]); //based on the user
   const [load, setLoad] = useState(false);
-  const [check, setCheck] = useState(0);
 
-  //loading data from group database TBD not working
+  //loading data from group database
   const loadData = async (arr) => {
-    const temp = [];
-    setCheck(arr.length);
-
+    var temp = [];
     for (var i = 0; i < arr.length; i++) {
       const group_id = arr[i];
       const res = await fetch(`http://localhost:9000/api/groups/${group_id}`);
       const data = await res.json();
-      temp.concat(data.info);
+      if (i == 0) {
+        temp.push.apply(temp, data.info);
+      } else {
+        temp = temp.concat(data.info);
+      }
     }
-
     setGroupsUserIsIn(temp);
-    //setGroups(temp);
   };
   const getGroupsUserIsIn = async () => {
     const res = await fetch(`
@@ -41,19 +40,14 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
 
   useEffect(() => {
     getGroupsUserIsIn();
+    setGroups(groupsUserIsIn);
 
     if (tag == "All Chats") {
       getAllGroups();
     } else {
-      //tbd retrieve groups chats with given hashtag
-      if (tag == "#chitchat") {
-        setGroups([]);
-      } else if (tag == "#makan") {
-        setGroups([]);
-      } else if (tag == "#sports") {
-        setGroups([]);
-      } else if (tag == "Study Groups") {
-        setGroups([]);
+      if (tag != "Joined") {
+        const temp = groupsUserIsIn.filter((x) => x.hashtag == tag);
+        setGroups(temp);
       }
     }
   }, [tag, load]);
@@ -63,7 +57,6 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
   };
   return (
     <div>
-      <text>Testing purpose {check}</text>
       <div className="pt-2 flex justify-center">
         <form action="#" method="GET">
           <div>
