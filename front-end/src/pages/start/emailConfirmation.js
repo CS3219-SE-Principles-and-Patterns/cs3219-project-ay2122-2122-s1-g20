@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import AlertMessage from "../../components/alerts/AlertMessage";
 
 const EmailConfirmationPage = () => {
   const [email, setEmail] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isError, setisError] = useState(false);
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -27,15 +31,17 @@ const EmailConfirmationPage = () => {
       const responseData = await response.json();
 
       if (response.status !== 200) {
+        setAlertMessage(responseData.message);
+        setisError(true);
         throw new Error(responseData.message);
       }
 
       if (response.status == 200) {
-        console.log(responseData.message);
-        // Route to login page
+        setAlertMessage(responseData.message);
+        setisError(false);
       }
     } catch (error) {
-      console.log(error.message);
+      setisError(true);
     }
   };
   return (
@@ -53,6 +59,9 @@ const EmailConfirmationPage = () => {
         method="POST"
       >
         <div>
+          {alertMessage !== "" ? (
+            <AlertMessage isError={isError} message={alertMessage} />
+          ) : undefined}
           <div className="flex justify-between">
             <label
               htmlFor="email"

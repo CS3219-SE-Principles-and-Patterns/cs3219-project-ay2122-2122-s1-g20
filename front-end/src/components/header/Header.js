@@ -5,7 +5,7 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 
 const navigation = [
   { name: "StudySessions", href: "/studysessions", current: true },
-  { name: "Chats", href: "/chats", current: false },
+  { name: "Chats", href: "/chat", current: false },
 ];
 
 function classNames(...classes) {

@@ -7,6 +7,7 @@ const cloudinary = require("cloudinary");
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const { verifyToken } = require("./middlewares/requireAuth");
+const groupRoutes = require("./routes/groupRoutes");
 
 dotenv.config({ path: "../../config.env" });
 cloudinary.config({
@@ -49,6 +50,7 @@ mongoose
 app.use("/api/user", authRoutes);
 app.use(verifyToken);
 app.use("/api/profile", profileRoutes);
+app.use("/api/user/account", groupRoutes);
 
 app.get("/", (req, res) => {
   console.log("Test passed");

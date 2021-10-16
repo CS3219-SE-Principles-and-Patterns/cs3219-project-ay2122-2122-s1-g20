@@ -20,21 +20,31 @@ function App() {
         <Header />
         <BrowserRouter>
           <Switch>
-            <Route path="/login">
+            <Route exact path="/login">
               <LoginPage />
             </Route>
             <Route exact path="/signup">
               <SignUpPage />
             </Route>
-            <Route path="/signup/confirmation">
-              <SignUpConfirmation />
-            </Route>
             <Route
+              exact
               path="/signup/confirmation/verified/:uniqueString"
               component={EmailVerification}
             />
-            <Route path="/resetPassword/:token" component={ResetPasswordPage} />
-            <Route path="/resetPassword">
+            <Route exact path="/signup/confirmation">
+              <SignUpConfirmation />
+            </Route>
+            <Route
+              exact
+              path="/signup/confirmation/verified/:uniqueString"
+              component={EmailVerification}
+            />
+            <Route
+              exact
+              path="/resetPassword/:token"
+              component={ResetPasswordPage}
+            />
+            <Route exact path="/resetPassword">
               <EmailConfirmationPage />
             </Route>
 
