@@ -12,6 +12,7 @@ import ProfilePage from "./pages/profile";
 import ChatPage from "./pages/chat";
 import { AccountProvider } from "./context/AccountContext";
 import EmailVerification from "./pages/start/emailVerification";
+import ErrorPage from "./pages/errors/404";
 
 function App() {
   return (
@@ -56,6 +57,9 @@ function App() {
           </Route>
           <Route path="/chat">
             <ChatPage />
+          </Route>
+          <Route path="/error">
+            <ErrorPage />
           </Route>
         </BrowserRouter>
       </div>
