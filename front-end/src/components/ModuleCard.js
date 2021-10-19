@@ -3,7 +3,7 @@ import { FiX } from "react-icons/fi";
 
 const ModuleCard = ({ mod, onClose, isEditable }) => {
   return (
-    <div className="mt-5 px-5 py-3 rounded-2xl min-h-full text-left flex justify-center items-center relative bg-blue-light text-purple-dark">
+    <div className="mt-5 px-5 py-3 rounded-2xl min-h-full text-left flex items-center relative bg-blue-light text-purple-dark">
       {mod.moduleCode}
       <br />
       {mod.title}

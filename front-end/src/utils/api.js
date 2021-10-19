@@ -1,14 +1,12 @@
 import axios from "axios";
 
 //DO NOT EDIT AND PUSH SOMETHING ELSE TO MAIN
-let instance = axios.create({
+export let api = axios.create({
   baseURL: "http://localhost:8080/api",
 });
 
-// instance.interceptors.request.use(async (config) => {
-//   const token = getJwtToken() --> from storage/cookies;
-//   config.headers.common["x-access-token"] = token;
-//   return config;
-// });
-
-export default instance;
+export const setTokenHeader = (token) =>
+  api.interceptors.request.use(async (config) => {
+    config.headers.common["x-access-token"] = token;
+    return config;
+  });

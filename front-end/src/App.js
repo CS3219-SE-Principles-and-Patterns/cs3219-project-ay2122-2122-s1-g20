@@ -37,6 +37,11 @@ function App() {
             </Route>
             <Route
               exact
+              path="/signup/confirmation/verified/:uniqueString"
+              component={EmailVerification}
+            />
+            <Route
+              exact
               path="/resetPassword/:token"
               component={ResetPasswordPage}
             />

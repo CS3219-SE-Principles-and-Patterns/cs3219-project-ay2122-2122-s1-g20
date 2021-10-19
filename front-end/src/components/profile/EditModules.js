@@ -4,10 +4,10 @@ import ModuleCard from "../../components/ModuleCard";
 import { AccountContext } from "../../context/AccountContext";
 import YellowButton from "../YellowButton";
 import SearchModules from "./SearchModules";
-import api from "../../utils/api";
+import { api } from "../../utils/api";
 
 const EditModules = ({ isProfilePage, nextPage }) => {
-  const { email, modules, handleDeleteModule } = useContext(AccountContext);
+  const { modules, handleDeleteModule } = useContext(AccountContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const textSize = isProfilePage ? "text-sm" : "text-base";
@@ -20,7 +20,7 @@ const EditModules = ({ isProfilePage, nextPage }) => {
     // update backend database
     setIsLoading(true);
     await api
-      .post("/user/modules", { email, modules })
+      .post("/profile/modules", { modules })
       .then((res) => console.log(res)) // res.data.updatedUser === null if cant find user to update.
       .catch((err) => console.log(err));
     handleUploadDone();
@@ -71,7 +71,7 @@ const EditModules = ({ isProfilePage, nextPage }) => {
       {editable ? <SearchModules isProfilePage={isProfilePage} /> : null}
       <div
         className={`grid sm:grid-cols-3 grid-cols-2 gap-5 ${
-          isProfilePage ? "mb-12 " : "mx-14 mb-14"
+          isProfilePage ? "mb-12 " : "mx-36 mb-14"
         }`}
       >
         {renderModules}
