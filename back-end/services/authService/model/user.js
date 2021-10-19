@@ -26,20 +26,20 @@ const userSchema = new mongoose.Schema({
   },
   uniqueString: {
     type: String,
-    required: true
+    required: true,
   },
   resetToken: String,
   resetTokenExpiration: Date,
   isVerified: {
     type: Boolean,
     required: true,
-    default: false
+    default: false,
   },
   groups: {
-    type: [String],
+    type: [mongoose.Schema.Types.ObjectId],
     required: false,
-    default: []
-  }
+    default: [],
+  },
 });
 
 userSchema.pre("save", function (next) {
