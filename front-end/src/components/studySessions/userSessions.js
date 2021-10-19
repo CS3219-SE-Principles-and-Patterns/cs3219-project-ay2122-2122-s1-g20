@@ -9,8 +9,8 @@ function classNames(...classes) {
 
 export default function UserSessions() {
   return (
-    <div>
-      <div className="bg-blue-light h-screen sm:hidden">
+    <div className="bg-blue-light h-screen ">
+      <div className="sm:hidden">
         <label htmlFor="tabs" className="sr-only">
           Select a tab
         </label>
