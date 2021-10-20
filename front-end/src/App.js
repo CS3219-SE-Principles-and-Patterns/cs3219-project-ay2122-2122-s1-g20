@@ -13,6 +13,7 @@ import ChatPage from "./pages/chat";
 import { AccountProvider } from "./context/AccountContext";
 import EmailVerification from "./pages/start/emailVerification";
 import ErrorPage from "./pages/errors/404";
+import StudySessionsHome from "./pages/studySession/studyHome";
 
 function App() {
   return (
@@ -65,6 +66,9 @@ function App() {
           </Route>
           <Route path="/error">
             <ErrorPage />
+          </Route>
+          <Route path="/studySessions">
+            <StudySessionsHome />
           </Route>
         </BrowserRouter>
       </div>
