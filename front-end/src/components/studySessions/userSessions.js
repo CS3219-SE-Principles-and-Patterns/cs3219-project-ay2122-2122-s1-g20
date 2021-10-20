@@ -11,11 +11,12 @@ function classNames(...classes) {
 
 export default function UserSessions() {
   const handleTabNavigation = (tab, tabIdx) => {
+    // Might have to change to useState
     tab.current = true;
     if (tabIdx === 1) {
-      tabs[1].current = false;
-    } else {
       tabs[0].current = false;
+    } else {
+      tabs[1].current = false;
     }
   };
 
