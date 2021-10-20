@@ -22,7 +22,7 @@ export default function UserSessions() {
   return (
     <div className="bg-blue-light pt-10 h-screen">
       <nav
-        className="flex ml-10 mr-10 z-0 rounded-lg shadow divide-x divide-gray-200"
+        className="flex ml-10 mr-10 mb-4 z-0 rounded-lg shadow divide-x divide-gray-200"
         aria-label="Tabs"
       >
         {tabs.map((tab, tabIdx) => (

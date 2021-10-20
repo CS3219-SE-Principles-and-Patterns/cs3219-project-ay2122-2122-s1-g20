@@ -1,6 +1,6 @@
 const BlueSessionCard = () => {
   return (
-    <div className="bg-purple-light  pb-5 pt-1 ml-8 mr-8 rounded-xl">
+    <div className="bg-purple-light pb-5 pt-1 ml-8 mr-8 rounded-xl">
       <div className="flex justify-between">
         <div>
           <div className="flex">
