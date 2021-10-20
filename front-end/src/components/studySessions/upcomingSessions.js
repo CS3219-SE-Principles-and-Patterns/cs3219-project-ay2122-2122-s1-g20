@@ -1,5 +1,5 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import SessionCard from "./sessionCards";
+import BlueSessionCard from "./blueSessionCard";
 
 const UpcomingSessions = () => {
   return (
@@ -25,7 +25,7 @@ const UpcomingSessions = () => {
           />
         </div>
       </form>
-      <SessionCard />
+      <BlueSessionCard />
     </div>
   );
 };

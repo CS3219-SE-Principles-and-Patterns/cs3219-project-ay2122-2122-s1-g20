@@ -1,3 +1,5 @@
+import YellowSessionCard from "./yellowSessionCard";
+
 const tabs = [
   { name: "Your created study sessions", current: true },
   { name: "Your past sessions", current: false },
@@ -48,6 +50,7 @@ export default function UserSessions() {
           </a>
         ))}
       </nav>
+      <YellowSessionCard />
     </div>
   );
 }

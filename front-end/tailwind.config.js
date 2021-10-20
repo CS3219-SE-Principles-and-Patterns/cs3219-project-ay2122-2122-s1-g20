@@ -14,7 +14,7 @@ module.exports = {
           misc: "#BBBFDB",
         },
         blue: {
-          light: "#F3F7FB",
+          light: "#EFF3FA",
           dark: "#B4CBE3",
         },
         yellow: {

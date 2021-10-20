@@ -1,4 +1,4 @@
-const SessionCard = () => {
+const BlueSessionCard = () => {
   return (
     <div className="bg-purple-light  pb-5 pt-1 ml-8 mr-8 rounded-xl">
       <div className="flex justify-between">
@@ -21,12 +21,12 @@ const SessionCard = () => {
             <p className="text-purple-dark lg:text-md">Time: 3-5pm</p>
           </div>
         </div>
-        <button className="mr-10 text-purple-dark hover:text-opacity-50 text-2xl">
-          JOIN
+        <button className="mr-10 text-purple-dark hover:text-opacity-50 text-xl">
+          Join
         </button>
       </div>
     </div>
   );
 };
 
-export default SessionCard;
+export default BlueSessionCard;
