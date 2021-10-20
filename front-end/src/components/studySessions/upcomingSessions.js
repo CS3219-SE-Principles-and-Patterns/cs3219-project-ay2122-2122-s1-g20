@@ -1,9 +1,10 @@
 import { SearchIcon } from "@heroicons/react/solid";
+import SessionCard from "./sessionCards";
 
 const UpcomingSessions = () => {
   return (
     <div className="bg-yellow-light h-screen">
-      <p className="text-xl text-purple-dark font-medium mt-10">
+      <p className="text-xl text-purple-dark pt-10 font-medium">
         Upcoming study sessions you <br />
         might be interested in
       </p>
@@ -17,13 +18,14 @@ const UpcomingSessions = () => {
           </div>
           <input
             id="search-field"
-            className="block w-full bg-white h-full pl-10 pr-3 py-3 text-gray-900 placeholder-gray-500 rounded-md focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
+            className="block w-full bg-white h-full pl-10 pr-3 py-4 text-gray-900 placeholder-gray-500 rounded-xl focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
             placeholder="Search for study sessions"
             type="search"
             name="search"
           />
         </div>
       </form>
+      <SessionCard />
     </div>
   );
 };
