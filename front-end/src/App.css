@@ -1,0 +1,113 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.disable-link {
+  pointer-events: none;
+  /* cursor: default; */
+}
+
+.react-autosuggest__container {
+  position: relative;
+}
+
+.react-autosuggest__input {
+  width: 16rem /* 256px */;
+  padding: 0.5rem 0.75rem 0.5rem 3rem;
+  font-size: 0.875rem /* 14px */;
+  line-height: 1.25rem /* 20px */;
+  border: 1px solid #aaa;
+  border-radius: 1rem /* 16px */;
+}
+
+.react-autosuggest__input--focused {
+  outline: none;
+}
+
+.react-autosuggest__input--open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.react-autosuggest__suggestions-container {
+  display: none;
+}
+
+.react-autosuggest__suggestions-container--open {
+  display: block;
+  position: absolute;
+  top: 51px;
+  width: 16rem /* 256px */;
+  text-align: left;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  border-bottom-left-radius: 1rem /* 16px */;
+  border-bottom-right-radius: 1rem /* 16px */;
+  max-height: 9rem;
+  overflow-y: auto;
+  z-index: 2;
+}
+
+.react-autosuggest__suggestions-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.react-autosuggest__suggestion {
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+.react-autosuggest__suggestion--highlighted {
+  background-color: #e5e6e4;
+}
+
+@media (min-width: 640px) {
+  .react-autosuggest__input {
+    width: 20rem /* 320px */;
+    font-size: 1rem /* 16px */;
+    line-height: 1.5rem /* 24px */;
+    padding: 0.75rem 0.75rem 0.75rem 3rem;
+  }
+
+  .react-autosuggest__suggestions-container--open {
+    width: 20rem /* 320px */;
+    max-height: 13rem;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
