@@ -2,6 +2,11 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
+//import { AccountContext } from "../../context/AccountContext";
+
+//const { jwtSalt } = useContext(AccountContext);
+
+//add handle logout
 
 const navigation = [
   { name: "StudySessions", href: "/studysessions", current: true },
@@ -95,7 +100,8 @@ export default function Header() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            href="/login"
+                            onClick
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"

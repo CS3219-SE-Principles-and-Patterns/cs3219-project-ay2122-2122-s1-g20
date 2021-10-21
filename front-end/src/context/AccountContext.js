@@ -9,6 +9,7 @@ export const AccountProvider = ({ children }) => {
   const [email, setEmail] = useState("");
   const [modules, setModules] = useState([]);
   const [profilePic, setProfilePic] = useState("");
+  const [jwtSalt, setJwtSalt] = useState("");
 
   const setUser = (user, token) => {
     setToken(token);
@@ -21,6 +22,7 @@ export const AccountProvider = ({ children }) => {
       setProfilePic(user.profilePic);
     }
     setTokenHeader(token);
+    setJwtSalt(user.jwtSalt);
   };
   const handleUpdateUsername = (newUsername) => {
     setUsername(newUsername); // comment this line out after api integration is done
@@ -58,6 +60,8 @@ export const AccountProvider = ({ children }) => {
         setModules,
         profilePic,
         setProfilePic,
+        jwtSalt,
+        setJwtSalt,
         handleAddModules,
         handleDeleteModule,
         handleUpdateUsername,
