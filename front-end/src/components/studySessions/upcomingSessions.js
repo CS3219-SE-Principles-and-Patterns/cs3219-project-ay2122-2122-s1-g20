@@ -4,7 +4,7 @@ import BlueSessionCard from "./blueSessionCard";
 const UpcomingSessions = () => {
   return (
     <div className="bg-yellow-light h-screen">
-      <p className="text-xl text-purple-dark pt-10 font-medium">
+      <p className="text-2xl text-purple-dark pt-10 font-medium">
         Upcoming study sessions you <br />
         might be interested in
       </p>
