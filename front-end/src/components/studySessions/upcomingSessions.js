@@ -12,7 +12,7 @@ const UpcomingSessions = () => {
         Upcoming study sessions you <br />
         might be interested in
       </p>
-      <div className="flex grid gap-0 grid-cols-9 mb-4">
+      <div className="grid gap-0 grid-cols-9 mb-4">
         <form
           className="pl-8 col-span-8 pr-8 pt-4 flex"
           action="#"

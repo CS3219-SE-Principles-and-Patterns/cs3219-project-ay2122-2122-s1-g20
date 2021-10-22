@@ -7,7 +7,29 @@ export const AccountProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [modules, setModules] = useState([]);
+  const [modules, setModules] = useState([
+    {
+      title: "DNSIAND",
+      moduleCode: "CS3219",
+    },
+    {
+      title: "helps",
+      moduleCode: "CS3235",
+    },
+    {
+      title: "helps",
+      moduleCode: "CS1231",
+    },
+    {
+      title: "helps",
+      moduleCode: "CS3342",
+    },
+
+    {
+      title: "helps",
+      moduleCode: "CS5555",
+    },
+  ]);
   const [profilePic, setProfilePic] = useState("");
 
   const setUser = (user, token) => {

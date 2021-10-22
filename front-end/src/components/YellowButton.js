@@ -1,7 +1,7 @@
 import React from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
-const YellowButton = ({ px, textSize, text, onClick, isLoading }) => {
+const YellowButton = ({ px, textSize, text, onClick, isLoading, color }) => {
   const override = `
     display: block;
     margin: 0 auto;
@@ -14,8 +14,8 @@ const YellowButton = ({ px, textSize, text, onClick, isLoading }) => {
         isLoading
           ? "px-7 bg-opacity-50 disable-link"
           : px + " hover:bg-opacity-75"
-      } py-2 sm:py-3 bg-yellow-dark 
-      shadow-sm `}
+      } py-2 sm:py-3 ${color ? color : "bg-yellow-dark"} 
+      shadow-sm`}
       onClick={onClick}
       disabled={isLoading}
     >
