@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: [],
   },
+  jwtSalt: {
+    type: String,
+    required: true,
+  },
 });
 
 userSchema.pre("save", function (next) {

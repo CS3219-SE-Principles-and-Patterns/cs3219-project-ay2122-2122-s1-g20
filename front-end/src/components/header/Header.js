@@ -1,7 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from "react";
+import { Fragment, useContext, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { AccountContext } from "../../context/AccountContext";
+import { api } from "../../utils/api";
 
 const navigation = [
   { name: "StudySessions", href: "/studysessions", current: true },
@@ -13,6 +15,26 @@ function classNames(...classes) {
 }
 
 export default function Header() {
+  const { email, handleUpdateSalt } = useContext(AccountContext);
+  const [logoutSuccess, setLogoutSuccess] = useState("false");
+
+  const handleLogout = async (event) => {
+    event.preventDefault();
+    console.log(email);
+    await api
+      .post("/user/logout", { email })
+      .then((res) => {
+        handleUpdateSalt(res.data.user.jwtSalt);
+        setLogoutSuccess(true);
+      })
+      .then(() => {
+        if (logoutSuccess) {
+          window.location.href = "http://localhost:3000/login";
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Disclosure as="nav" className="bg-purple-dark">
       {({ open }) => (
@@ -95,7 +117,7 @@ export default function Header() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            onClick={handleLogout}
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
