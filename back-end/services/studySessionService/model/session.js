@@ -19,15 +19,13 @@ const studySessionSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  time: {
-    startTime: {
-      value: Number,
-      amOrPm: String,
-    },
-    endTime: {
-      value: Number,
-      amOrPm: String,
-    },
+  start: {
+    type: Number,
+    required: true,
+  },
+  end: {
+    type: Number,
+    required: true,
   },
   date: {
     type: String,

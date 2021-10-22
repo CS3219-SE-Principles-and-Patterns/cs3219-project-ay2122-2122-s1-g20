@@ -10,10 +10,8 @@ exports.createSession = async (req, res, next) => {
       title: req.body.title,
       capacity: req.body.capacity,
       timeLimit: req.body.timeLimit,
-      time: {
-        startTime: req.body.time.startTime,
-        endTime: req.body.time.endTime,
-      },
+      start: req.body.start,
+      end: req.body.end,
       module: req.body.module,
       date: req.body.date,
       isOnline: req.body.isOnline,
@@ -61,8 +59,8 @@ exports.editStudySession = (req, res, next) => {
   const sid = req.params.sid;
   const title = req.body.title;
   const capacity = req.body.capacity;
-  const startTime = req.body.time.startTime;
-  const endTime = req.body.time.endTime;
+  const start = req.body.start;
+  const end = req.body.end;
   const module = req.body.module;
   const date = req.body.date;
   const isOnline = req.body.isOnline;
@@ -76,8 +74,8 @@ exports.editStudySession = (req, res, next) => {
       }
       session.title = title;
       session.capacity = capacity;
-      session.time.startTime = startTime;
-      session.time.endTime = endTime;
+      session.start = start;
+      session.end = end;
       session.module = module;
       session.date = date;
       session.isOnline = isOnline;
