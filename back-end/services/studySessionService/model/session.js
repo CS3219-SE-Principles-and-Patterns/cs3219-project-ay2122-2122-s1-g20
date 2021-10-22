@@ -4,9 +4,12 @@ const studySessionSchema = mongoose.Schema({
   sid: {
     type: Number,
   },
+  capacity: {
+    type: Number,
+    required: true,
+  },
   owner: {
     type: String,
-    required: true,
   },
   title: {
     type: String,
@@ -20,12 +23,10 @@ const studySessionSchema = mongoose.Schema({
     startTime: {
       value: Number,
       amOrPm: String,
-      required: true,
     },
     endTime: {
       value: Number,
       amOrPm: String,
-      required: true,
     },
     timeOffset: Number,
   },
@@ -39,6 +40,10 @@ const studySessionSchema = mongoose.Schema({
   },
   participants: {
     type: [String],
+    required: true,
+  },
+  isOnline: {
+    type: String,
     required: true,
   },
 });
