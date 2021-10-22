@@ -24,17 +24,18 @@ const YellowSessionCard = () => {
   };
   // mock data
   const studySession = {
-    name: "test1",
+    title: "test1",
     capacity: 5,
     // members usernames stored in array
-    members: ["sylviaokt", "andrea", "mabel", "haishan"],
-    type: { value: "online", label: "Online" },
-    modules: ["CS3219", "CS1231"],
-    day: { value: "saturday", label: "Saturday" },
-    timeRange: {
+    participants: ["sylviaokt", "andrea", "mabel", "haishan"],
+    isOnline: "online",
+    module: "CS3219",
+    date: "saturday",
+    time: {
       start: "14:00",
       end: "17:30",
     },
+    timeLimit: 2,
   };
 
   return (

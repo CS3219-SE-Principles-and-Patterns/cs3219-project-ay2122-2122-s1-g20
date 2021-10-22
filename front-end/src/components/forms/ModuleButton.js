@@ -1,19 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 const ModuleButton = ({
   moduleCode,
-  selectedMods,
-  addSelectedMods,
-  removeSelectedMods,
+  selectedMod,
+  setSelectedMod,
+  // addSelectedMods,
+  // removeSelectedMods,
 }) => {
-  const [selected, setSelected] = useState(selectedMods.includes(moduleCode));
+  // const [selected, setSelected] = useState(selectedMods.includes(moduleCode));
+  const [selected, setSelected] = useState(selectedMod === moduleCode);
+  useEffect(() => {
+    if (selectedMod !== moduleCode) {
+      setSelected(false);
+    }
+  }, [selectedMod]);
 
   const handleSelectMod = () => {
     if (selected) {
-      removeSelectedMods(moduleCode);
+      setSelectedMod("");
     } else {
-      addSelectedMods(moduleCode);
+      setSelectedMod(moduleCode);
     }
     setSelected(!selected);
   };

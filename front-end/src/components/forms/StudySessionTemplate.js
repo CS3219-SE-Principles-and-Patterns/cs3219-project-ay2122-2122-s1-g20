@@ -9,42 +9,70 @@ import TimeRangeSlider from "react-time-range-slider";
 import YellowButton from "../YellowButton";
 
 const StudySessionTemplate = ({ setOpen, open, studySession }) => {
+  const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
   const { modules } = useContext(AccountContext);
-  const [name, setName] = useState(studySession ? studySession.name : "");
-  const [type, setType] = useState(studySession ? studySession.type : null);
+  const [name, setName] = useState(studySession ? studySession.title : "");
+  const [isOnlineOption, setIsOnlineOption] = useState(
+    studySession
+      ? {
+          value: studySession.isOnline,
+          label: capitalizeFirstLetter(studySession.isOnline),
+        }
+      : null
+  );
+  const [isOnline, setIsOnline] = useState(
+    studySession ? studySession.isOnline : ""
+  );
   const [capacity, setCapacity] = useState(
     studySession ? studySession.capacity : ""
   );
-  const [selectedMods, setSelectedMods] = useState(
-    studySession ? studySession.modules : []
+  const [selectedMod, setSelectedMod] = useState(
+    studySession ? studySession.module : ""
+  );
+  const [selectedDayOption, setSelectedDayOption] = useState(
+    studySession
+      ? {
+          value: studySession.date,
+          label: capitalizeFirstLetter(studySession.date),
+        }
+      : null
   );
   const [selectedDay, setSelectedDay] = useState(
-    studySession ? studySession.day : null
+    studySession ? studySession.date : ""
   );
-  const [range, setRange] = useState(
+  const [time, setTime] = useState(
     studySession
-      ? studySession.timeRange
+      ? studySession.time
       : {
           start: "00:00",
           end: "23:59",
         }
   );
+  const [timeLimit, setTimeLimit] = useState(
+    studySession ? studySession.timeLimit : ""
+  );
 
-  const addSelectedMods = (moduleCode) => {
-    setSelectedMods([...selectedMods, moduleCode]);
-  };
+  console.log(isOnline, selectedDay);
 
-  const removeSelectedMods = (moduleCode) => {
-    setSelectedMods(selectedMods.filter((mod) => mod != moduleCode));
-  };
+  // const addSelectedMods = (moduleCode) => {
+  //   setSelectedMod([...selectedMod, moduleCode]);
+  // };
+
+  // const removeSelectedMods = (moduleCode) => {
+  //   setSelectedMod(selectedMod.filter((mod) => mod != moduleCode));
+  // };
 
   const resetStates = () => {
     setName("");
     setCapacity("");
-    setType(null);
-    setSelectedMods([]);
-    setSelectedDay(null);
-    setRange({
+    setIsOnline("");
+    setIsOnlineOption(null);
+    setSelectedMod("");
+    setSelectedDay("");
+    setSelectedDayOption(null);
+    setTime({
       start: "00:00",
       end: "23:59",
     });
@@ -54,9 +82,8 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
     <div key={mod.moduleCode}>
       <ModuleButton
         moduleCode={mod.moduleCode}
-        selectedMods={selectedMods}
-        addSelectedMods={addSelectedMods}
-        removeSelectedMods={removeSelectedMods}
+        selectedMod={selectedMod}
+        setSelectedMod={setSelectedMod}
       ></ModuleButton>
     </div>
   ));
@@ -77,10 +104,12 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   ];
 
   const handleSelectDay = (selectedOption) => {
-    setSelectedDay(selectedOption);
+    setSelectedDay(selectedOption.value);
+    setSelectedDayOption(selectedOption);
   };
   const handleSelectType = (selectedOption) => {
-    setType(selectedOption);
+    setIsOnline(selectedOption.value);
+    setIsOnlineOption(selectedOption);
   };
 
   const customStyles = {
@@ -164,7 +193,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
               Type
             </label>
             <Select
-              value={type}
+              value={isOnlineOption}
               onChange={handleSelectType}
               options={typeOptions}
               placeholder="Select type"
@@ -185,11 +214,11 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
           <div className="mt-2 grid grid-cols-6 gap-x-2 items-center">
             {/* <div className="mt-2 flex flex-col justify-between"> */}
             <label className="text-lg text-white col-span-1 justify-self-end">
-              Time range
+              Day and Time
             </label>
             <div className="col-span-2">
               <Select
-                value={selectedDay}
+                value={selectedDayOption}
                 onChange={handleSelectDay}
                 options={options}
                 placeholder="Select day"
@@ -201,8 +230,8 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
 
             <div className="col-span-3 flex flex-col pb-4">
               <div className="flex justify-between">
-                <span className="text-lg text-white">{range.start}</span>
-                <span className="text-lg text-white">{range.end}</span>
+                <span className="text-lg text-white">{time.start}</span>
+                <span className="text-lg text-white">{time.end}</span>
               </div>
               <span>
                 <TimeRangeSlider
@@ -213,9 +242,9 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
                   name={"time_range"}
                   // onChangeStart={this.changeStartHandler}
                   // onChangeComplete={this.changeCompleteHandler}
-                  onChange={(time) => setRange(time)}
+                  onChange={(time) => setTime(time)}
                   step={15}
-                  value={range}
+                  value={time}
                 />
               </span>
             </div>
@@ -226,10 +255,27 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
                 px="px-1"
               /> */}
           </div>
+          <div className="mt-2 grid grid-cols-6 items-center gap-x-2">
+            <label className="text-lg text-white col-span-1 justify-self-end">
+              Time Limit
+            </label>
+            <input
+              onChange={(event) =>
+                setTimeLimit(event.target.value.replace(/\D/, ""))
+              }
+              value={timeLimit}
+              type="text"
+              placeholder="Enter time limit (hrs)"
+              id="timeLimit"
+              name="timeLimit"
+              required
+              className={"p-3 rounded-2xl col-span-2"}
+            />
+          </div>
           <div className="flex justify-center mt-6">
             <YellowButton
               text={studySession ? "Save" : "Create"}
-              // onClick={handleAddTime}
+              // onClick={handleSave} OR handleCreate
               textSize="text-lg"
               px="px-8"
             />

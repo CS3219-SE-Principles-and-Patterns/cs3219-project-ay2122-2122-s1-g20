@@ -21,7 +21,7 @@ const StudySessionDetails = ({ setOpen, open, studySession }) => {
             <VscChromeClose />
           </button>
           <p className="ml-8 text-3xl font-semibold text-grey-whitetinge">
-            {studySession.name}
+            {studySession.title}
           </p>
           <div className="grid grid-cols-2 items-center gap-2 mt-3">
             <div className="grid grid-cols-2 items-center gap-x-2">
@@ -29,7 +29,7 @@ const StudySessionDetails = ({ setOpen, open, studySession }) => {
                 Type:
               </span>
               <span className="text-lg text-white ">
-                {studySession.type.label}
+                {studySession.isOnline}
               </span>
             </div>
 
@@ -38,7 +38,7 @@ const StudySessionDetails = ({ setOpen, open, studySession }) => {
                 Capacity:
               </span>
               <span className="col-span-3 text-lg text-white ">
-                {studySession.members.length}/{studySession.capacity}
+                {studySession.participants.length}/{studySession.capacity}
               </span>
             </div>
 
@@ -46,9 +46,7 @@ const StudySessionDetails = ({ setOpen, open, studySession }) => {
               <span className="text-lg font-medium text-white justify-self-end">
                 Date:
               </span>
-              <span className="text-lg text-white ">
-                {studySession.day.label}
-              </span>
+              <span className="text-lg text-white ">{studySession.date}</span>
             </div>
 
             <div className="col-span-2 grid grid-cols-4 items-center gap-x-2">
@@ -56,16 +54,25 @@ const StudySessionDetails = ({ setOpen, open, studySession }) => {
                 Time:
               </span>
               <span className="col-span-3 text-lg text-white ">
-                {studySession.timeRange.start} - {studySession.timeRange.end}{" "}
+                {studySession.time.start} - {studySession.time.end}{" "}
               </span>
             </div>
 
             <div className="col-span-2 grid grid-cols-4 items-center gap-x-2">
               <span className="col-span-1 text-lg font-medium text-white justify-self-end">
-                Modules:
+                Time Limit:
+              </span>
+              <span className="col-span-3 text-lg text-white ">
+                {studySession.timeLimit} hrs
+              </span>
+            </div>
+
+            <div className="col-span-2 grid grid-cols-4 items-center gap-x-2">
+              <span className="col-span-1 text-lg font-medium text-white justify-self-end">
+                Module:
               </span>
               <span className="col-span-3 text-lg text-white">
-                {studySession.modules.join(", ")}
+                {studySession.module}
               </span>
             </div>
 
@@ -74,7 +81,7 @@ const StudySessionDetails = ({ setOpen, open, studySession }) => {
                 Members:
               </span>
               <span className="col-span-3 text-lg text-white">
-                {studySession.members.join(", ")}
+                {studySession.participants.join(", ")}
               </span>
             </div>
           </div>
