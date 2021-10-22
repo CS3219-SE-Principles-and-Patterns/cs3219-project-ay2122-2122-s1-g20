@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setTokenHeader } from "../utils/api";
+import { setTokenHeader, setSaltHeader } from "../utils/api";
 
 export const AccountContext = React.createContext();
 
@@ -23,6 +23,7 @@ export const AccountProvider = ({ children }) => {
     }
     setTokenHeader(token);
     setJwtSalt(user.jwtSalt);
+    setSaltHeader(user.jwtSalt);
   };
   const handleUpdateUsername = (newUsername) => {
     setUsername(newUsername); // comment this line out after api integration is done
@@ -47,6 +48,11 @@ export const AccountProvider = ({ children }) => {
     setModules(modules.filter((mod) => mod.moduleCode !== modCode));
   };
 
+  const handleUpdateSalt = (salt) => {
+    setJwtSalt(salt);
+    setSaltHeader(salt);
+  };
+
   return (
     <AccountContext.Provider
       value={{
@@ -62,6 +68,7 @@ export const AccountProvider = ({ children }) => {
         setProfilePic,
         jwtSalt,
         setJwtSalt,
+        handleUpdateSalt,
         handleAddModules,
         handleDeleteModule,
         handleUpdateUsername,

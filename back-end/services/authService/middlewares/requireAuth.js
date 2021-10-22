@@ -10,7 +10,6 @@ exports.verifyToken = async (req, res, next) => {
     return res.status(401).json({ error: "You must be logged in." });
   }
 
-  //todo: add user's salt to header
   jwt.verify(token, process.env.TOKEN_KEY + salt, async (err, payload) => {
     if (err) {
       return res.status(401).json({ error: "You must be logged in." });
