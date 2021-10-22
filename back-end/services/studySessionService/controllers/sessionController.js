@@ -9,6 +9,7 @@ exports.createSession = async (req, res, next) => {
     const session = new Session({
       title: req.body.title,
       capacity: req.body.capacity,
+      timeLimit: req.body.timeLimit,
       time: {
         startTime: req.body.time.startTime,
         endTime: req.body.time.endTime,
@@ -23,6 +24,7 @@ exports.createSession = async (req, res, next) => {
       .status(200)
       .json({ message: "Study session successfully created!" });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ message: "Error with creating study session." });

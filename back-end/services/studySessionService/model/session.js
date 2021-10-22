@@ -28,10 +28,9 @@ const studySessionSchema = mongoose.Schema({
       value: Number,
       amOrPm: String,
     },
-    timeOffset: Number,
   },
   date: {
-    type: Date,
+    type: String,
     required: true,
   },
   module: {
