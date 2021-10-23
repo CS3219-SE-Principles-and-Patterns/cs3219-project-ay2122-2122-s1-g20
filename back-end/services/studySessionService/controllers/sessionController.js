@@ -26,8 +26,8 @@ exports.getUpcomingSessions = (req, res, next) => {
 // Get my created study session that has not expired yet
 exports.getMySessions = (req, res, next) => {
   // remove uid from params after gateway api is implemented
-  const uid = req.params.uid;
-  Session.find({ owner: uid })
+  const username = req.params.username;
+  Session.find({ owner: username })
     .then((session) => {
       // session === array of session objects
       const mySessions = session.filter((s) => {
@@ -46,9 +46,9 @@ exports.getMySessions = (req, res, next) => {
 
 // Get my created study session
 exports.getPastSessions = (req, res, next) => {
-  // remove uid from params after gateway api is implemented
-  const uid = req.params.uid;
-  Session.find({ owner: uid })
+  // remove USERNAME from params after gateway api is implemented
+  const username = req.params.username;
+  Session.find({ owner: username })
     .then((session) => {
       // session === array of session objects
       const pastSessions = session.filter((s) => {
@@ -66,7 +66,7 @@ exports.getPastSessions = (req, res, next) => {
 };
 
 exports.getASession = (req, res, next) => {
-  // remove uid from params after gateway api is implemented
+  // remove USERNAME from params after gateway api is implemented
   const sid = req.params.sid;
   Session.findById(sid)
     .then((session) => {
