@@ -3,6 +3,8 @@
 # dependencies
 /services/authService/node_modules
 /services/chatService/node_modules
+/services/studySessionService/node_modules
+
 /.pnp
 .pnp.js
 

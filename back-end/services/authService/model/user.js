@@ -35,10 +35,19 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  sessions: {
+    type: [mongoose.Schema.Types.ObjectId],
+    required: false,
+    default: [],
+  },
   groups: {
     type: [mongoose.Schema.Types.ObjectId],
     required: false,
     default: [],
+  },
+  jwtSalt: {
+    type: String,
+    required: true,
   },
 });
 
