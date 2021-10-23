@@ -1,22 +1,26 @@
 import YellowSessionCard from "./yellowSessionCard";
-
-const tabs = [
-  { name: "Your created study sessions", current: true },
-  { name: "Your past sessions", current: false },
-];
+import React, { useState } from "react";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function UserSessions() {
+  const [isTab0, setIsTab0] = useState(true);
+  const [isTab1, setIsTab1] = useState(false);
+
+  const tabs = [
+    { name: "Your created study sessions", current: isTab0 },
+    { name: "Your past sessions", current: isTab1 },
+  ];
+
   const handleTabNavigation = (tab, tabIdx) => {
-    // Might have to change to useState
-    tab.current = true;
-    if (tabIdx === 1) {
-      tabs[0].current = false;
+    if (tabIdx === 0) {
+      setIsTab0(true);
+      setIsTab1(false);
     } else {
-      tabs[1].current = false;
+      setIsTab1(true);
+      setIsTab0(false);
     }
   };
 

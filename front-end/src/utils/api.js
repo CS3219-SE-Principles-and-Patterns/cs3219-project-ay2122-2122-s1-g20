@@ -10,3 +10,9 @@ export const setTokenHeader = (token) =>
     config.headers.common["x-access-token"] = token;
     return config;
   });
+
+export const setSaltHeader = (salt) =>
+  api.interceptors.request.use(async (config) => {
+    config.headers.common["jwt-salt"] = salt;
+    return config;
+  });

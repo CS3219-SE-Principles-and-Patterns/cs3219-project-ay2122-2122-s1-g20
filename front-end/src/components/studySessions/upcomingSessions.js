@@ -1,14 +1,18 @@
 import { SearchIcon } from "@heroicons/react/solid";
 import BlueSessionCard from "./blueSessionCard";
+import CreateNewStudySession from "../forms/CreateNewStudySession";
+import React, { useState } from "react";
 
 const UpcomingSessions = () => {
+  const [loadNewForm, setLoadNewForm] = useState(false);
+  const [openNewForm, setOpenNewForm] = useState(false);
   return (
     <div className="bg-yellow-light h-screen">
-      <p className="text-xl text-purple-dark pt-10 font-medium">
+      <p className="text-2xl text-purple-dark pt-10 font-medium">
         Upcoming study sessions you <br />
         might be interested in
       </p>
-      <div className="flex grid gap-0 grid-cols-9 mb-4">
+      <div className="grid gap-0 grid-cols-9 mb-4">
         <form
           className="pl-8 col-span-8 pr-8 pt-4 flex"
           action="#"
@@ -31,12 +35,22 @@ const UpcomingSessions = () => {
           </div>
         </form>
         <div className="pt-3">
-          <button className="text-3xl text-white mt-3 rounded-full bg-purple-dark h-10 w-10 flex items-center justify-center">
+          <button
+            onClick={() => {
+              setOpenNewForm(true);
+            }}
+            className="text-3xl text-white mt-3 rounded-full bg-purple-dark h-10 w-10 flex items-center justify-center"
+          >
             +
           </button>
+          <CreateNewStudySession
+            setOpen={setOpenNewForm}
+            setLoad={setLoadNewForm}
+            open={openNewForm}
+            load={loadNewForm}
+          />
         </div>
       </div>
-
       <BlueSessionCard />
     </div>
   );

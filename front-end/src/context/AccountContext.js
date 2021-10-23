@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setTokenHeader } from "../utils/api";
+import { setTokenHeader, setSaltHeader } from "../utils/api";
 
 export const AccountContext = React.createContext();
 
@@ -7,8 +7,31 @@ export const AccountProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [modules, setModules] = useState([]);
+  const [modules, setModules] = useState([
+    {
+      title: "DNSIAND",
+      moduleCode: "CS3219",
+    },
+    {
+      title: "helps",
+      moduleCode: "CS3235",
+    },
+    {
+      title: "helps",
+      moduleCode: "CS1231",
+    },
+    {
+      title: "helps",
+      moduleCode: "CS3342",
+    },
+
+    {
+      title: "helps",
+      moduleCode: "CS5555",
+    },
+  ]);
   const [profilePic, setProfilePic] = useState("");
+  const [jwtSalt, setJwtSalt] = useState("");
 
   const setUser = (user, token) => {
     setToken(token);
@@ -21,6 +44,8 @@ export const AccountProvider = ({ children }) => {
       setProfilePic(user.profilePic);
     }
     setTokenHeader(token);
+    setJwtSalt(user.jwtSalt);
+    setSaltHeader(user.jwtSalt);
   };
   const handleUpdateUsername = (newUsername) => {
     setUsername(newUsername); // comment this line out after api integration is done
@@ -45,6 +70,11 @@ export const AccountProvider = ({ children }) => {
     setModules(modules.filter((mod) => mod.moduleCode !== modCode));
   };
 
+  const handleUpdateSalt = (salt) => {
+    setJwtSalt(salt);
+    setSaltHeader(salt);
+  };
+
   return (
     <AccountContext.Provider
       value={{
@@ -58,6 +88,9 @@ export const AccountProvider = ({ children }) => {
         setModules,
         profilePic,
         setProfilePic,
+        jwtSalt,
+        setJwtSalt,
+        handleUpdateSalt,
         handleAddModules,
         handleDeleteModule,
         handleUpdateUsername,
