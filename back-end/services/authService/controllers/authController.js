@@ -232,3 +232,21 @@ exports.postNewPassword = (req, res, next) => {
         .json({ message: "Your token is invalid or has expired." });
     });
 };
+
+exports.verifyToken = async (req, res) => {
+  const token = req.headers["x-access-token"];
+  const salt = req.headers["jwt-salt"];
+
+  if (!token || !salt) {
+    return res.status(401).json({ error: "You must be logged in." });
+  }
+  jwt.verify(token, process.env.TOKEN_KEY + salt, async (err, payload) => {
+    if (err) {
+      console.log(err);
+      return res.status(401).json({ error: "You must be logged in." });
+    } else {
+      return res.status(200).json({message: "Authenticated"});
+    }
+  });
+};
+
