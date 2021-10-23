@@ -22,6 +22,7 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    console.log(token);
     if (token) {
       setIsLoggedIn(true);
     }
