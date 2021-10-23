@@ -90,7 +90,11 @@ export default function Header() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              history.push("/profile");
+                            }}
+                            href="/profile"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
@@ -103,7 +107,11 @@ export default function Header() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              history.push("/logout");
+                            }}
+                            href="/logout"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
