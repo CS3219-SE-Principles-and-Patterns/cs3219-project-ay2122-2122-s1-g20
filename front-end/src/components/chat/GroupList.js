@@ -140,6 +140,7 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
             group={group}
             setDisplayChat={setDisplayChat}
             userEmail={account.email}
+            token={account.token}
             joined={groupsUserIsIn.includes(group)}
           />
         ))}
