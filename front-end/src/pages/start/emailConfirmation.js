@@ -13,7 +13,6 @@ const EmailConfirmationPage = () => {
 
   const handleEmailConfirmation = async (event) => {
     event.preventDefault();
-    console.log(email);
     try {
       const response = await fetch(
         "http://localhost:8080/api/user/emailConfirmation",
@@ -36,7 +35,7 @@ const EmailConfirmationPage = () => {
         throw new Error(responseData.message);
       }
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         setAlertMessage(responseData.message);
         setisError(false);
       }
