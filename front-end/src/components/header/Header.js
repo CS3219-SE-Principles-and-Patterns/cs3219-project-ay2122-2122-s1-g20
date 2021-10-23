@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { AccountContext } from "../../context/AccountContext";
@@ -10,26 +10,20 @@ function classNames(...classes) {
 }
 
 export default function Header() {
-  const [isTab0, setIsTab0] = useState(false);
-  const [isTab1, setIsTab1] = useState(false);
   const navigation = [
-    { name: "StudySessions", href: "/studysessions", current: isTab0 },
-    { name: "Chats", href: "/chat", current: isTab1 },
+    { name: "StudySessions", href: "/studysessions" },
+    { name: "Chats", href: "/chat" },
   ];
 
-  const { email, handleUpdateSalt } = useContext(AccountContext);
+  const { email, handleUpdateSalt, token } = useContext(AccountContext);
   const [logoutSuccess, setLogoutSuccess] = useState("false");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleNavigationTab = (tab, tabIdx) => {
-    console.log("in func");
-    if (tabIdx === 0) {
-      setIsTab0(true);
-      setIsTab1(false);
-    } else {
-      setIsTab1(true);
-      setIsTab0(false);
+  useEffect(() => {
+    if (token) {
+      setIsLoggedIn(true);
     }
-  };
+  });
 
   const handleLogout = async (event) => {
     event.preventDefault();
@@ -39,9 +33,11 @@ export default function Header() {
       .then((res) => {
         handleUpdateSalt(res.data.user.jwtSalt);
         setLogoutSuccess(true);
+        setIsLoggedIn(false);
       })
       .then(() => {
         if (logoutSuccess) {
+          console.log("logout");
           window.location.href = "http://localhost:3000/login";
         }
       })
@@ -70,80 +66,78 @@ export default function Header() {
                     StudyBuddy
                   </span>
                 </div>
-                <div className="hidden pl-3 sm:block sm:ml-6">
-                  <div className="flex space-x-4">
-                    {navigation.map((item, itemIdx) => (
-                      <a
-                        onClick={() => handleNavigationTab(item, itemIdx)}
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-100 hover:bg-gray-700 hover:text-white",
-                          "px-3 py-2 rounded-md text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                {isLoggedIn ? (
+                  <div className="hidden pl-3 sm:block sm:ml-6">
+                    <div className="flex space-x-4">
+                      {navigation.map((item) => (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className="px-3 py-2 text-white rounded-md hover:bg-gray-700 hover:text-white text-sm font-medium"
+                        >
+                          {item.name}
+                        </a>
+                      ))}
+                    </div>
                   </div>
+                ) : undefined}
+              </div>
+              {isLoggedIn ? (
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  {/* Profile dropdown */}
+
+                  <Menu as="div" className="ml-3 relative">
+                    <div>
+                      <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <span className="sr-only">Open user menu</span>
+                        <img
+                          className="h-8 w-8 rounded-full"
+                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          alt=""
+                        />
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              Your Profile
+                            </a>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <a
+                              onClick={() => handleLogout}
+                              className={classNames(
+                                active ? "bg-gray-100" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              Sign out
+                            </a>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
                 </div>
-              </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
-                  <div>
-                    <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                      <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            onClick={() => handleLogout}
-                            className={classNames(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Sign out
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
-              </div>
+              ) : undefined}
             </div>
           </div>
 
