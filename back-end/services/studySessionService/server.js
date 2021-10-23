@@ -38,7 +38,7 @@ mongoose
   })
   .then(() => console.log("DB connection successful!"));
 
-app.use("/api", sessionRoutes);
+app.use("/api/session", sessionRoutes);
 
 app.get("/", (req, res) => {
   console.log("Test passed");
