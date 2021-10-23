@@ -17,16 +17,13 @@ function PrivateRoute({ component: Component, ...rest }) {
           .then((res) => {
             console.log(res);
             setAuthenticated(true);
-            setIsLoading(false);
           })
           .catch((err) => {
             console.log(err);
             setAuthenticated(false);
-            setIsLoading(false);
           });
-      } else {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
     const timer = setTimeout(() => {
       authenticate();
