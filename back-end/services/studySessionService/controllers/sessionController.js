@@ -3,29 +3,73 @@ const mongoose = require("mongoose");
 
 const Session = require("../model/session");
 
+// Get upcoming study session
+// exports.getUpcomingSession = (req, res, next) => {
+//   Session.findById(sid)
+//     .then((post) => {
+//       if (!post) {
+//         const error = new Error("Could not find study session.");
+//         error.status = 404;
+//         throw error;
+//       }
+//       return Session.findByIdAndRemove(sid);
+//     })
+//     .then((result) => {
+//       res
+//         .status(200)
+//         .json({ message: "Study session is successfully deleted!" });
+//     })
+//     .catch((err) => {
+//       if (!err.statusCode) {
+//         err.statusCode = 500;
+//       }
+//       res.status(500).json({ message: "Error with deleting study session." });
+//     });
+// };
+
 // Create study session
 exports.createSession = async (req, res, next) => {
   try {
-    const session = new Session({
-      title: req.body.title,
-      capacity: req.body.capacity,
-      timeLimit: req.body.timeLimit,
-      start: req.body.start,
-      end: req.body.end,
-      module: req.body.module,
-      date: req.body.date,
-      isOnline: req.body.isOnline,
-    });
+    // sample data
+    //   {
+    //     "title": "testing",
+    //     "capacity": 5,
+    //     "owner": "sylviaokt",
+    //     "timeLimit": "1",
+    //     "time": {
+    //         "start": "14:00",
+    //         "end": "16:00"
+    //     },
+    //     "module": "CS3219",
+    //     "date": "tuesday",
+    //     "participants": ["sylviaokt","andreatan", "mabelkang", "limhaishan"],
+    //     "isOnline": "online"
+    // }
+    const session = new Session(req.body);
+    // const session = new Session({
+    //   title: req.body.title,
+    //   capacity: req.body.capacity,
+    //   timeLimit: req.body.timeLimit,
+    //   timestart: req.body.start,
+    //   end: req.body.end,
+    //   module: req.body.module,
+    //   date: req.body.date,
+    //   isOnline: req.body.isOnline,
+    // });
 
-    await session.save();
-    return res
-      .status(200)
-      .json({ message: "Study session successfully created!" });
+    const createdSession = await session.save();
+    return res.status(200).json({
+      studySessionId: createdSession._id,
+      message: "Study session successfully created!",
+    });
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({ message: "Error with creating study session." });
+    var message = "Error with creating study session.";
+    if (error.code === 11000) {
+      message =
+        "Title of study session already exists, please try again with a different title.";
+    }
+    return res.status(500).json({ message });
   }
 };
 
@@ -90,6 +134,7 @@ exports.editStudySession = (req, res, next) => {
       if (!err.statusCode) {
         err.statusCode = 500;
       }
+      console.log(err);
       res.status(500).json({ message: "Error with editing study session." });
     });
 };

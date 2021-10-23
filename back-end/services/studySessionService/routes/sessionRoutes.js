@@ -3,10 +3,12 @@ const sessionController = require("../controllers/sessionController");
 
 const router = express.Router();
 
-router.post("/create", sessionController.createSession);
+// after creating study session, call another api to update user database under 'sessions' field
+router.post("/", sessionController.createSession);
+// router.get("/upcoming", sessionController.getUpcomingSession);
 
-router.delete("/delete/:sid", sessionController.deleteSession);
+router.delete("/:sid", sessionController.deleteSession);
 
-router.put("/edit/:sid", sessionController.editStudySession);
+router.put("/:sid", sessionController.editStudySession);
 
 module.exports = router;
