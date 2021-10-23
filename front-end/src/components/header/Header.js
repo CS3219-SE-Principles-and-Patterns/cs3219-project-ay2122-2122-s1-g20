@@ -2,6 +2,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { useHistory } from "react-router-dom";
 
 const navigation = [
   { name: "StudySessions", href: "/studysessions", current: true },
@@ -13,6 +14,8 @@ function classNames(...classes) {
 }
 
 export default function Header() {
+  const history = useHistory();
+
   return (
     <Disclosure as="nav" className="bg-purple-dark">
       {({ open }) => (
@@ -41,6 +44,11 @@ export default function Header() {
                     {navigation.map((item) => (
                       <a
                         key={item.name}
+                        onClick={(e) => {
+                          //maintain context between tabs navigation
+                          e.preventDefault();
+                          history.push(item.href);
+                        }}
                         href={item.href}
                         className={classNames(
                           item.current
