@@ -6,7 +6,7 @@ exports.verifyToken = async (req, res, next) => {
   const token = req.headers["x-access-token"];
   const salt = req.headers["jwt-salt"];
 
-  if (!token) {
+  if (!token || !salt) {
     return res.status(401).json({ error: "You must be logged in." });
   }
 

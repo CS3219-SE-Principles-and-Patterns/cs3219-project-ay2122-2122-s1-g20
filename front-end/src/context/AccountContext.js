@@ -35,6 +35,9 @@ export const AccountProvider = ({ children }) => {
 
   const setUser = (user, token) => {
     setToken(token);
+    setJwtSalt(user.jwtSalt);
+    setTokenHeader(token);
+    setSaltHeader(user.jwtSalt);
     setUsername(user.username);
     setEmail(user.email);
     if (user.modules) {
@@ -43,9 +46,6 @@ export const AccountProvider = ({ children }) => {
     if (user.profilePic) {
       setProfilePic(user.profilePic);
     }
-    setTokenHeader(token);
-    setJwtSalt(user.jwtSalt);
-    setSaltHeader(user.jwtSalt);
   };
   const handleUpdateUsername = (newUsername) => {
     setUsername(newUsername); // comment this line out after api integration is done

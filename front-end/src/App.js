@@ -14,6 +14,7 @@ import { AccountProvider } from "./context/AccountContext";
 import EmailVerification from "./pages/start/emailVerification";
 import ErrorPage from "./pages/errors/404";
 import StudySessionsHome from "./pages/studySession/studyHome";
+import PrivateRoute from "./routing/PrivateRoute";
 
 function App() {
   return (
@@ -51,25 +52,23 @@ function App() {
             </Route>
 
             {/* After first login - account customization */}
-            <Route path="/setProfilePic">
-              <SetProfilePicPage />
-            </Route>
-            <Route path="/addModules">
-              <AddModulesPage />
-            </Route>
+            <PrivateRoute
+              path="/setProfilePic"
+              exact
+              component={SetProfilePicPage}
+            />
+            <PrivateRoute path="/addModules" exact component={AddModulesPage} />
           </Switch>
-          <Route path="/profile">
-            <ProfilePage />
-          </Route>
-          <Route path="/chat">
-            <ChatPage />
-          </Route>
+          <PrivateRoute path="/profile" exact component={ProfilePage} />
+          <PrivateRoute path="/chat" exact component={ChatPage} />
           <Route path="/error">
             <ErrorPage />
           </Route>
-          <Route path="/studySessions">
-            <StudySessionsHome />
-          </Route>
+          <PrivateRoute
+            path="/studySessions"
+            exact
+            component={StudySessionsHome}
+          />
         </BrowserRouter>
       </div>
     </AccountProvider>
