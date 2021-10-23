@@ -9,7 +9,7 @@ const Messenger = ({ account, displayChat }) => {
   const [toggle, setToggle] = useState(false); //update receiving of message whenever someone else send
 
   const username = account.username;
-  //const profilePic = account.profilePic;
+  const profilePic = account.profilePic;
   const group = displayChat._id;
   console.log(displayChat._id);
 
@@ -21,13 +21,12 @@ const Messenger = ({ account, displayChat }) => {
     const newMessage = {
       group_id: group,
       sender: username,
+      profilePic: profilePic,
       timestamp: Date.now(),
       content: message,
     };
     const originalMessages = oldMessages;
     setOldMessages(originalMessages.concat(newMessage));
-    setToggle(!toggle);
-
     console.log(oldMessages);
   });
 
@@ -39,6 +38,7 @@ const Messenger = ({ account, displayChat }) => {
       group_id: group,
       sender: username,
       timestamp: Date.now(),
+      profilePic: profilePic,
       content: message,
     };
     setMessage("");
@@ -57,11 +57,14 @@ const Messenger = ({ account, displayChat }) => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
   useEffect(() => {
+    //TBD, have to figure out when to call scroll without infinite call loop
     scrollToBottom();
-  }, [oldMessages]);
+  }, []);
 
   useEffect(() => {
     const getOldMessages = async () => {
@@ -71,8 +74,10 @@ const Messenger = ({ account, displayChat }) => {
       setOldMessages(data.messages);
     };
     getOldMessages();
+    setToggle(!toggle);
+
     console.log(oldMessages);
-  }, [displayChat, toggle]);
+  }, [displayChat, oldMessages]);
 
   const setMessageChange = (event) => {
     setMessage(event.target.value);
@@ -86,26 +91,6 @@ const Messenger = ({ account, displayChat }) => {
     }
   };
   return (
-<<<<<<< HEAD
-    <div className="flex flex-col h-screen relative md:w-auto">
-      <StudyHeader />
-      <div className="pr-10 pl-2">
-        <ChatBubble />
-        <ChatBubble />
-      </div>
-
-      <div className="absolute inset-x-0 bottom-0 flex flex-row h-14">
-        <input
-          onChange={setMessageChange}
-          value={message}
-          placeholder="Write a message"
-          className="w-full placeholder-white bg-purple border-black border-2 pl-2 text-lg"
-        ></input>
-        <button className="pl-2 pr-2 bg-grey" onClick={handleSendMessage}>
-          Send
-        </button>
-      </div>
-=======
     <div>
       {displayChat.length == 0 ? (
         " "
@@ -117,6 +102,7 @@ const Messenger = ({ account, displayChat }) => {
               <ChatBubble
                 key={index}
                 message={message}
+                pic={message.profilePic}
                 toggle={checkSender(message.sender)}
               />
             ))}
@@ -136,7 +122,6 @@ const Messenger = ({ account, displayChat }) => {
           </div>
         </div>
       )}
->>>>>>> 69520132c96d05881d806d45109fe2ba9c3702b3
     </div>
   );
 };

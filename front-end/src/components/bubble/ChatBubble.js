@@ -4,11 +4,11 @@ import PropTypes from "prop-types";
 const ChatBubble = ({ message, toggle }) => {
   return toggle == "left" ? (
     <div className="p-2">
-      <div className="rounded-full h-16 w-16 flex items-center justify-center bg-grey">
-        profile
-      </div>
+      <img className="h-14 w-14 rounded-full" src={message.profilePic} alt="" />
       <div>
-        <div className="mt-2 pl-2 text-s text-left">{message.sender} says:</div>
+        <div className="mt-2 pl-2 text-xs text-left">
+          {message.sender} says:
+        </div>
         <div className="p-2 rounded-tr-bl-br w-3/5 text-left bg-purple-light">
           {message.content}
         </div>
@@ -18,15 +18,17 @@ const ChatBubble = ({ message, toggle }) => {
     <div className="p-2 flex flex-row-reverse">
       <div className=" relative">
         <div className="absolute right-0">
-          <div className="rounded-full h-16 w-16 bg-grey flex items-center justify-center">
-            profile
-          </div>
+          <img
+            className="h-14 w-14 rounded-full"
+            src={message.profilePic}
+            alt=""
+          />
         </div>
         <div className="flex flex-col pt-16">
-          <div className="mt-2 pl-2 text-s text-right">
+          <div className="mt-2 pl-2 text-xs text-right">
             {message.sender} says:
           </div>
-          <div className="p-2 rounded-tr-bl-br text-left bg-purple-light">
+          <div className="p-2 rounded-tr-bl-br text-left bg-purple-light w-full">
             {message.content}
           </div>
         </div>

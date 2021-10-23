@@ -2,46 +2,14 @@ import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 
-<<<<<<< HEAD
-const GroupList = () => {
-  const [search, setSearch] = useState("");
-=======
 const GroupList = ({ account, setDisplayChat, tag }) => {
   const [search, setSearchValue] = useState("");
->>>>>>> 69520132c96d05881d806d45109fe2ba9c3702b3
   const [open, setOpen] = useState(false);
   const [groups, setGroups] = useState([]);
   const [display, setDisplay] = useState([]);
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
   const [load, setLoad] = useState(false);
 
-<<<<<<< HEAD
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
-  };
-  return (
-    <div className="flex flex-col">
-      <div className="justify-center w-full flex flex-row">
-        <div>
-          <form action="#" method="GET">
-            <div>
-              <label
-                htmlFor="search"
-                className="text-sm font-medium text-gray-700"
-              ></label>
-              <input
-                onChange={handleSearch}
-                type="text"
-                name="search"
-                id="search"
-                value={search}
-                placeholder="Search for chat groups"
-                className="mt-1 placeholder-white appearance-none py-3 sm:w-96 border-none  pl-3 py-2 sm:py-4 rounded-md bg-purple-misc focus:outline-none focus:ring-purple-dark text-xs focus:border-purple-dark sm:text-sm"
-              />
-            </div>
-          </form>
-        </div>
-=======
   //use token to call authservices api
   const getGroupsUserIsIn = async () => {
     const res = await fetch(
@@ -145,7 +113,6 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
             />
           </div>
         </form>
->>>>>>> 69520132c96d05881d806d45109fe2ba9c3702b3
 
         <div className="pl-4 pt-2">
           <button
@@ -166,12 +133,6 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
         </div>
       </div>
 
-<<<<<<< HEAD
-      <div className="justify-center w-full pl-4 flex flex-col">
-        <GroupBubble />
-
-        <GroupBubble />
-=======
       <div className="w-full pl-4">
         {display.map((group, index) => (
           <GroupBubble
@@ -180,10 +141,10 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
             setDisplayChat={setDisplayChat}
             userEmail={account.email}
             token={account.token}
+            profilePic={account.profilePic}
             joined={groupsUserIsIn.includes(group)}
           />
         ))}
->>>>>>> 69520132c96d05881d806d45109fe2ba9c3702b3
       </div>
     </div>
   );
