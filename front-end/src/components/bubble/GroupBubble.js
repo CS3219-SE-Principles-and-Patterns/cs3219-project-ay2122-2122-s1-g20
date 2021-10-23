@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { socket } from "../chat/Socket";
 
-const GroupBubble = ({ group, setDisplayChat, userEmail, joined }) => {
+const GroupBubble = ({ group, setDisplayChat, userEmail, joined, token }) => {
   const name = group.name;
   const hashtag = group.hashtag;
   const id = group._id;
@@ -24,6 +24,7 @@ const GroupBubble = ({ group, setDisplayChat, userEmail, joined }) => {
       const res = fetch("http://localhost:8080/api/user/account/groups", {
         method: "POST",
         headers: {
+          "x-access-token": token,
           "Content-type": "application/json",
         },
         body: JSON.stringify(newGroupJoined),
@@ -65,6 +66,7 @@ const GroupBubble = ({ group, setDisplayChat, userEmail, joined }) => {
           method: "POST",
           headers: {
             "Content-type": "application/json",
+            "x-access-token": token,
           },
           body: JSON.stringify(groupToLeave),
         }

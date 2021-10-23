@@ -4,12 +4,14 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { AccountContext } from "../../context/AccountContext";
 import { api } from "../../utils/api";
+import { useHistory } from "react-router-dom";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
+  const history = useHistory();
   const navigation = [
     { name: "StudySessions", href: "/studysessions" },
     { name: "Chats", href: "/chat" },
@@ -71,6 +73,11 @@ export default function Header() {
                     <div className="flex space-x-4">
                       {navigation.map((item) => (
                         <a
+                          onClick={(e) => {
+                            //maintain context between tabs navigation
+                            e.preventDefault();
+                            history.push(item.href);
+                          }}
                           key={item.name}
                           href={item.href}
                           className="px-3 py-2 text-white rounded-md hover:bg-gray-700 hover:text-white text-sm font-medium"
@@ -110,7 +117,11 @@ export default function Header() {
                         <Menu.Item>
                           {({ active }) => (
                             <a
-                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                history.push("/profile");
+                              }}
+                              href="/profile"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
@@ -124,6 +135,7 @@ export default function Header() {
                           {({ active }) => (
                             <a
                               onClick={() => handleLogout}
+                              href="/login"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
