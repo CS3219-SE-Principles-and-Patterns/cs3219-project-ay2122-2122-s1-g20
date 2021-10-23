@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
-
+//handle left right positioning
 const Messenger = ({ account, displayChat }) => {
   const [message, setMessage] = useState("");
   const [oldMessages, setOldMessages] = useState([]);
+  const [toggle, setToggle] = useState(false); //update receiving of message whenever someone else send
+
   const username = account.username;
   //const profilePic = account.profilePic;
   const group = displayChat._id;
@@ -24,6 +26,8 @@ const Messenger = ({ account, displayChat }) => {
     };
     const originalMessages = oldMessages;
     setOldMessages(originalMessages.concat(newMessage));
+    setToggle(!toggle);
+
     console.log(oldMessages);
   });
 
@@ -68,10 +72,18 @@ const Messenger = ({ account, displayChat }) => {
     };
     getOldMessages();
     console.log(oldMessages);
-  }, [displayChat]);
+  }, [displayChat, toggle]);
 
   const setMessageChange = (event) => {
     setMessage(event.target.value);
+  };
+
+  const checkSender = (sdr) => {
+    if (sdr == username) {
+      return "right";
+    } else {
+      return "left";
+    }
   };
   return (
     <div>
@@ -82,7 +94,11 @@ const Messenger = ({ account, displayChat }) => {
           <StudyHeader group={displayChat} />
           <div className="pr-10 pl-2 overflow-y-auto">
             {oldMessages.map((message, index) => (
-              <ChatBubble key={index} message={message} />
+              <ChatBubble
+                key={index}
+                message={message}
+                toggle={checkSender(message.sender)}
+              />
             ))}
             <div ref={messagesEndRef} />
           </div>

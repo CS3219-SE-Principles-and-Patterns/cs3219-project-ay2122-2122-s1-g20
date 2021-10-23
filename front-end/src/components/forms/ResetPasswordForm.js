@@ -7,7 +7,7 @@ const ResetPasswordForm = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [isError, setisError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const { token } = useParams();
 
@@ -23,7 +23,7 @@ const ResetPasswordForm = () => {
     event.preventDefault();
     try {
       if (password !== passwordConfirmation) {
-        setisError(true);
+        setIsError(true);
         setAlertMessage("Passwords do not match!");
         throw new Error("Passwords do not match!");
       } else {
@@ -45,19 +45,21 @@ const ResetPasswordForm = () => {
 
         if (response.status !== 200) {
           setAlertMessage(responseData.message);
-          setisError(true);
+          setIsError(true);
           throw new Error(responseData.message);
         }
 
-        if (response.status == 200) {
+        if (response.status === 200) {
           // Route to home page
           setAlertMessage(responseData.message);
-          setisError(false);
+          setIsError(false);
+          setPassword("");
+          setPasswordConfirmation("");
           console.log(responseData.message);
         }
       }
     } catch (error) {
-      setisError(true);
+      setIsError(true);
     }
   };
 

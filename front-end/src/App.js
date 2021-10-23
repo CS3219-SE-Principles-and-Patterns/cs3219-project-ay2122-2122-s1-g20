@@ -20,8 +20,8 @@ function App() {
   return (
     <AccountProvider>
       <div className="App">
-        <Header />
         <BrowserRouter>
+          <Header />
           <Switch>
             <Route exact path="/login">
               <LoginPage />

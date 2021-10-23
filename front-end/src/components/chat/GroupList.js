@@ -10,6 +10,23 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
   const [load, setLoad] = useState(false);
 
+  //use token to call authservices api
+  const getGroupsUserIsIn = async () => {
+    const res = await fetch(
+      `http://localhost:8080/api/user/account/groups/${account.email}`,
+      {
+        method: "GET",
+        headers: {
+          "x-access-token": account.token,
+        },
+      }
+    );
+
+    const data = await res.json();
+    loadData(data.groups);
+    console.log(groupsUserIsIn);
+  };
+
   //loading data from group database
   const loadData = async (arr) => {
     var temp = [];
@@ -24,13 +41,6 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
       }
     }
     setGroupsUserIsIn(temp);
-  };
-  const getGroupsUserIsIn = async () => {
-    const res = await fetch(`
-            http://localhost:8080/api/user/account/groups/${account.email}`);
-    const data = await res.json(); //return an arr of chat group id
-    loadData(data.groups);
-    console.log(groupsUserIsIn);
   };
 
   const getAllGroups = async () => {
@@ -57,15 +67,28 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
   const handleSearch = (event) => {
     setSearchValue(event.target.value);
     var temp;
+    const empty = search == "";
     if (tag == "All Chats") {
-      temp = groups.filter((x) => x.name.includes(search));
+      if (empty) {
+        temp = groups;
+      } else {
+        temp = groups.filter((x) => x.name.includes(search));
+      }
     } else {
       if (tag != "Joined") {
-        temp = groupsUserIsIn.filter(
-          (x) => x.hashtag == tag && x.name.includes(search)
-        );
+        if (empty) {
+          temp = groupsUserIsIn.filter((x) => x.hashtag == tag);
+        } else {
+          temp = groupsUserIsIn.filter(
+            (x) => x.hashtag == tag && x.name.includes(search)
+          );
+        }
       } else {
-        temp = groupsUserIsIn.filter((x) => x.name.includes(search));
+        if (empty) {
+          temp = groupsUserIsIn;
+        } else {
+          temp = groupsUserIsIn.filter((x) => x.name.includes(search));
+        }
       }
     }
     setDisplay(temp);
@@ -117,6 +140,7 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
             group={group}
             setDisplayChat={setDisplayChat}
             userEmail={account.email}
+            token={account.token}
             joined={groupsUserIsIn.includes(group)}
           />
         ))}

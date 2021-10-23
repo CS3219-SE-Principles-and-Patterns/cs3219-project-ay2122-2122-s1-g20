@@ -1,8 +1,9 @@
+const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 
 const studySessionSchema = mongoose.Schema({
-  sid: {
-    type: Number,
+  cid: {
+    type: String,
   },
   capacity: {
     type: Number,
@@ -14,21 +15,33 @@ const studySessionSchema = mongoose.Schema({
   title: {
     type: String,
     required: true,
+    unique: true,
   },
   timeLimit: {
     type: Number,
     required: true,
   },
-  start: {
-    type: Number,
-    required: true,
-  },
-  end: {
-    type: Number,
-    required: true,
+  time: {
+    start: {
+      type: String,
+      required: true,
+    },
+    end: {
+      type: String,
+      required: true,
+    },
   },
   date: {
     type: String,
+    enum: [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday",
+    ],
     required: true,
   },
   module: {
@@ -41,6 +54,7 @@ const studySessionSchema = mongoose.Schema({
   },
   isOnline: {
     type: String,
+    enum: ["online", "offline"],
     required: true,
   },
 });
