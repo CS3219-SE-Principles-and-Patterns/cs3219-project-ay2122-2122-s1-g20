@@ -37,16 +37,22 @@ function PrivateRoute({ component: Component, ...rest }) {
   if (isLoading) return <div />;
 
   return (
-    <Route
-      {...rest}
-      render={() => {
-        if (authenticated) {
-          return <Component />;
-        } else {
-          return <Redirect to="/error" />;
-        }
-      }}
-    />
+    <div>
+      {isLoading ? (
+        " "
+      ) : (
+        <Route
+          {...rest}
+          render={() => {
+            if (authenticated) {
+              return <Component />;
+            } else {
+              return <Redirect to="/error" />;
+            }
+          }}
+        />
+      )}
+    </div>
   );
 }
 
