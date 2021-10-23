@@ -5,18 +5,31 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { AccountContext } from "../../context/AccountContext";
 import { api } from "../../utils/api";
 
-const navigation = [
-  { name: "StudySessions", href: "/studysessions", current: true },
-  { name: "Chats", href: "/chat", current: false },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
+  const [isTab0, setIsTab0] = useState(false);
+  const [isTab1, setIsTab1] = useState(false);
+  const navigation = [
+    { name: "StudySessions", href: "/studysessions", current: isTab0 },
+    { name: "Chats", href: "/chat", current: isTab1 },
+  ];
+
   const { email, handleUpdateSalt } = useContext(AccountContext);
   const [logoutSuccess, setLogoutSuccess] = useState("false");
+
+  const handleNavigationTab = (tab, tabIdx) => {
+    console.log("in func");
+    if (tabIdx === 0) {
+      setIsTab0(true);
+      setIsTab1(false);
+    } else {
+      setIsTab1(true);
+      setIsTab0(false);
+    }
+  };
 
   const handleLogout = async (event) => {
     event.preventDefault();
@@ -42,7 +55,6 @@ export default function Header() {
           <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-between h-16">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                {/* Mobile menu button*/}
                 <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
@@ -60,8 +72,9 @@ export default function Header() {
                 </div>
                 <div className="hidden pl-3 sm:block sm:ml-6">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
+                    {navigation.map((item, itemIdx) => (
                       <a
+                        onClick={() => handleNavigationTab(item, itemIdx)}
                         key={item.name}
                         href={item.href}
                         className={classNames(
@@ -100,7 +113,7 @@ export default function Header() {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="origin-top-right z-50 absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
                           <a
@@ -117,7 +130,7 @@ export default function Header() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            onClick={handleLogout}
+                            onClick={() => handleLogout}
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"

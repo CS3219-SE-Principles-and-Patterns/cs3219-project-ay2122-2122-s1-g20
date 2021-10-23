@@ -7,7 +7,7 @@ function classNames(...classes) {
 
 export default function UserSessions() {
   const [isTab0, setIsTab0] = useState(true);
-  const [isTab1, setIsTab1] = useState(true);
+  const [isTab1, setIsTab1] = useState(false);
 
   const tabs = [
     { name: "Your created study sessions", current: isTab0 },
