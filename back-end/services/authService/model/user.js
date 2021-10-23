@@ -26,15 +26,29 @@ const userSchema = new mongoose.Schema({
   },
   uniqueString: {
     type: String,
-    required: true
+    required: true,
   },
   resetToken: String,
   resetTokenExpiration: Date,
   isVerified: {
     type: Boolean,
     required: true,
-    default: false
-  }
+    default: false,
+  },
+  sessions: {
+    type: [mongoose.Schema.Types.ObjectId],
+    required: false,
+    default: [],
+  },
+  groups: {
+    type: [mongoose.Schema.Types.ObjectId],
+    required: false,
+    default: [],
+  },
+  jwtSalt: {
+    type: String,
+    required: true,
+  },
 });
 
 userSchema.pre("save", function (next) {

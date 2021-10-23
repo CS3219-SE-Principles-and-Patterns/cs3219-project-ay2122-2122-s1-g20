@@ -1,18 +1,34 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const ChatBubble = (props) => {
-  return (
-    <div className="mt-5">
-      <div className="rounded-full h-20 w-20 flex items-center justify-center bg-grey">
+const ChatBubble = ({ message, toggle }) => {
+  return toggle == "left" ? (
+    <div className="p-2">
+      <div className="rounded-full h-16 w-16 flex items-center justify-center bg-grey">
         profile
       </div>
       <div>
-        <div className="mt-2 pl-2 text-s text-left">
-          {props.name}TempName says:
+        <div className="mt-2 pl-2 text-s text-left">{message.sender} says:</div>
+        <div className="p-2 rounded-tr-bl-br w-3/5 text-left bg-purple-light">
+          {message.content}
         </div>
-        <div className="pt-2 pb-2 pl-5 rounded-tr-bl-br text-left bg-purple-light">
-          {props.message}I wonder if there is a way this can be learned quickly
+      </div>
+    </div>
+  ) : (
+    <div className="p-2 flex flex-row-reverse">
+      <div className=" relative">
+        <div className="absolute right-0">
+          <div className="rounded-full h-16 w-16 bg-grey flex items-center justify-center">
+            profile
+          </div>
+        </div>
+        <div className="flex flex-col pt-16">
+          <div className="mt-2 pl-2 text-s text-right">
+            {message.sender} says:
+          </div>
+          <div className="p-2 rounded-tr-bl-br text-left bg-purple-light">
+            {message.content}
+          </div>
         </div>
       </div>
     </div>
@@ -20,8 +36,8 @@ const ChatBubble = (props) => {
 };
 
 ChatBubble.propTypes = {
-  name: PropTypes.string,
-  message: PropTypes.string,
+  sender: PropTypes.string,
+  content: PropTypes.string,
 };
 
 export default ChatBubble;

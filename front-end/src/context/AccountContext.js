@@ -1,30 +1,59 @@
 import React, { useState } from "react";
+import { setTokenHeader, setSaltHeader } from "../utils/api";
 
 export const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
-  // const [token, setToken] = useState("");
+  const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [modules, setModules] = useState([
     {
-      moduleCode: "AC5001",
-      title: "Architectural History of Singapore",
+      title: "DNSIAND",
+      moduleCode: "CS3219",
     },
     {
-      moduleCode: "AC5002",
-      title: "Conservation Approaches and Philosophies",
+      title: "helps",
+      moduleCode: "CS3235",
+    },
+    {
+      title: "helps",
+      moduleCode: "CS1231",
+    },
+    {
+      title: "helps",
+      moduleCode: "CS3342",
+    },
+
+    {
+      title: "helps",
+      moduleCode: "CS5555",
     },
   ]);
   const [profilePic, setProfilePic] = useState("");
+  const [jwtSalt, setJwtSalt] = useState("");
 
+  const setUser = (user, token) => {
+    setToken(token);
+    setUsername(user.username);
+    setEmail(user.email);
+    if (user.modules) {
+      setModules(user.modules);
+    }
+    if (user.profilePic) {
+      setProfilePic(user.profilePic);
+    }
+    setTokenHeader(token);
+    setJwtSalt(user.jwtSalt);
+    setSaltHeader(user.jwtSalt);
+  };
   const handleUpdateUsername = (newUsername) => {
     setUsername(newUsername); // comment this line out after api integration is done
     // await api call to update username in backend, change to async function
   };
 
   const handleUpdateEmail = (newEmail) => {
-    setUsername(newEmail); // comment this line out after api integration is done
+    setEmail(newEmail); // comment this line out after api integration is done
     // await api call to update username in backend, change to async function
   };
 
@@ -41,9 +70,16 @@ export const AccountProvider = ({ children }) => {
     setModules(modules.filter((mod) => mod.moduleCode !== modCode));
   };
 
+  const handleUpdateSalt = (salt) => {
+    setJwtSalt(salt);
+    setSaltHeader(salt);
+  };
+
   return (
     <AccountContext.Provider
       value={{
+        setUser,
+        token,
         username,
         setUsername,
         email,
@@ -52,6 +88,9 @@ export const AccountProvider = ({ children }) => {
         setModules,
         profilePic,
         setProfilePic,
+        jwtSalt,
+        setJwtSalt,
+        handleUpdateSalt,
         handleAddModules,
         handleDeleteModule,
         handleUpdateUsername,

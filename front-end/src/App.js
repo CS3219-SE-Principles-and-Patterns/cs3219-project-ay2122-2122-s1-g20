@@ -12,29 +12,41 @@ import ProfilePage from "./pages/profile";
 import ChatPage from "./pages/chat";
 import { AccountProvider } from "./context/AccountContext";
 import EmailVerification from "./pages/start/emailVerification";
+import ErrorPage from "./pages/errors/404";
+import StudySessionsHome from "./pages/studySession/studyHome";
 
 function App() {
   return (
     <AccountProvider>
       <div className="App">
-        <Header />
         <BrowserRouter>
+          <Header />
           <Switch>
-            <Route path="/login">
+            <Route exact path="/login">
               <LoginPage />
             </Route>
             <Route exact path="/signup">
               <SignUpPage />
             </Route>
-            <Route path="/signup/confirmation">
+            <Route
+              exact
+              path="/signup/confirmation/verified/:uniqueString"
+              component={EmailVerification}
+            />
+            <Route exact path="/signup/confirmation">
               <SignUpConfirmation />
             </Route>
             <Route
-              path="signup/confirmation/verified/:uniqueString"
+              exact
+              path="/signup/confirmation/verified/:uniqueString"
               component={EmailVerification}
             />
-            <Route path="/resetPassword/:token" component={ResetPasswordPage} />
-            <Route path="/resetPassword">
+            <Route
+              exact
+              path="/resetPassword/:token"
+              component={ResetPasswordPage}
+            />
+            <Route exact path="/resetPassword">
               <EmailConfirmationPage />
             </Route>
 
@@ -51,6 +63,12 @@ function App() {
           </Route>
           <Route path="/chat">
             <ChatPage />
+          </Route>
+          <Route path="/error">
+            <ErrorPage />
+          </Route>
+          <Route path="/studySessions">
+            <StudySessionsHome />
           </Route>
         </BrowserRouter>
       </div>

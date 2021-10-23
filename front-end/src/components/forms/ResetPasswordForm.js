@@ -6,9 +6,8 @@ const ResetPasswordForm = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [isRevealPassword, setIsRevealPassword] = useState(false);
-  const [errorPasswordReset, setErrorPasswordReset] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [isError, setisError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const { token } = useParams();
 
@@ -24,8 +23,7 @@ const ResetPasswordForm = () => {
     event.preventDefault();
     try {
       if (password !== passwordConfirmation) {
-        setErrorPasswordReset(true);
-        setisError(true);
+        setIsError(true);
         setAlertMessage("Passwords do not match!");
         throw new Error("Passwords do not match!");
       } else {
@@ -47,27 +45,27 @@ const ResetPasswordForm = () => {
 
         if (response.status !== 200) {
           setAlertMessage(responseData.message);
-          setErrorPasswordReset(true);
-          setisError(true);
+          setIsError(true);
           throw new Error(responseData.message);
         }
 
-        if (response.status == 200) {
+        if (response.status === 200) {
           // Route to home page
           setAlertMessage(responseData.message);
+          setIsError(false);
+          setPassword("");
+          setPasswordConfirmation("");
           console.log(responseData.message);
         }
       }
     } catch (error) {
-      setErrorPasswordReset(true);
-      console.log(error.message);
-      console.log(errorPasswordReset);
+      setIsError(true);
     }
   };
 
   return (
     <div className="py-6 align-middle justify-center mt-5">
-      {errorPasswordReset ? (
+      {alertMessage !== "" ? (
         <AlertMessage isError={isError} message={alertMessage} />
       ) : undefined}
       <form
@@ -82,7 +80,7 @@ const ResetPasswordForm = () => {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Password
+              New Password
             </label>
             <button
               type="button"

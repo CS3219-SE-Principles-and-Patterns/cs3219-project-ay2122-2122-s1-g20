@@ -3,7 +3,7 @@ import Popup from "reactjs-popup";
 import PropTypes from "prop-types";
 import { VscChromeClose } from "react-icons/vsc";
 
-const ChatGroupCreationForm = ({ setOpen, open }) => {
+const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
   const [groupName, setGroupName] = useState("");
   const [chitchat, setChitchat] = useState(false);
   const [makan, setMakan] = useState(true);
@@ -11,6 +11,46 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
 
   const handleGroupNameChange = (event) => {
     setGroupName(event.target.value);
+  };
+
+  const checkHashTag = async () => {
+    if (sports) {
+      return "sports";
+    } else if (makan) {
+      return "makan";
+    } else if (chitchat) {
+      return "chitchat";
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const value = await checkHashTag();
+      console.log(value);
+      const res = await fetch("http://localhost:9000/api/groups", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          hashtag: value,
+          name: groupName,
+          uid: [userEmail],
+          lastModified: Date.now(),
+          creator: userEmail,
+        }),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (res.status == 200) {
+        handleReset();
+        setLoad(!load);
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleReset = () => {
@@ -45,7 +85,7 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
   return (
     <div className="w-1">
       <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
-        <form method="POST">
+        <form onSubmit={handleSubmit} action="#" method="POST">
           <div className="bg-blue-dark p-20">
             <button
               className="bg-white absolute top-1 right-1 p-0.5 rounded-full"
@@ -115,10 +155,6 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
               <button
                 className="w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium text-black bg-yellow-dark hover:bg-opacity-75 mt-6"
                 type="submit"
-                onSubmit={() => {
-                  handleReset();
-                  setOpen(false);
-                }}
               >
                 Create
               </button>
@@ -133,6 +169,8 @@ const ChatGroupCreationForm = ({ setOpen, open }) => {
 ChatGroupCreationForm.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
+  setLoad: PropTypes.func,
+  load: PropTypes.bool,
 };
 
 export default ChatGroupCreationForm;

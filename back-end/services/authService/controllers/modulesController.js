@@ -3,8 +3,8 @@ const User = require("../model/user");
 
 exports.addModules = async (req, res, next) => {
   try {
-    const updatedUser = await User.findOneAndUpdate(
-      { email: req.body.email },
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
       { modules: req.body.modules },
       { new: true }
     );
@@ -21,8 +21,8 @@ exports.addModules = async (req, res, next) => {
 
 exports.deleteModules = async (req, res, next) => {
   try {
-    const updatedUser = await User.findOneAndUpdate(
-      { email: req.body.email },
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
       { modules: [] },
       { new: true }
     );
