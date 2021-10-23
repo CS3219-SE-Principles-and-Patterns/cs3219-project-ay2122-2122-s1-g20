@@ -46,17 +46,6 @@ exports.createSession = async (req, res, next) => {
     //     "isOnline": "online"
     // }
     const session = new Session(req.body);
-    // const session = new Session({
-    //   title: req.body.title,
-    //   capacity: req.body.capacity,
-    //   timeLimit: req.body.timeLimit,
-    //   timestart: req.body.start,
-    //   end: req.body.end,
-    //   module: req.body.module,
-    //   date: req.body.date,
-    //   isOnline: req.body.isOnline,
-    // });
-
     const createdSession = await session.save();
     return res.status(200).json({
       studySessionId: createdSession._id,
@@ -103,11 +92,12 @@ exports.editStudySession = (req, res, next) => {
   const sid = req.params.sid;
   const title = req.body.title;
   const capacity = req.body.capacity;
-  const start = req.body.start;
-  const end = req.body.end;
+  const time = req.body.time;
+  const timeLimit = req.body.timeLimit;
   const module = req.body.module;
   const date = req.body.date;
   const isOnline = req.body.isOnline;
+  const participants = req.body.participants;
 
   Session.findById(sid) // mongoose built in function
     .then((session) => {
@@ -118,7 +108,9 @@ exports.editStudySession = (req, res, next) => {
       }
       session.title = title;
       session.capacity = capacity;
-      session.start = start;
+      session.time = time;
+      session.timeLimit = timeLimit;
+      session.participants = participants;
       session.end = end;
       session.module = module;
       session.date = date;

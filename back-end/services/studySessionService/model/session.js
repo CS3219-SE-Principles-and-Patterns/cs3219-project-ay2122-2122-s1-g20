@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const studySessionSchema = mongoose.Schema({
   cid: {
-    type: ObjectId,
+    type: String,
   },
   capacity: {
     type: Number,
