@@ -36,7 +36,7 @@ const ProfilePage = () => {
           />
         </div>
         <EditModules isProfilePage />
-        <ChangePasswordForm />
+        <ChangePasswordForm email={email} />
       </div>
     </div>
   );

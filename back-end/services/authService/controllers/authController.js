@@ -134,6 +134,65 @@ exports.logout = async (req, res) => {
   }
 };
 
+exports.updatePassword = async (req, res) => {
+  const { email, oldpassword, newpassword, confirmNewpassword } = req.body;
+
+  if (newpassword != confirmNewpassword) {
+    return res.status(422).json({ message: "The new passwords do not match" });
+  }
+
+  const user = await User.findOne({ email });
+
+  try {
+    await user.comparePassword(oldpassword); //check that password matches
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email },
+      { password: newpassword },
+      { new: true }
+    );
+    updatedUser.save();
+    return res.status(200).json({ message: "Updated user password" });
+  } catch (err) {
+    return res.status(422).json({ message: "Invalid password entered." });
+  }
+};
+
+exports.updateEmail = async (req, res) => {
+  const { username, newEmail } = req.body;
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { username: username },
+      { email: newEmail },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .json({ user: updatedUser, message: "Updated user email" });
+  } catch (err) {
+    console.log(err);
+    return res.status(422).json({ message: "Error updating email" });
+  }
+};
+
+exports.updateUsername = async (req, res) => {
+  const { email, newUsername } = req.body;
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email },
+      { username: newUsername },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .json({ user: updatedUser, message: "Updated username" });
+  } catch (err) {
+    console.log(err);
+    return res.status(422).json({ message: "Error updating username" });
+  }
+};
+
 exports.postReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
@@ -250,8 +309,7 @@ exports.verifyToken = async (req, res) => {
       console.log(err);
       return res.status(401).json({ error: "You must be logged in." });
     } else {
-      return res.status(200).json({message: "Authenticated"});
+      return res.status(200).json({ message: "Authenticated" });
     }
   });
 };
-

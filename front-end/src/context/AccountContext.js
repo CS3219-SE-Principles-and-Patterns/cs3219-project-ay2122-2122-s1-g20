@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setTokenHeader, setSaltHeader } from "../utils/api";
+import { setTokenHeader, setSaltHeader, api } from "../utils/api";
 
 export const AccountContext = React.createContext();
 
@@ -7,29 +7,7 @@ export const AccountProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [modules, setModules] = useState([
-    {
-      title: "DNSIAND",
-      moduleCode: "CS3219",
-    },
-    {
-      title: "helps",
-      moduleCode: "CS3235",
-    },
-    {
-      title: "helps",
-      moduleCode: "CS1231",
-    },
-    {
-      title: "helps",
-      moduleCode: "CS3342",
-    },
-
-    {
-      title: "helps",
-      moduleCode: "CS5555",
-    },
-  ]);
+  const [modules, setModules] = useState([]);
   const [profilePic, setProfilePic] = useState("");
   const [jwtSalt, setJwtSalt] = useState("");
 
@@ -47,14 +25,16 @@ export const AccountProvider = ({ children }) => {
       setProfilePic(user.profilePic);
     }
   };
-  const handleUpdateUsername = (newUsername) => {
-    setUsername(newUsername); // comment this line out after api integration is done
-    // await api call to update username in backend, change to async function
+  const handleUpdateUsername = async (newUsername) => {
+    await api
+      .post("/user/updateUsername", { newUsername, email })
+      .catch((err) => console.log(err));
   };
 
-  const handleUpdateEmail = (newEmail) => {
-    setEmail(newEmail); // comment this line out after api integration is done
-    // await api call to update username in backend, change to async function
+  const handleUpdateEmail = async (newEmail) => {
+    await api
+      .post("/user/updateEmail", { newEmail, username })
+      .catch((err) => console.log(err));
   };
 
   const handleAddModules = (newModule) => {

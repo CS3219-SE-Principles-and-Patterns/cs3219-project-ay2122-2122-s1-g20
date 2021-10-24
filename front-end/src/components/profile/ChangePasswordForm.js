@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import YellowButton from "../YellowButton";
 import TextInput from "./TextInput";
+import AlertMessage from "../alerts/AlertMessage";
+import { api } from "../../utils/api";
 
-const ChangePasswordForm = () => {
+const ChangePasswordForm = (email) => {
   const [oldpassword, setOldpassword] = useState("");
   const [newpassword, setNewpassword] = useState("");
   const [confirmNewpassword, setConfirmNewpassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(false);
 
   const resetFields = () => {
     setOldpassword("");
@@ -13,53 +17,72 @@ const ChangePasswordForm = () => {
     setConfirmNewpassword("");
   };
   // When user press enter button instead of clicking on the done button
-  const handleEnter = (event) => {
+  const handleEnter = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
-    // await api to update password
-    // Update button to disabled while awaiting
-    // once done, button is enabled again, and clear all fields
-    resetFields();
   };
 
-  const handleDoneEdit = () => {
-    resetFields();
+  const handleDoneEdit = async () => {
+    setIsLoading(true);
+    const res = await api
+      .post("/user/updatePassword", {
+        email,
+        oldpassword,
+        newpassword,
+        confirmNewpassword,
+      })
+      .catch((err) => console.log(err));
+    console.log(res);
+
+    setAlertMessage(res);
+    handleUpdateDone();
   };
 
+  const handleUpdateDone = () => {
+    setIsLoading(false);
+    resetFields();
+  };
   return (
-    <form
-      className="flex-col flex space-y-4 mr-5 mb-4 items-baseline"
-      onSubmit={handleEnter}
-    >
-      <label className="flex self-start text-xs sm:text-sm font-medium text-gray-700">
-        Change password:
-      </label>
-      <TextInput
-        label="Old password"
-        value={oldpassword}
-        setValue={setOldpassword}
-        type="password"
-      />
-      <TextInput
-        label="New password"
-        value={newpassword}
-        setValue={setNewpassword}
-        type="password"
-      />
-      <TextInput
-        label="Confirm new password"
-        value={confirmNewpassword}
-        setValue={setConfirmNewpassword}
-        type="password"
-      />
-      <span className="flex-initial">
-        <YellowButton
-          text="Update"
-          onClick={handleDoneEdit}
-          textSize="text-sm"
-          px="px-5"
+    <div>
+      {alertMessage !== "" ? (
+        <AlertMessage message={alertMessage} />
+      ) : undefined}
+      <form
+        className="flex-col flex space-y-4 mr-5 mb-4 items-baseline"
+        onSubmit={handleEnter}
+      >
+        <label className="flex self-start text-xs sm:text-sm font-medium text-gray-700">
+          Change password:
+        </label>
+        <TextInput
+          label="Old password"
+          value={oldpassword}
+          setValue={setOldpassword}
+          type="password"
         />
-      </span>
-    </form>
+        <TextInput
+          label="New password"
+          value={newpassword}
+          setValue={setNewpassword}
+          type="password"
+        />
+        <TextInput
+          label="Confirm new password"
+          value={confirmNewpassword}
+          setValue={setConfirmNewpassword}
+          type="password"
+        />
+        <span className="flex-initial">
+          <YellowButton
+            text="Update"
+            onClick={handleDoneEdit}
+            textSize="text-sm"
+            px="px-5"
+            isLoading={isLoading}
+          />
+        </span>
+      </form>
+    </div>
   );
 };
 
