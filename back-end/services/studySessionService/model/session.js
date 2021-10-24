@@ -33,15 +33,6 @@ const studySessionSchema = mongoose.Schema({
   },
   date: {
     type: String,
-    enum: [
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-      "sunday",
-    ],
     required: true,
   },
   module: {
