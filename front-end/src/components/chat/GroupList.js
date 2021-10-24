@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 
-const GroupList = ({ account, setDisplayChat, tag }) => {
+const GroupList = ({ account, setDisplayChat, tag, setEnable }) => {
   const [search, setSearchValue] = useState("");
   const [open, setOpen] = useState(false);
   const [groups, setGroups] = useState([]);
@@ -18,6 +18,7 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
         method: "GET",
         headers: {
           "x-access-token": account.token,
+          "jwt-salt": account.jwtSalt,
         },
       }
     );
@@ -51,10 +52,10 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
 
   useEffect(() => {
     getGroupsUserIsIn();
+    getAllGroups();
     setDisplay(groupsUserIsIn);
 
     if (tag == "All Chats") {
-      getAllGroups();
       setDisplay(groups);
     } else {
       if (tag != "Joined") {
@@ -139,8 +140,10 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
             key={index}
             group={group}
             setDisplayChat={setDisplayChat}
+            setEnable={setEnable}
             userEmail={account.email}
             token={account.token}
+            jwtSalt={account.jwtSalt}
             profilePic={account.profilePic}
             joined={groupsUserIsIn.includes(group)}
           />

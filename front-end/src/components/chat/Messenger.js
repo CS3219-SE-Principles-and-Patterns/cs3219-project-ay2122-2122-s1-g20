@@ -3,7 +3,7 @@ import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
 //handle left right positioning
-const Messenger = ({ account, displayChat }) => {
+const Messenger = ({ account, displayChat, enable }) => {
   const [message, setMessage] = useState("");
   const [oldMessages, setOldMessages] = useState([]);
   const [toggle, setToggle] = useState(false); //update receiving of message whenever someone else send
@@ -108,18 +108,23 @@ const Messenger = ({ account, displayChat }) => {
             ))}
             <div ref={messagesEndRef} />
           </div>
-
-          <div className="absolute inset-x-0 bottom-0 flex flex-row h-16">
-            <input
-              onChange={setMessageChange}
-              value={message}
-              placeholder="Write a message"
-              className="w-full placeholder-white bg-purple border-black border-2 pl-2 text-lg"
-            ></input>
-            <button className="pl-2 pr-2 bg-grey" onClick={handleSendMessage}>
-              Send
-            </button>
-          </div>
+          {enable ? (
+            <div className="absolute inset-x-0 bottom-0 flex flex-row h-16">
+              <input
+                onChange={setMessageChange}
+                value={message}
+                placeholder="Write a message"
+                className="w-full placeholder-white bg-purple border-black border-2 pl-2 text-lg"
+              ></input>
+              <button className="pl-2 pr-2 bg-grey" onClick={handleSendMessage}>
+                Send
+              </button>
+            </div>
+          ) : (
+            <div className="absolute inset-x-0 bottom-0 flex flex-row h-16 pt-4 bg-purple justify-center">
+              Join the group to start chatting
+            </div>
+          )}
         </div>
       )}
     </div>

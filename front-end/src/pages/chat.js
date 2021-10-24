@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 
 const ChatPage = () => {
   const [displayChat, setDisplayChat] = useState([]);
-  const [tag, setTag] = useState("All Chats");
+  const [enable, setEnable] = useState(false);
+  const [tag, setTag] = useState("");
 
   useEffect(() => {
     setDisplayChat("");
@@ -23,11 +24,16 @@ const ChatPage = () => {
             <GroupList
               account={context}
               setDisplayChat={setDisplayChat}
+              setEnable={setEnable}
               tag={tag}
             />
           </div>
           <div className="col-span-3">
-            <Messenger account={context} displayChat={displayChat} />
+            <Messenger
+              account={context}
+              displayChat={displayChat}
+              enable={enable}
+            />
           </div>
         </div>
       )}

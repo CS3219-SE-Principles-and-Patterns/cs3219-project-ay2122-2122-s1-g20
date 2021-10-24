@@ -1,15 +1,26 @@
 import React, { useState } from "react";
+import Popup from "reactjs-popup";
 import PropTypes from "prop-types";
 import { socket } from "../chat/Socket";
 
-const GroupBubble = ({ group, setDisplayChat, userEmail, joined, token }) => {
+const GroupBubble = ({
+  group,
+  setDisplayChat,
+  setEnable,
+  userEmail,
+  joined,
+  token,
+  jwtSalt,
+}) => {
   const name = group.name;
   const hashtag = group.hashtag;
   const id = group._id;
   const [join, setJoin] = useState(joined);
+  const [open, setOpen] = useState(false);
 
   const handlePreview = () => {
     setDisplayChat(group);
+    setEnable(join);
   };
   const handleJoinChat = () => {
     setJoin(true);
@@ -25,6 +36,7 @@ const GroupBubble = ({ group, setDisplayChat, userEmail, joined, token }) => {
         method: "POST",
         headers: {
           "x-access-token": token,
+          "jwt-salt": jwtSalt,
           "Content-type": "application/json",
         },
         body: JSON.stringify(newGroupJoined),
@@ -53,7 +65,9 @@ const GroupBubble = ({ group, setDisplayChat, userEmail, joined, token }) => {
 
   const handleLeaveChat = () => {
     setDisplayChat("");
+    setOpen(false);
     setJoin(false);
+
     const groupToLeave = {
       email: userEmail,
       groupId: id,
@@ -67,6 +81,7 @@ const GroupBubble = ({ group, setDisplayChat, userEmail, joined, token }) => {
           headers: {
             "Content-type": "application/json",
             "x-access-token": token,
+            "jwt-salt": jwtSalt,
           },
           body: JSON.stringify(groupToLeave),
         }
@@ -104,10 +119,22 @@ const GroupBubble = ({ group, setDisplayChat, userEmail, joined, token }) => {
       </button>
       <button
         className="rounded bg-gray-100 h-20 w-20 mt-5 text-xl"
-        onClick={!join ? handleJoinChat : handleLeaveChat}
+        onClick={() => (!join ? handleJoinChat : setOpen(true))}
       >
         {!join ? "Join" : "Leave"}
       </button>
+
+      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
+        <div className="flex flex-col bg-blue-dark p-10">
+          Confirm to leave? {open}
+          <button className="p-2 bg-red-400" onClick={handleLeaveChat}>
+            Yes
+          </button>
+          <button className="p-2 bg-grey" onClick={() => setOpen(false)}>
+            No
+          </button>
+        </div>
+      </Popup>
     </div>
   );
 };
