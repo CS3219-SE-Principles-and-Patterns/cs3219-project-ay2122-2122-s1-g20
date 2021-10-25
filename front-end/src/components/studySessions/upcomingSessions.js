@@ -1,23 +1,16 @@
 import { SearchIcon } from "@heroicons/react/solid";
 import CreateNewStudySession from "../forms/CreateNewStudySession";
 import React, { useState } from "react";
-import { sessionApi } from "../../utils/api";
 import { useEffect } from "react";
 import BlueSessionCard from "./blueSessionCard";
+import { useContext } from "react";
+import { SessionContext } from "../../context/SessionContext";
 
 const UpcomingSessions = () => {
   const [loadNewForm, setLoadNewForm] = useState(false);
   const [openNewForm, setOpenNewForm] = useState(false);
-  const [upcomingSessions, setUpcomingSessions] = useState([]);
-
-  const fetchData = async () => {
-    const response = await sessionApi.get("/upcoming");
-    setUpcomingSessions(response.data.sessions);
-  };
-  useEffect(() => {
-    fetchData();
-    console.log(upcomingSessions);
-  }, []);
+  const { upcomingSessions, getUpcomingSessions, setUpcomingSessions } =
+    useContext(SessionContext);
 
   // mock data
   const studySession = [
@@ -50,6 +43,12 @@ const UpcomingSessions = () => {
       timeLimit: 2,
     },
   ];
+
+  useEffect(() => {
+    getUpcomingSessions();
+    setUpcomingSessions(studySession);
+    console.log(upcomingSessions);
+  }, []);
 
   const renderCards = (sessions) => {
     return sessions.map((session) => (
@@ -104,7 +103,9 @@ const UpcomingSessions = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-y-3">{renderCards(studySession)}</div>
+      <div className="flex flex-col gap-y-3">
+        {renderCards(upcomingSessions)}
+      </div>
     </div>
   );
 };

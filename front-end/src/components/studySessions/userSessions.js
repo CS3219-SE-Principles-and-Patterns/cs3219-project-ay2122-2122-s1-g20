@@ -1,47 +1,15 @@
 import YellowSessionCard from "./yellowSessionCard";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { sessionApi } from "../../utils/api";
 import { useContext } from "react";
 import { AccountContext } from "../../context/AccountContext";
+import { SessionContext } from "../../context/SessionContext";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function UserSessions() {
-  const { username } = useContext(AccountContext);
-  const [isTab0, setIsTab0] = useState(true);
-  const [isTab1, setIsTab1] = useState(false);
-  const [mySessions, setMySessions] = useState([]);
-  const [pastSessions, setPastSessions] = useState([]);
-
-  const tabs = [
-    { name: "Your created study sessions", current: isTab0 },
-    { name: "Your past sessions", current: isTab1 },
-  ];
-
-  const handleTabNavigation = (tab, tabIdx) => {
-    if (tabIdx === 0) {
-      setIsTab0(true);
-      setIsTab1(false);
-    } else {
-      setIsTab1(true);
-      setIsTab0(false);
-    }
-  };
-
-  const fetchData = async () => {
-    const reponseMySessions = await sessionApi.get(`/my/${username}`);
-    setMySessions(reponseMySessions.data.sessions);
-    const responsePastSessions = await sessionApi.get(`/past/${username}`);
-    setPastSessions(responsePastSessions.data.sessions);
-  };
-  useEffect(() => {
-    fetchData();
-    console.log(mySessions, pastSessions);
-  }, []);
-
   // mock data
   const studySession = [
     {
@@ -91,6 +59,42 @@ export default function UserSessions() {
     },
   ];
 
+  const { username } = useContext(AccountContext);
+  const [isTab0, setIsTab0] = useState(true);
+  const [isTab1, setIsTab1] = useState(false);
+
+  const {
+    mySessions,
+    pastSessions,
+    getMySessions,
+    getPastSessions,
+    setMySessions,
+    setPastSessions,
+  } = useContext(SessionContext);
+
+  const tabs = [
+    { name: "Your created study sessions", current: isTab0 },
+    { name: "Your past sessions", current: isTab1 },
+  ];
+
+  const handleTabNavigation = (tab, tabIdx) => {
+    if (tabIdx === 0) {
+      setIsTab0(true);
+      setIsTab1(false);
+    } else {
+      setIsTab1(true);
+      setIsTab0(false);
+    }
+  };
+
+  useEffect(() => {
+    getMySessions(username);
+    getPastSessions(username);
+    setMySessions(studySession);
+    setPastSessions(mockPastSessions);
+    console.log(mySessions, pastSessions);
+  }, []);
+
   const renderCards = (sessions) => {
     return sessions.map((session) => (
       <div key={session.title}>
@@ -131,7 +135,7 @@ export default function UserSessions() {
         ))}
       </nav>
       <div className="flex flex-col gap-y-3">
-        {isTab0 ? renderCards(studySession) : renderCards(mockPastSessions)}
+        {isTab0 ? renderCards(mySessions) : renderCards(pastSessions)}
       </div>
     </div>
   );

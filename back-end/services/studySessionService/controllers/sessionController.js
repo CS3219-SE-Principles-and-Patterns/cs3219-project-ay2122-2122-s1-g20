@@ -99,7 +99,7 @@ exports.createSession = async (req, res, next) => {
     const session = new Session(req.body);
     const createdSession = await session.save();
     return res.status(200).json({
-      studySessionId: createdSession._id,
+      session: createdSession,
       message: "Study session successfully created!",
     });
   } catch (error) {

@@ -5,12 +5,17 @@ import ConfirmationPopup from "../forms/ConfirmationPopup";
 import EditStudySession from "../forms/EditStudySession";
 import StudySessionDetails from "../forms/StudySessionDetails";
 import SessionCardTemplate from "./sessionCardTemplate";
+import { useContext } from "react";
+import { SessionContext } from "../../context/SessionContext";
 
 const YellowSessionCard = ({ studySession }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
-  const handleDelete = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { deleteMySession } = useContext(SessionContext);
+
+  const handleDeletePopup = () => {
     setOpenDeleteModal(true);
   };
   const handleEdit = () => {
@@ -21,7 +26,16 @@ const YellowSessionCard = ({ studySession }) => {
   };
   const handleView = () => {
     setOpenDetails(true);
-    // open up details of study session
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteMySession(studySession);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -37,16 +51,20 @@ const YellowSessionCard = ({ studySession }) => {
           <button onClick={handleEdit} className="mr-2">
             <FaPen color="#8488A3" />
           </button>
-          <button onClick={handleDelete}>
+          <button onClick={handleDeletePopup}>
             <FaTrash color="#8488A3" />
           </button>
         </div>
         <ConfirmationPopup
           title="Are you sure?"
           text="Deleting study session is an irreversible action."
-          onClick={() => console.log("text")}
+          onClick={() => {
+            setIsLoading(true);
+            handleDelete();
+          }}
           open={openDeleteModal}
           setOpen={setOpenDeleteModal}
+          isLoading={isLoading}
         />
         <EditStudySession
           setOpen={setOpenEdit}
