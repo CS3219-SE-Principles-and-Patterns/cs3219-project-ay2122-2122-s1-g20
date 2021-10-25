@@ -104,7 +104,6 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   ];
 
   const handleSelectDay = (event) => {
-    console.log("selected date: ", event.target.value);
     setSelectedDay(event.target.value);
     // setSelectedDayOption(selectedOption);
   };

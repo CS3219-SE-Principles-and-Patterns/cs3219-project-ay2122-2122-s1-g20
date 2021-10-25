@@ -14,9 +14,9 @@ exports.getUpcomingSessions = (req, res, next) => {
   const moduleList = modules.map((mod) => mod.moduleCode);
 
   Session.find({ module: { $in: moduleList } })
-    .then((session) => {
+    .then((sessions) => {
       // session === array of session objects
-      res.status(200).json({ length: session.length, session });
+      res.status(200).json({ length: session.length, sessions });
     })
     .catch((err) => {
       res.status(404).json({ message: "Error in getting upcoming sessions." });

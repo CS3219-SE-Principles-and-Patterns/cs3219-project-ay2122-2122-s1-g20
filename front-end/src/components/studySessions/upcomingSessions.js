@@ -1,11 +1,64 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import BlueSessionCard from "./blueSessionCard";
 import CreateNewStudySession from "../forms/CreateNewStudySession";
 import React, { useState } from "react";
+import { sessionApi } from "../../utils/api";
+import { useEffect } from "react";
+import BlueSessionCard from "./blueSessionCard";
 
 const UpcomingSessions = () => {
   const [loadNewForm, setLoadNewForm] = useState(false);
   const [openNewForm, setOpenNewForm] = useState(false);
+  const [upcomingSessions, setUpcomingSessions] = useState([]);
+
+  const fetchData = async () => {
+    const response = await sessionApi.get("/upcoming");
+    setUpcomingSessions(response.data.sessions);
+  };
+  useEffect(() => {
+    fetchData();
+    console.log(upcomingSessions);
+  }, []);
+
+  // mock data
+  const studySession = [
+    {
+      title: "upcoming session",
+      capacity: 5,
+      // members usernames stored in array
+      participants: ["sylviaokt", "andrea", "mabel", "haishan"],
+      isOnline: "online",
+      module: "CS3235",
+      date: "2021-12-25",
+      time: {
+        start: "11:00",
+        end: "17:30",
+      },
+      timeLimit: 2,
+    },
+    {
+      title: "second one",
+      capacity: 6,
+      // members usernames stored in array
+      participants: ["sylviaokt"],
+      isOnline: "offline",
+      module: "CS3235",
+      date: "2021-11-25",
+      time: {
+        start: "14:00",
+        end: "17:30",
+      },
+      timeLimit: 2,
+    },
+  ];
+
+  const renderCards = (sessions) => {
+    return sessions.map((session) => (
+      <div key={session.title}>
+        <BlueSessionCard studySession={session} />
+      </div>
+    ));
+  };
+
   return (
     <div className="bg-yellow-light h-screen">
       <p className="text-2xl text-purple-dark pt-10 font-medium">
@@ -51,7 +104,7 @@ const UpcomingSessions = () => {
           />
         </div>
       </div>
-      <BlueSessionCard />
+      <div className="flex flex-col gap-y-3">{renderCards(studySession)}</div>
     </div>
   );
 };
