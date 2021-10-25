@@ -9,12 +9,12 @@ const GroupBubble = ({
   setDisplayChat,
   setEnable,
   userEmail,
-  groupsUserIsIn,
+  joined,
 }) => {
   const name = group.name;
   const hashtag = group.hashtag;
   const id = group._id;
-  const [join, setJoin] = useState(groupsUserIsIn.includes(group));
+  const [join, setJoin] = useState(joined);
   const [open, setOpen] = useState(false); //popout of leaving confirmation
 
   const handlePreview = () => {

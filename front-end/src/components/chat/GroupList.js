@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
+import ClipLoader from "react-spinners/ClipLoader";
 import { api } from "../../utils/api";
 
-const GroupList = ({ account, setDisplayChat, tag, setEnable, reload }) => {
+const GroupList = ({
+  account,
+  setDisplayChat,
+  tag,
+  setEnable,
+  isLoading,
+  setIsLoading,
+}) => {
   const [search, setSearchValue] = useState("");
   const [open, setOpen] = useState(false);
+  const [load, setLoad] = useState(false);
   const [groups, setGroups] = useState([]);
   const [display, setDisplay] = useState([]);
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
-  const [load, setLoad] = useState(false);
 
   const getAllGroups = async () => {
     const res = await fetch("http://localhost:9000/api/groups");
@@ -22,19 +30,22 @@ const GroupList = ({ account, setDisplayChat, tag, setEnable, reload }) => {
   };
 
   const getGroupsUserIsIn = async () => {
+    setIsLoading(true);
     getAllGroups();
     await api
       .get(`/user/account/groups/${account.email}`)
-      .then((res) =>
-        setGroupsUserIsIn(groups.filter((x) => res.data.groups.includes(x._id)))
-      )
+      .then((res) => {
+        setGroupsUserIsIn(
+          groups.filter((x) => res.data.groups.includes(x._id))
+        );
+        setIsLoading(false);
+      })
       .catch((err) => console.log(err));
-
-    console.log(groupsUserIsIn);
   };
 
   useEffect(() => {
     getGroupsUserIsIn();
+
     if (tag == "All Chats") {
       setDisplay(groups);
     } else {
@@ -46,7 +57,7 @@ const GroupList = ({ account, setDisplayChat, tag, setEnable, reload }) => {
         setDisplay(temp);
       }
     }
-  }, [tag, groupsUserIsIn, reload]);
+  }, [tag, load]);
 
   const handleSearch = (event) => {
     setSearchValue(event.target.value);
@@ -117,20 +128,27 @@ const GroupList = ({ account, setDisplayChat, tag, setEnable, reload }) => {
           ""
         )}
       </div>
-
-      <div className="w-full pl-4">
-        {display.map((group, index) => (
-          <GroupBubble
-            key={index}
-            group={group}
-            setDisplayChat={setDisplayChat}
-            setEnable={setEnable}
-            userEmail={account.email}
-            profilePic={account.profilePic}
-            groupsUserIsIn={groupsUserIsIn}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <ClipLoader loading={isLoading} size={10} />
+      ) : (
+        <div className="w-full pl-4">
+          {display.map((group, index) => (
+            <GroupBubble
+              key={index}
+              group={group}
+              setDisplayChat={setDisplayChat}
+              setEnable={setEnable}
+              userEmail={account.email}
+              profilePic={account.profilePic}
+              joined={
+                tag == "All Chats" ? groupsUserIsIn.includes(group) : true
+              }
+              setLoad={setLoad}
+              load={load}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,9 +1,8 @@
 import React from "react";
 
-const Category = ({ tag, setTag, setReload, reload }) => {
+const Category = ({ tag, setTag }) => {
   const handleFilterChange = (event) => {
     setTag(event.target.value);
-    setReload(!reload);
   };
   return (
     <div className="align-middle justify-center">
