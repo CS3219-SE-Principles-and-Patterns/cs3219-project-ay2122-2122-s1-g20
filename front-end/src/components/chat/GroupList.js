@@ -53,33 +53,34 @@ const GroupList = ({
         setDisplay(groupsUserIsIn);
       }
       if (tag != "Joined") {
-        const temp = groupsUserIsIn.filter((x) => x.hashtag == tag);
+        const temp = groups.filter((x) => x.hashtag == tag);
         setDisplay(temp);
       }
     }
   }, [tag, load]);
 
   const handleSearch = (event) => {
-    setSearchValue(event.target.value);
+    const input = event.target.value;
+    setSearchValue(input);
+
     var temp;
-    const empty = search == "";
     if (tag == "All Chats") {
-      if (empty) {
+      if (!input) {
         temp = groups;
       } else {
         temp = groups.filter((x) => x.name.includes(search));
       }
     } else {
       if (tag != "Joined") {
-        if (empty) {
-          temp = groupsUserIsIn.filter((x) => x.hashtag == tag);
+        if (!input) {
+          temp = groups.filter((x) => x.hashtag == tag);
         } else {
-          temp = groupsUserIsIn.filter(
+          temp = groups.filter(
             (x) => x.hashtag == tag && x.name.includes(search)
           );
         }
       } else {
-        if (empty) {
+        if (!input) {
           temp = groupsUserIsIn;
         } else {
           temp = groupsUserIsIn.filter((x) => x.name.includes(search));
@@ -88,6 +89,7 @@ const GroupList = ({
     }
     setDisplay(temp);
   };
+
   return (
     <div className="h-screen overflow-y-auto">
       <div className="pt-2 flex justify-center">
@@ -140,9 +142,7 @@ const GroupList = ({
               setEnable={setEnable}
               userEmail={account.email}
               profilePic={account.profilePic}
-              joined={
-                tag == "All Chats" ? groupsUserIsIn.includes(group) : true
-              }
+              joined={tag == "Joined" ? true : groupsUserIsIn.includes(group)}
               setLoad={setLoad}
               load={load}
             />
