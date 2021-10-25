@@ -30,7 +30,7 @@ const YellowSessionCard = () => {
     participants: ["sylviaokt", "andrea", "mabel", "haishan"],
     isOnline: "online",
     module: "CS3219",
-    date: "saturday",
+    date: "2021-11-13",
     time: {
       start: "14:00",
       end: "17:30",

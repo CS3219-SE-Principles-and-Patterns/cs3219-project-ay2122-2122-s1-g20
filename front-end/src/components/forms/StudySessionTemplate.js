@@ -31,14 +31,14 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   const [selectedMod, setSelectedMod] = useState(
     studySession ? studySession.module : ""
   );
-  const [selectedDayOption, setSelectedDayOption] = useState(
-    studySession
-      ? {
-          value: studySession.date,
-          label: capitalizeFirstLetter(studySession.date),
-        }
-      : null
-  );
+  // const [selectedDayOption, setSelectedDayOption] = useState(
+  //   studySession
+  //     ? {
+  //         value: studySession.date,
+  //         label: capitalizeFirstLetter(studySession.date),
+  //       }
+  //     : null
+  // );
   const [selectedDay, setSelectedDay] = useState(
     studySession ? studySession.date : ""
   );
@@ -71,7 +71,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
     setIsOnlineOption(null);
     setSelectedMod("");
     setSelectedDay("");
-    setSelectedDayOption(null);
+    // setSelectedDayOption(null);
     setTime({
       start: "00:00",
       end: "23:59",
@@ -88,43 +88,44 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
     </div>
   ));
 
-  const options = [
-    { value: "monday", label: "Monday" },
-    { value: "tuesday", label: "Tuesday" },
-    { value: "wednesday", label: "Wednesday" },
-    { value: "thursday", label: "Thursday" },
-    { value: "friday", label: "Friday" },
-    { value: "saturday", label: "Saturday" },
-    { value: "sunday", label: "Sunday" },
-  ];
+  // const options = [
+  //   { value: "monday", label: "Monday" },
+  //   { value: "tuesday", label: "Tuesday" },
+  //   { value: "wednesday", label: "Wednesday" },
+  //   { value: "thursday", label: "Thursday" },
+  //   { value: "friday", label: "Friday" },
+  //   { value: "saturday", label: "Saturday" },
+  //   { value: "sunday", label: "Sunday" },
+  // ];
 
   const typeOptions = [
     { value: "online", label: "Online" },
     { value: "offline", label: "Offline" },
   ];
 
-  const handleSelectDay = (selectedOption) => {
-    setSelectedDay(selectedOption.value);
-    setSelectedDayOption(selectedOption);
+  const handleSelectDay = (event) => {
+    console.log("selected date: ", event.target.value);
+    setSelectedDay(event.target.value);
+    // setSelectedDayOption(selectedOption);
   };
   const handleSelectType = (selectedOption) => {
     setIsOnline(selectedOption.value);
     setIsOnlineOption(selectedOption);
   };
 
-  const customStyles = {
-    indicatorSeparator: () => {},
-    control: (provided) => ({
-      ...provided,
-      borderRadius: "16px",
-      padding: "6px",
-      width: "10.5rem",
-    }),
-    menuList: (provided) => ({
-      ...provided,
-      height: "6rem",
-    }),
-  };
+  // const customStyles = {
+  //   indicatorSeparator: () => {},
+  //   control: (provided) => ({
+  //     ...provided,
+  //     borderRadius: "16px",
+  //     padding: "6px",
+  //     width: "10.5rem",
+  //   }),
+  //   menuList: (provided) => ({
+  //     ...provided,
+  //     height: "6rem",
+  //   }),
+  // };
 
   const typeStyles = {
     indicatorSeparator: () => {},
@@ -214,10 +215,20 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
           <div className="mt-2 grid grid-cols-6 gap-x-2 items-center">
             {/* <div className="mt-2 flex flex-col justify-between"> */}
             <label className="text-lg text-white col-span-1 justify-self-end">
-              Day and Time
+              Date and Time
             </label>
             <div className="col-span-2">
-              <Select
+              <input
+                onChange={handleSelectDay}
+                value={selectedDay}
+                type="date"
+                placeholder="Select Date"
+                id="date"
+                name="date"
+                required
+                className="p-3 rounded-2xl col-span-2"
+              />
+              {/* <Select
                 value={selectedDayOption}
                 onChange={handleSelectDay}
                 options={options}
@@ -225,7 +236,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
                 autoFocus
                 isSearchable={false}
                 styles={customStyles}
-              />
+              /> */}
             </div>
 
             <div className="col-span-3 flex flex-col pb-4">
