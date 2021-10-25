@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
+
 //handle left right positioning
 const Messenger = ({ account, displayChat, enable }) => {
   const [message, setMessage] = useState("");
@@ -11,29 +12,31 @@ const Messenger = ({ account, displayChat, enable }) => {
   const username = account.username;
   const profilePic = account.profilePic;
   const group = displayChat._id;
-  console.log(displayChat._id);
 
   socket.on("connect", () => {
     console.log(socket.id);
   });
 
-  socket.on("receive-message", (message) => {
+  socket.on("receive-message", (messageFromSocket) => {
     const newMessage = {
       group_id: group,
-      sender: username,
-      profilePic: profilePic,
+      sender: messageFromSocket.sender,
+      profilePic: messageFromSocket.profilePic,
       timestamp: Date.now(),
-      content: message,
+      content: messageFromSocket.content,
     };
-    const originalMessages = oldMessages;
-    setOldMessages(originalMessages.concat(newMessage));
-    console.log(oldMessages);
+    //const originalMessages = oldMessages;
+    setOldMessages(oldMessages.concat(newMessage));
   });
 
   const handleSendMessage = async () => {
-    socket.emit("send-message", message, group);
-    console.log(message);
-    const originalMessages = oldMessages;
+    const messageForSocket = {
+      sender: username,
+      profilePic: profilePic,
+      content: message,
+    };
+    socket.emit("send-message", messageForSocket, group);
+    //const originalMessages = oldMessages;
     const newMessage = {
       group_id: group,
       sender: username,
@@ -42,7 +45,7 @@ const Messenger = ({ account, displayChat, enable }) => {
       content: message,
     };
     setMessage("");
-    setOldMessages(originalMessages.concat(newMessage));
+    setOldMessages(oldMessages.concat(newMessage));
 
     const res = await fetch("http://localhost:9000/api/messages", {
       method: "POST",
@@ -75,9 +78,7 @@ const Messenger = ({ account, displayChat, enable }) => {
     };
     getOldMessages();
     setToggle(!toggle);
-
-    console.log(oldMessages);
-  }, [displayChat, oldMessages]);
+  }, [displayChat]);
 
   const setMessageChange = (event) => {
     setMessage(event.target.value);

@@ -20,6 +20,7 @@ const GroupBubble = ({
   const handlePreview = () => {
     setDisplayChat(group);
     setEnable(join);
+    socket.emit("join-room", id);
   };
   const handleJoinChat = async () => {
     setJoin(true);
@@ -55,7 +56,7 @@ const GroupBubble = ({
       console.log(err);
     }
 
-    socket.emit("join-room", id); //same to be done when user clicks on name of joined chats
+    //socket.emit("join-room", id); //same to be done when user clicks on name of joined chats
   };
 
   const handleLeaveChat = async () => {
