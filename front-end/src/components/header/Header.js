@@ -5,12 +5,13 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { AccountContext } from "../../context/AccountContext";
 import { api } from "../../utils/api";
 import { useHistory } from "react-router-dom";
+// import loadData from "../../context/loadData";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Header() {
+export default async function Header() {
   const history = useHistory();
   const navigation = [
     { name: "StudySessions", href: "/studysessions" },

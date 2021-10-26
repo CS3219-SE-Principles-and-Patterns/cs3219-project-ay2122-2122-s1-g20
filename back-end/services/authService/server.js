@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary");
+const session = require("express-session");
 
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
@@ -21,6 +22,9 @@ const PORT = process.env.AUTH_PORT || config.port;
 
 app.use(cors());
 app.use(express.json({ limit: "15360mb" }));
+app.use(
+  session({ secret: "my secret", resave: false, saveUninitialized: false })
+);
 app.use(
   express.urlencoded({
     extended: true,

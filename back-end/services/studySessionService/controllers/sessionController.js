@@ -75,9 +75,9 @@ exports.deleteSession = (req, res, next) => {
       return Session.findByIdAndRemove(sid);
     })
     .then((result) => {
-      res
-        .status(200)
-        .json({ message: "Study session is successfully deleted!" });
+      res.status(200).json({
+        message: "Study session is successfully deleted!",
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -118,9 +118,10 @@ exports.editStudySession = (req, res, next) => {
       return session.save();
     })
     .then((result) => {
-      res
-        .status(200)
-        .json({ message: "Study session details updated!", post: result });
+      res.status(200).json({
+        message: "Study session details updated!",
+        post: result,
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {
