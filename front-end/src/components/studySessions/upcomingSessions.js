@@ -1,54 +1,28 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import BlueSessionCard from "./blueSessionCard";
 import CreateNewStudySession from "../forms/CreateNewStudySession";
 import React, { useState } from "react";
+import BlueSessionCard from "./blueSessionCard";
+import { useContext } from "react";
+import { SessionContext } from "../../context/SessionContext";
 
 const UpcomingSessions = () => {
-  const [loadNewForm, setLoadNewForm] = useState(false);
   const [openNewForm, setOpenNewForm] = useState(false);
+  const [searchSession, setSearchSession] = useState("");
+  const { upcomingSessions } = useContext(SessionContext);
 
-  const sessions = [
-    {
-      _id: "1",
-      title: "Title 1",
-      owner: "Andrea",
-      module: "CS3219",
-      capacity: 5,
-      date: "25/10/2021",
-      time: {
-        start: "5pm",
-        end: "7pm",
-      },
-      timeLimit: "1",
-      participants: [
-        { name: "andreatanky" },
-        { name: "sylviaokt" },
-        { name: "mabel" },
-        { name: "haishan" },
-      ],
-      isOnline: "Offline",
-    },
-    {
-      _id: "1",
-      title: "Title 2",
-      owner: "Sylvia",
-      module: "CS3235",
-      capacity: 7,
-      date: "29/10/2021",
-      time: {
-        start: "1pm",
-        end: "7pm",
-      },
-      timeLimit: "2",
-      participants: [
-        { name: "andreatanky" },
-        { name: "sylviaokt" },
-        { name: "mabel" },
-        { name: "haishan" },
-      ],
-      isOnline: "Online",
-    },
-  ];
+  const renderCards = (sessions) => {
+    const searchTerm = searchSession.toLowerCase();
+    const filteredSessions = sessions.filter(
+      (s) =>
+        s.title.toLowerCase().includes(searchTerm) ||
+        s.module.toLowerCase().includes(searchTerm)
+    );
+    return filteredSessions.map((session) => (
+      <div key={session.title}>
+        <BlueSessionCard studySession={session} />
+      </div>
+    ));
+  };
 
   return (
     <div className="bg-yellow-light h-screen">
@@ -75,6 +49,8 @@ const UpcomingSessions = () => {
               placeholder="Search for study sessions"
               type="search"
               name="search"
+              onChange={(event) => setSearchSession(event.target.value)}
+              value={searchSession}
             />
           </div>
         </form>
@@ -87,28 +63,12 @@ const UpcomingSessions = () => {
           >
             +
           </button>
-          <CreateNewStudySession
-            setOpen={setOpenNewForm}
-            setLoad={setLoadNewForm}
-            open={openNewForm}
-            load={loadNewForm}
-          />
+          <CreateNewStudySession setOpen={setOpenNewForm} open={openNewForm} />
         </div>
       </div>
-      {sessions.map((session) => (
-        <BlueSessionCard
-          key={session._id}
-          title={session.title}
-          module={session.module}
-          capacity={session.capacity}
-          start={session.time.start}
-          end={session.time.end}
-          date={session.date}
-          minimum={session.timeLimit}
-          participants_count={session.participants.length}
-          owner={session.owner}
-        />
-      ))}
+      <div className="flex flex-col gap-y-3">
+        {renderCards(upcomingSessions)}
+      </div>
     </div>
   );
 };

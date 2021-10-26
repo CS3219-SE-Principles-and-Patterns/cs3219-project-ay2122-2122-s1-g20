@@ -5,11 +5,18 @@ import PropTypes from "prop-types";
 import YellowButton from "../YellowButton";
 import TimeRangeSlider from "react-time-range-slider";
 
-const ConfirmationPopup = ({ title, onClick, text, open, setOpen }) => {
+const ConfirmationPopup = ({
+  title,
+  onClick,
+  text,
+  open,
+  setOpen,
+  isLoading,
+}) => {
   return (
     <div className="w-10">
-      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={false}>
-        <div className="bg-blue-dark px-32 py-10 rounded-2xl">
+      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
+        <div className="bg-blue-dark px-32 py-10rounded-2xl">
           <button
             className="bg-purple-dark text-white mr-2 mt-2 absolute top-1 right-1 p-1 rounded-full"
             onClick={() => {
@@ -50,6 +57,7 @@ const ConfirmationPopup = ({ title, onClick, text, open, setOpen }) => {
               onClick={onClick}
               textSize="text-lg"
               px="px-8"
+              isLoading={isLoading}
             />
             <YellowButton
               text="No"

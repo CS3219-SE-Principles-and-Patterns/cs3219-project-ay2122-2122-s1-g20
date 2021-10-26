@@ -1,5 +1,9 @@
 import axios from "axios";
 
+export let sessionApi = axios.create({
+  baseURL: "http://localhost:1025/api/session",
+});
+
 //DO NOT EDIT AND PUSH SOMETHING ELSE TO MAIN
 export let api = axios.create({
   baseURL: "http://localhost:8080/api",

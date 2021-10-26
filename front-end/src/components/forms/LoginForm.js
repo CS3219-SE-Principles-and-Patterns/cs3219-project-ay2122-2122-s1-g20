@@ -54,7 +54,7 @@ const LoginForm = () => {
         setEmail("");
         setPassword("");
         handleNext(
-          responseData.user.profilePic ? "/profile" : "/setProfilePic"
+          responseData.user.profilePic ? "/studySessions" : "/setProfilePic"
         );
       }
     } catch (error) {
