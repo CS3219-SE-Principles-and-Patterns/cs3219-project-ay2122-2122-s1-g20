@@ -13,21 +13,28 @@ const Messenger = ({ account, displayChat, enable }) => {
   const profilePic = account.profilePic;
   const group = displayChat._id;
 
-  socket.on("connect", () => {
+  /*
+  socket.once("connect", () => {
     console.log(socket.id);
   });
-
-  socket.on("receive-message", (messageFromSocket) => {
-    const newMessage = {
-      group_id: group,
-      sender: messageFromSocket.sender,
-      profilePic: messageFromSocket.profilePic,
-      timestamp: Date.now(),
-      content: messageFromSocket.content,
-    };
-    //const originalMessages = oldMessages;
-    setOldMessages(oldMessages.concat(newMessage));
-  });
+  */
+  useEffect(() => {
+    socket.on("receive-message", (messageFromSocket) => {
+      console.log("receive by client");
+      console.log(messageFromSocket);
+      const newMessage = {
+        group_id: group,
+        sender: messageFromSocket.sender,
+        profilePic: messageFromSocket.profilePic,
+        timestamp: Date.now(),
+        content: messageFromSocket.content,
+      };
+      setOldMessages((prevState) => prevState.concat(newMessage));
+      return () => {
+        socket.removeAllListeners("receive-message");
+      };
+    });
+  }, []);
 
   const handleSendMessage = async () => {
     const messageForSocket = {
@@ -67,7 +74,7 @@ const Messenger = ({ account, displayChat, enable }) => {
   useEffect(() => {
     //TBD, have to figure out when to call scroll without infinite call loop
     scrollToBottom();
-  }, []);
+  }, [oldMessages]);
 
   useEffect(() => {
     const getOldMessages = async () => {
