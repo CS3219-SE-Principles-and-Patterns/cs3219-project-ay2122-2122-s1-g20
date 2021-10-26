@@ -16,7 +16,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   const capitalizeFirstLetter = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
-  const { modules } = useContext(AccountContext);
+  const { modules, username } = useContext(AccountContext);
   const [session, setSession] = useState(
     studySession
       ? studySession
@@ -52,6 +52,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
 
   const resetStates = () => {
     setSession({
+      owner: username,
       title: "",
       isOnline: "",
       capacity: "",
@@ -105,28 +106,35 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   };
 
   const handleSave = async () => {
-    const response = updateMySessions(session);
-    setAlertMessage(response);
+    try {
+      const response = await updateMySessions(session);
+      setAlertMessage(response);
+      setOpen(false);
+    } catch (err) {
+      setAlertMessage(err.message);
+    }
     setIsLoading(false);
   };
 
   const handleCreate = async () => {
-    const response = addMySession(session);
-    setAlertMessage(response);
+    try {
+      const response = await addMySession(session);
+      setAlertMessage(response);
+      setOpen(false);
+    } catch (err) {
+      setAlertMessage(err.message);
+    }
     setIsLoading(false);
   };
 
   return (
     <div className="w-10">
       <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
-        <form
-          className="bg-blue-dark px-24 py-10 rounded-2xl"
-          action="#"
-          method="POST"
-        >
+        <form className="bg-blue-dark px-24 py-10 rounded-2xl" action="#">
           <button
             className="bg-purple-dark text-white mr-2 mt-2 absolute top-1 right-1 p-2 rounded-full"
-            onClick={() => {
+            onClick={(event) => {
+              event.preventDefault();
               setOpen(false);
               if (!studySession) {
                 resetStates();

@@ -70,7 +70,11 @@ function App() {
             <Route path="/error">
               <ErrorPage />
             </Route>
-            <Route path="/studySessions" exact component={StudySessionsHome} />
+            <PrivateRoute
+              path="/studySessions"
+              exact
+              component={StudySessionsHome}
+            />
           </BrowserRouter>
         </div>
       </SessionProvider>

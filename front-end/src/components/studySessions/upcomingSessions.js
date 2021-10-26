@@ -1,7 +1,6 @@
 import { SearchIcon } from "@heroicons/react/solid";
 import CreateNewStudySession from "../forms/CreateNewStudySession";
 import React, { useState } from "react";
-import { useEffect } from "react";
 import BlueSessionCard from "./blueSessionCard";
 import { useContext } from "react";
 import { SessionContext } from "../../context/SessionContext";
@@ -9,46 +8,7 @@ import { SessionContext } from "../../context/SessionContext";
 const UpcomingSessions = () => {
   const [loadNewForm, setLoadNewForm] = useState(false);
   const [openNewForm, setOpenNewForm] = useState(false);
-  const { upcomingSessions, getUpcomingSessions, setUpcomingSessions } =
-    useContext(SessionContext);
-
-  // mock data
-  const studySession = [
-    {
-      title: "upcoming session",
-      capacity: 5,
-      // members usernames stored in array
-      participants: ["sylviaokt", "andrea", "mabel", "haishan"],
-      isOnline: "online",
-      module: "CS3235",
-      date: "2021-12-25",
-      time: {
-        start: "11:00",
-        end: "17:30",
-      },
-      timeLimit: 2,
-    },
-    {
-      title: "second one",
-      capacity: 6,
-      // members usernames stored in array
-      participants: ["sylviaokt"],
-      isOnline: "offline",
-      module: "CS3235",
-      date: "2021-11-25",
-      time: {
-        start: "14:00",
-        end: "17:30",
-      },
-      timeLimit: 2,
-    },
-  ];
-
-  useEffect(() => {
-    getUpcomingSessions();
-    setUpcomingSessions(studySession);
-    console.log(upcomingSessions);
-  }, []);
+  const { upcomingSessions } = useContext(SessionContext);
 
   const renderCards = (sessions) => {
     return sessions.map((session) => (

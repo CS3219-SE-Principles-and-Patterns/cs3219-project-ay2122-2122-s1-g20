@@ -31,9 +31,10 @@ const YellowSessionCard = ({ studySession }) => {
   const handleDelete = async () => {
     try {
       const response = await deleteMySession(studySession);
+      setOpenDeleteModal(false);
       console.log(response);
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
     }
     setIsLoading(false);
   };

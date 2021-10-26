@@ -5,72 +5,60 @@ export const SessionContext = React.createContext();
 
 export const SessionProvider = ({ children }) => {
   const [mySessions, setMySessions] = useState([]);
-  const [pastSessions, setPastSessions] = useState([]);
+  const [joinedSessions, setJoinedSessions] = useState([]);
   const [upcomingSessions, setUpcomingSessions] = useState([]);
 
   const getMySessions = async (username) => {
     try {
       const response = await sessionApi.get(`/my/${username}`);
       setMySessions(response.data.sessions);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      throw new Error(error.response.data.message);
     }
   };
 
   const addMySession = async (session) => {
     try {
       const response = await sessionApi.post("/", session);
-      if (response.status === 200) {
-        setMySessions([...mySessions, response.data.session]);
-        return "";
-      } else {
-        return response.data.message;
-      }
+      setMySessions([...mySessions, response.data.session]);
+      return "";
     } catch (error) {
-      return "Error in creating new session.";
+      throw new Error(error.response.data.message);
     }
   };
 
   const updateMySessions = async (session) => {
     try {
       const response = await sessionApi.put(`/${session._id}`, session);
-      if (response.status === 200) {
-        const index = mySessions.findIndex((s) => s._id == session._id);
-        setMySessions([
-          ...mySessions.slice(0, index),
-          session,
-          ...mySessions.slice(index + 1),
-        ]);
-        return "";
-      } else {
-        return response.data.message;
-      }
+      const index = mySessions.findIndex((s) => s._id == session._id);
+      setMySessions([
+        ...mySessions.slice(0, index),
+        response.data.session,
+        ...mySessions.slice(index + 1),
+      ]);
+      return "";
     } catch (error) {
-      return "Error in updating session.";
+      throw new Error(error.response.data.message);
     }
   };
 
   const deleteMySession = async (session) => {
     try {
-      const response = await sessionApi.delete(`/${session._id}`);
-      if (response.status === 200) {
-        const updatedSessions = mySessions.filter((s) => s._id !== session._id);
-        setMySessions(updatedSessions);
-        return "";
-      } else {
-        return response.data.message;
-      }
+      await sessionApi.delete(`/${session._id}`);
+      const updatedSessions = mySessions.filter((s) => s._id !== session._id);
+      setMySessions(updatedSessions);
+      return "";
     } catch (error) {
-      return "Error in deleting session.";
+      throw new Error(error.response.data.message);
     }
   };
 
-  const getPastSessions = async (username) => {
+  const getJoinedSessions = async (username) => {
     try {
-      const response = await sessionApi.get(`/past/${username}`);
-      setPastSessions(response.data.sessions);
-    } catch (err) {
-      console.log(err);
+      const response = await sessionApi.get(`/joined/${username}`);
+      setJoinedSessions(response.data.sessions);
+    } catch (error) {
+      throw new Error(error.response.data.message);
     }
   };
 
@@ -78,8 +66,8 @@ export const SessionProvider = ({ children }) => {
     try {
       const response = await sessionApi.get("/upcoming");
       setUpcomingSessions(response.data.sessions);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      throw new Error(error.response.data.message);
     }
   };
 
@@ -89,9 +77,9 @@ export const SessionProvider = ({ children }) => {
         mySessions,
         setMySessions,
         getMySessions,
-        pastSessions,
-        setPastSessions,
-        getPastSessions,
+        joinedSessions,
+        setJoinedSessions,
+        getJoinedSessions,
         upcomingSessions,
         setUpcomingSessions,
         getUpcomingSessions,

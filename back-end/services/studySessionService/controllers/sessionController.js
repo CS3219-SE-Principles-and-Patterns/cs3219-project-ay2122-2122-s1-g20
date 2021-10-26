@@ -5,6 +5,7 @@ const Session = require("../model/session");
 
 // Get upcoming study session
 exports.getUpcomingSessions = (req, res, next) => {
+  const username = req.params.username;
   // get list of modules [{moduleCode: "", title: ""}]
   // mock data ---- to be replaced after gateway api is implemented
   const modules = [
@@ -14,11 +15,14 @@ exports.getUpcomingSessions = (req, res, next) => {
   const moduleList = modules.map((mod) => mod.moduleCode);
 
   Session.find({ module: { $in: moduleList } })
+    .find({ owner: { $ne: username } })
+    .find({ participants: { $ne: username } })
     .then((sessions) => {
       // session === array of session objects
-      res.status(200).json({ length: session.length, sessions });
+      res.status(200).json({ length: sessions.length, sessions });
     })
     .catch((err) => {
+      console.log(err);
       res.status(404).json({ message: "Error in getting upcoming sessions." });
     });
 };
@@ -28,14 +32,14 @@ exports.getMySessions = (req, res, next) => {
   // remove uid from params after gateway api is implemented
   const username = req.params.username;
   Session.find({ owner: username })
-    .then((session) => {
+    .then((sessions) => {
       // session === array of session objects
-      const mySessions = session.filter((s) => {
-        const dateArr = s.date.split("-");
-        const date = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
-        return date >= new Date();
-      });
-      res.status(200).json({ length: mySessions.length, sessions: mySessions });
+      // const mySessions = session.filter((s) => {
+      //   const dateArr = s.date.split("-");
+      //   const date = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+      //   return date >= new Date();
+      // });
+      res.status(200).json({ length: sessions.length, sessions });
     })
     .catch((err) => {
       res
@@ -45,23 +49,22 @@ exports.getMySessions = (req, res, next) => {
 };
 
 // Get my created study session
-exports.getPastSessions = (req, res, next) => {
+exports.getJoinedSessions = (req, res, next) => {
   // remove USERNAME from params after gateway api is implemented
   const username = req.params.username;
-  Session.find({ owner: username })
-    .then((session) => {
+  Session.find({ participants: username })
+    .then((sessions) => {
       // session === array of session objects
-      const pastSessions = session.filter((s) => {
-        const dateArr = s.date.split("-");
-        const date = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
-        return date < new Date();
-      });
-      res
-        .status(200)
-        .json({ length: pastSessions.length, sessions: pastSessions });
+      // const joinedSessions = session.filter((s) => {
+      //   const dateArr = s.date.split("-");
+      //   const date = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+      //   return date < new Date();
+      // });
+      res.status(200).json({ length: sessions.length, sessions });
     })
     .catch((err) => {
-      res.status(404).json({ message: "Error in getting past sessions." });
+      console.log(err);
+      res.status(404).json({ message: "Error in getting joined sessions." });
     });
 };
 
@@ -141,44 +144,48 @@ exports.deleteSession = (req, res, next) => {
 // Edit study session
 exports.editStudySession = (req, res, next) => {
   const sid = req.params.sid;
-  const title = req.body.title;
-  const capacity = req.body.capacity;
-  const time = req.body.time;
-  const timeLimit = req.body.timeLimit;
-  const module = req.body.module;
-  const date = req.body.date;
-  const isOnline = req.body.isOnline;
-  const participants = req.body.participants;
+  // const title = req.body.title;
+  // const capacity = req.body.capacity;
+  // const time = req.body.time;
+  // const timeLimit = req.body.timeLimit;
+  // const module = req.body.module;
+  // const date = req.body.date;
+  // const isOnline = req.body.isOnline;
+  // const participants = req.body.participants;
 
-  Session.findById(sid) // mongoose built in function
-    .then((session) => {
-      if (!session) {
-        const error = new Error("Could not find study session.");
-        error.status = 404;
-        throw error;
-      }
-      session.title = title;
-      session.capacity = capacity;
-      session.time = time;
-      session.timeLimit = timeLimit;
-      session.participants = participants;
-      session.end = end;
-      session.module = module;
-      session.date = date;
-      session.isOnline = isOnline;
-      return session.save();
-    })
+  Session.findByIdAndUpdate(sid, req.body, { new: true }) // mongoose built in function
+    // .then((session) => {
+    //   if (!session) {
+    //     const error = new Error("Could not find study session.");
+    //     error.status = 404;
+    //     throw error;
+    //   }
+    //   session.title = title;
+    //   session.capacity = capacity;
+    //   session.time = time;
+    //   session.timeLimit = timeLimit;
+    //   session.participants = participants;
+    //   session.module = module;
+    //   session.date = date;
+    //   session.isOnline = isOnline;
+    //   return session.save();
+    // })
     .then((result) => {
       res
         .status(200)
-        .json({ message: "Study session details updated!", post: result });
+        .json({ message: "Study session details updated!", session: result });
     })
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
       }
       console.log(err);
-      res.status(500).json({ message: "Error with editing study session." });
+      var message = "Error with updating study session.";
+      if (err.code === 11000) {
+        message =
+          "Title of study session already exists, please try again with a different title.";
+      }
+      res.status(err.statusCode).json({ message });
     });
 };
 

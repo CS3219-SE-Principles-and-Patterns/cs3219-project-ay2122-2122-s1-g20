@@ -48,7 +48,7 @@ const LoginForm = () => {
         setAlertMessage(responseData.message);
         setisError(false);
         handleNext(
-          responseData.user.profilePic ? "/profile" : "/setProfilePic"
+          responseData.user.profilePic ? "/studySessions" : "/setProfilePic"
         );
       }
     } catch (error) {

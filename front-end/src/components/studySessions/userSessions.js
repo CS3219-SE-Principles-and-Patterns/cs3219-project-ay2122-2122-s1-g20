@@ -1,8 +1,6 @@
 import YellowSessionCard from "./yellowSessionCard";
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { useContext } from "react";
-import { AccountContext } from "../../context/AccountContext";
 import { SessionContext } from "../../context/SessionContext";
 
 function classNames(...classes) {
@@ -10,71 +8,14 @@ function classNames(...classes) {
 }
 
 export default function UserSessions() {
-  // mock data
-  const studySession = [
-    {
-      title: "my created",
-      capacity: 5,
-      // members usernames stored in array
-      participants: ["sylviaokt", "andrea", "mabel", "haishan"],
-      isOnline: "online",
-      module: "CS3219",
-      date: "2021-11-13",
-      time: {
-        start: "14:00",
-        end: "17:30",
-      },
-      timeLimit: 2,
-    },
-    {
-      title: "second one",
-      capacity: 6,
-      // members usernames stored in array
-      participants: ["sylviaokt"],
-      isOnline: "offline",
-      module: "CS3235",
-      date: "2021-11-25",
-      time: {
-        start: "14:00",
-        end: "17:30",
-      },
-      timeLimit: 2,
-    },
-  ];
-
-  const mockPastSessions = [
-    {
-      title: "pastSession",
-      capacity: 5,
-      // members usernames stored in array
-      participants: ["sylviaokt", "andrea", "mabel", "haishan"],
-      isOnline: "online",
-      module: "CS3219",
-      date: "2021-10-13",
-      time: {
-        start: "14:00",
-        end: "17:30",
-      },
-      timeLimit: 2,
-    },
-  ];
-
-  const { username } = useContext(AccountContext);
   const [isTab0, setIsTab0] = useState(true);
   const [isTab1, setIsTab1] = useState(false);
 
-  const {
-    mySessions,
-    pastSessions,
-    getMySessions,
-    getPastSessions,
-    setMySessions,
-    setPastSessions,
-  } = useContext(SessionContext);
+  const { mySessions, joinedSessions } = useContext(SessionContext);
 
   const tabs = [
     { name: "Your created study sessions", current: isTab0 },
-    { name: "Your past sessions", current: isTab1 },
+    { name: "Your joined sessions", current: isTab1 },
   ];
 
   const handleTabNavigation = (tab, tabIdx) => {
@@ -86,14 +27,6 @@ export default function UserSessions() {
       setIsTab0(false);
     }
   };
-
-  useEffect(() => {
-    getMySessions(username);
-    getPastSessions(username);
-    setMySessions(studySession);
-    setPastSessions(mockPastSessions);
-    console.log(mySessions, pastSessions);
-  }, []);
 
   const renderCards = (sessions) => {
     return sessions.map((session) => (
@@ -135,7 +68,7 @@ export default function UserSessions() {
         ))}
       </nav>
       <div className="flex flex-col gap-y-3">
-        {isTab0 ? renderCards(mySessions) : renderCards(pastSessions)}
+        {isTab0 ? renderCards(mySessions) : renderCards(joinedSessions)}
       </div>
     </div>
   );
