@@ -7,6 +7,7 @@ const EmailVerification = () => {
   const { uniqueString } = useParams();
   const [alertMessage, setAlertMessage] = useState("");
   const [isError, setisError] = useState(false);
+  const [openAlert, setOpenAlert] = useState(true);
 
   useEffect(() => {
     async function verifyEmail() {
@@ -27,7 +28,7 @@ const EmailVerification = () => {
           throw new Error(responseData.message);
         }
 
-        if (response.status == 200) {
+        if (response.status === 200) {
           // Route to home page
           setAlertMessage(responseData.message);
           console.log(responseData.message);
@@ -41,8 +42,13 @@ const EmailVerification = () => {
 
   return (
     <div className="max-w-7xl mt-10 mb-10 flex flex-col h-full justify-center items-center w-max mx-auto">
-      {alertMessage != "" ? (
-        <AlertMessage isError={isError} message={alertMessage} />
+      {alertMessage !== "" && openAlert ? (
+        <AlertMessage
+          open={openAlert}
+          setOpen={setOpenAlert}
+          isError={isError}
+          message={alertMessage}
+        />
       ) : undefined}
       <div className="bg-purple bg-opacity-50 px-32 py-20 rounded-md">
         <div className="text-3xl sm:text-4xl md:text-5xl font-bold pt-7">

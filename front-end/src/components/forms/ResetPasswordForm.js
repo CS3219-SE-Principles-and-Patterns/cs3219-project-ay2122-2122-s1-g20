@@ -8,6 +8,7 @@ const ResetPasswordForm = () => {
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [openAlert, setOpenAlert] = useState(true);
 
   const { token } = useParams();
 
@@ -25,6 +26,8 @@ const ResetPasswordForm = () => {
       if (password !== passwordConfirmation) {
         setIsError(true);
         setAlertMessage("Passwords do not match!");
+        setPassword("");
+        setPasswordConfirmation("");
         throw new Error("Passwords do not match!");
       } else {
         const response = await fetch(
@@ -46,6 +49,8 @@ const ResetPasswordForm = () => {
         if (response.status !== 200) {
           setAlertMessage(responseData.message);
           setIsError(true);
+          setPassword("");
+          setPasswordConfirmation("");
           throw new Error(responseData.message);
         }
 
@@ -65,8 +70,13 @@ const ResetPasswordForm = () => {
 
   return (
     <div className="py-6 align-middle justify-center mt-5">
-      {alertMessage !== "" ? (
-        <AlertMessage isError={isError} message={alertMessage} />
+      {alertMessage !== "" && openAlert ? (
+        <AlertMessage
+          open={openAlert}
+          setOpen={setOpenAlert}
+          isError={isError}
+          message={alertMessage}
+        />
       ) : undefined}
       <form
         onSubmit={handlePasswordReset}

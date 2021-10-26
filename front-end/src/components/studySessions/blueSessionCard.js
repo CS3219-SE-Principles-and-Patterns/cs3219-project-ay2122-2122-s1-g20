@@ -9,11 +9,12 @@ const BlueSessionCard = ({ studySession }) => {
       <SessionCardTemplate studySession={studySession} theme="blue">
         <ConfirmationPopup
           title="Join study session?"
-          text=""
+          text="Input your available time:"
           onClick={() => console.log("text")}
           open={openConfirmation}
           setOpen={setOpenConfirmation}
         />
+
         <button
           onClick={() => {
             setOpenConfirmation(true);
