@@ -99,7 +99,7 @@ exports.login = async (req, res) => {
       { userId: user._id },
       process.env.TOKEN_KEY + jwtSalt
     );
-    // Check that email is verified before logging in
+    // Check that email is verified beforee logging in
     if (user.isVerified === false) {
       return res
         .status(422)
@@ -135,25 +135,30 @@ exports.logout = async (req, res) => {
 };
 
 exports.updatePassword = async (req, res) => {
-  const { email, oldpassword, newpassword, confirmNewpassword } = req.body;
+  const { oldpassword, newpassword, confirmNewpassword } = req.body;
 
   if (newpassword != confirmNewpassword) {
-    return res.status(422).json({ message: "The new passwords do not match" });
-  }
+    console.log("no match");
+    res.status(422).json({ message: "The new passwords do not match" });
+  } else {
+    const user = User.findOne({ email: req.body.email.email });
 
-  const user = await User.findOne({ email });
+    try {
+      //await user.comparePassword(oldpassword);
 
-  try {
-    await user.comparePassword(oldpassword); //check that password matches
-    const updatedUser = await User.findOneAndUpdate(
-      { email: email },
-      { password: newpassword },
-      { new: true }
-    );
-    updatedUser.save();
-    return res.status(200).json({ message: "Updated user password" });
-  } catch (err) {
-    return res.status(422).json({ message: "Invalid password entered." });
+      User.findOne({ email: req.body.email.email })
+        .then((user) => {
+          user.password = newpassword;
+          return user.save();
+        })
+        .then((result) => {
+          return res
+            .status(200)
+            .json({ message: "Password changed successful!" });
+        });
+    } catch (err) {
+      return res.status(422).json({ message: "Invalid password entered." });
+    }
   }
 };
 

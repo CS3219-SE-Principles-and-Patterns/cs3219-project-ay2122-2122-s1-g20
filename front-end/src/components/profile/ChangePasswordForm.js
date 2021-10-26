@@ -10,6 +10,7 @@ const ChangePasswordForm = (email) => {
   const [confirmNewpassword, setConfirmNewpassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const resetFields = () => {
     setOldpassword("");
@@ -32,9 +33,16 @@ const ChangePasswordForm = (email) => {
         confirmNewpassword,
       })
       .catch((err) => console.log(err));
+
     console.log(res);
 
-    setAlertMessage(res);
+    if (res.status != 200) {
+      setAlertMessage(res.data.message);
+      setIsError(true);
+    } else {
+      setAlertMessage(res.data.message);
+      setIsError(false);
+    }
     handleUpdateDone();
   };
 
@@ -45,7 +53,7 @@ const ChangePasswordForm = (email) => {
   return (
     <div>
       {alertMessage !== "" ? (
-        <AlertMessage message={alertMessage} />
+        <AlertMessage isError={isError} message={alertMessage} />
       ) : undefined}
       <form
         className="flex-col flex space-y-4 mr-5 mb-4 items-baseline"
