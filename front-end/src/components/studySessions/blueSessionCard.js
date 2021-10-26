@@ -40,15 +40,20 @@ const BlueSessionCard = ({ studySession }) => {
           setTime={setTime}
           timeRange={studySession.time}
         />
-
-        <button
-          onClick={() => {
-            setOpenConfirmation(true);
-          }}
-          className="flex self-center mr-5 text-purple-dark hover:text-opacity-50 text-xl"
-        >
-          Join
-        </button>
+        {studySession.participants.length + 1 === studySession.capacity ? (
+          <p className="flex self-center mr-5 text-purple-dark font-bold text-xl">
+            FULL
+          </p>
+        ) : (
+          <button
+            onClick={() => {
+              setOpenConfirmation(true);
+            }}
+            className="flex self-center mr-5 text-purple-dark hover:text-opacity-50 text-xl"
+          >
+            Join
+          </button>
+        )}
       </SessionCardTemplate>
     </div>
   );
