@@ -9,9 +9,95 @@ export default function UserSessions() {
   const [isTab0, setIsTab0] = useState(true);
   const [isTab1, setIsTab1] = useState(false);
 
+  const myCreatedSessions = [
+    {
+      _id: "1",
+      title: "Sample",
+      owner: "Andrea",
+      module: "CS3219",
+      capacity: 5,
+      date: "25/10/2021",
+      time: {
+        start: "5pm",
+        end: "7pm",
+      },
+      timeLimit: "1",
+      participants: [
+        { name: "andreatanky" },
+        { name: "sylviaokt" },
+        { name: "mabel" },
+        { name: "haishan" },
+      ],
+      isOnline: "Offline",
+    },
+    {
+      _id: "1",
+      title: "Title 2",
+      owner: "Sylvia",
+      module: "CS3235",
+      capacity: 7,
+      date: "29/10/2021",
+      time: {
+        start: "1pm",
+        end: "7pm",
+      },
+      timeLimit: "2",
+      participants: [
+        { name: "andreatanky" },
+        { name: "sylviaokt" },
+        { name: "mabel" },
+        { name: "haishan" },
+      ],
+      isOnline: "Online",
+    },
+  ];
+
+  const myJoinedSessions = [
+    {
+      _id: "1",
+      title: "Active!!",
+      owner: "Andrea",
+      module: "CS3219",
+      capacity: 5,
+      date: "25/10/2021",
+      time: {
+        start: "5pm",
+        end: "7pm",
+      },
+      timeLimit: "1",
+      participants: [
+        { name: "andreatanky" },
+        { name: "sylviaokt" },
+        { name: "mabel" },
+        { name: "haishan" },
+      ],
+      isOnline: "Offline",
+    },
+    {
+      _id: "2",
+      title: "Expired!!",
+      owner: "Sylvia",
+      module: "CS3235",
+      capacity: 7,
+      date: "29/10/2021",
+      time: {
+        start: "1pm",
+        end: "7pm",
+      },
+      timeLimit: "2",
+      participants: [
+        { name: "andreatanky" },
+        { name: "sylviaokt" },
+        { name: "mabel" },
+        { name: "haishan" },
+      ],
+      isOnline: "Online",
+    },
+  ];
+
   const tabs = [
     { name: "Your created study sessions", current: isTab0 },
-    { name: "Your past sessions", current: isTab1 },
+    { name: "Your joined sessions", current: isTab1 },
   ];
 
   const handleTabNavigation = (tab, tabIdx) => {
@@ -55,7 +141,35 @@ export default function UserSessions() {
           </a>
         ))}
       </nav>
-      <YellowSessionCard />
+      {tabs[0].current === true
+        ? myCreatedSessions.map((session) => (
+            <YellowSessionCard
+              key={session._id}
+              title={session.title}
+              module={session.module}
+              capacity={session.capacity}
+              start={session.time.start}
+              end={session.time.end}
+              date={session.date}
+              minimum={session.timeLimit}
+              participants_count={session.participants.length}
+              owner={session.owner}
+            />
+          ))
+        : myJoinedSessions.map((session) => (
+            <YellowSessionCard
+              key={session._id}
+              title={session.title}
+              module={session.module}
+              capacity={session.capacity}
+              start={session.time.start}
+              end={session.time.end}
+              date={session.date}
+              minimum={session.timeLimit}
+              participants_count={session.participants.length}
+              owner={session.owner}
+            />
+          ))}
     </div>
   );
 }

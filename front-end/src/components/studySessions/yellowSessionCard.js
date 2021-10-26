@@ -5,7 +5,7 @@ import ConfirmationPopup from "../forms/ConfirmationPopup";
 import EditStudySession from "../forms/EditStudySession";
 import StudySessionDetails from "../forms/StudySessionDetails";
 
-const YellowSessionCard = () => {
+const YellowSessionCard = (props) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
@@ -39,7 +39,7 @@ const YellowSessionCard = () => {
   };
 
   return (
-    <div className="bg-yellow-light p-4 mx-8 rounded-xl relative">
+    <div className="bg-yellow-light mt-5 p-4 mx-8 rounded-xl relative">
       <div className="absolute right-4 bottom-2">
         <button onClick={handleView} className="mr-2">
           <FaEye color="#8488A3" />
@@ -73,20 +73,27 @@ const YellowSessionCard = () => {
       />
       <div className="flex justify-between">
         <div className="flex flex-col justify-center">
+          {/* title */}
           <div className="flex">
-            <span className=" text-purple-dark font-medium lg:text-2xl">
-              CHIONG CS3219 OTOT TASKS
+            <span className="text-purple-dark font-medium lg:text-2xl">
+              {props.title}
             </span>
             <span className="pl-3 font-bold text-purple-dark lg:text-2xl">
-              #CS3219
+              #{props.module}
             </span>
           </div>
+          {/* Details */}
           <div className="flex flex-col items-start">
-            <p className="text-purple-dark lg:text-md">Capacity: 3/5</p>
             <p className="text-purple-dark lg:text-md">
-              Date: 23/10/2021, Sunday
+              Capacity: {props.participants_count}/{props.capacity}
             </p>
-            <p className="text-purple-dark lg:text-md">Time: 3-5pm</p>
+            <p className="text-purple-dark lg:text-md">Date: {props.date}</p>
+            <p className="text-purple-dark lg:text-md">
+              Current time range: {props.start}-{props.end}
+            </p>
+            <p className="text-purple-dark lg:text-md">
+              Minimum hours: {props.minimum}
+            </p>
           </div>
         </div>
       </div>

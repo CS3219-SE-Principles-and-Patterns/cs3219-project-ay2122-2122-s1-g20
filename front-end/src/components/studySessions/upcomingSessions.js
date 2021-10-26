@@ -6,6 +6,50 @@ import React, { useState } from "react";
 const UpcomingSessions = () => {
   const [loadNewForm, setLoadNewForm] = useState(false);
   const [openNewForm, setOpenNewForm] = useState(false);
+
+  const sessions = [
+    {
+      _id: "1",
+      title: "Title 1",
+      owner: "Andrea",
+      module: "CS3219",
+      capacity: 5,
+      date: "25/10/2021",
+      time: {
+        start: "5pm",
+        end: "7pm",
+      },
+      timeLimit: "1",
+      participants: [
+        { name: "andreatanky" },
+        { name: "sylviaokt" },
+        { name: "mabel" },
+        { name: "haishan" },
+      ],
+      isOnline: "Offline",
+    },
+    {
+      _id: "1",
+      title: "Title 2",
+      owner: "Sylvia",
+      module: "CS3235",
+      capacity: 7,
+      date: "29/10/2021",
+      time: {
+        start: "1pm",
+        end: "7pm",
+      },
+      timeLimit: "2",
+      participants: [
+        { name: "andreatanky" },
+        { name: "sylviaokt" },
+        { name: "mabel" },
+        { name: "haishan" },
+      ],
+      isOnline: "Online",
+    },
+  ];
+
   return (
     <div className="bg-yellow-light h-screen">
       <p className="text-2xl text-purple-dark pt-10 font-medium">
@@ -51,7 +95,20 @@ const UpcomingSessions = () => {
           />
         </div>
       </div>
-      <BlueSessionCard />
+      {sessions.map((session) => (
+        <BlueSessionCard
+          key={session._id}
+          title={session.title}
+          module={session.module}
+          capacity={session.capacity}
+          start={session.time.start}
+          end={session.time.end}
+          date={session.date}
+          minimum={session.timeLimit}
+          participants_count={session.participants.length}
+          owner={session.owner}
+        />
+      ))}
     </div>
   );
 };
