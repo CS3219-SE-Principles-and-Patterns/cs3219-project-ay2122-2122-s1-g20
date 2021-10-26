@@ -32,6 +32,7 @@ exports.getMySessions = (req, res, next) => {
   // remove uid from params after gateway api is implemented
   const username = req.params.username;
   Session.find({ owner: username })
+    .sort("-date")
     .then((sessions) => {
       // session === array of session objects
       // const mySessions = session.filter((s) => {

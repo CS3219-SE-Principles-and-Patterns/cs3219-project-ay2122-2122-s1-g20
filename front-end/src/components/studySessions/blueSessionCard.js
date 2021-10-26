@@ -1,18 +1,44 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { AccountContext } from "../../context/AccountContext";
+import { SessionContext } from "../../context/SessionContext";
 import ConfirmationPopup from "../forms/ConfirmationPopup";
 import SessionCardTemplate from "./sessionCardTemplate";
 
 const BlueSessionCard = ({ studySession }) => {
+  const { username } = useContext(AccountContext);
+  const { joinSession } = useContext(SessionContext);
+
   const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [time, setTime] = useState(studySession.time);
+
+  const handleJoin = async () => {
+    try {
+      const response = await joinSession(username, studySession, time);
+      setOpenConfirmation(false);
+      console.log(response);
+    } catch (err) {
+      console.log(err.message);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div>
       <SessionCardTemplate studySession={studySession} theme="blue">
         <ConfirmationPopup
           title="Join study session?"
           text="Input your available time:"
-          onClick={() => console.log("text")}
+          onClick={() => {
+            setIsLoading(true);
+            handleJoin();
+          }}
           open={openConfirmation}
           setOpen={setOpenConfirmation}
+          isLoading={isLoading}
+          time={time}
+          setTime={setTime}
+          timeRange={studySession.time}
         />
 
         <button

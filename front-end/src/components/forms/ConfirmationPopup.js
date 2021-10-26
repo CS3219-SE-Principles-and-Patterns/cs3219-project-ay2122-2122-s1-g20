@@ -12,11 +12,14 @@ const ConfirmationPopup = ({
   open,
   setOpen,
   isLoading,
+  time,
+  setTime,
+  timeRange,
 }) => {
   return (
     <div className="w-10">
       <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
-        <div className="bg-blue-dark px-32 py-10 rounded-2xl">
+        <div className="bg-blue-dark px-10 py-10 rounded-2xl">
           <button
             className="bg-purple-dark text-white mr-2 mt-2 absolute top-1 right-1 p-1 rounded-full"
             onClick={() => {
@@ -31,26 +34,26 @@ const ConfirmationPopup = ({
           <p className="text-xl font-medium mb-4 text-grey-whitetinge">
             {text}
           </p>
-          <div className="col-span-3 flex flex-col pb-4">
-            <div className="flex justify-between">
-              <span className="text-lg text-white">start</span>
-              <span className="text-lg text-white">end</span>
+          {time ? (
+            <div className="flex flex-col">
+              <div className="flex justify-between">
+                <span className="text-lg text-white">{time.start}</span>
+                <span className="text-lg text-white">{time.end}</span>
+              </div>
+              <div className="px-4">
+                <TimeRangeSlider
+                  disabled={false}
+                  format={24}
+                  maxValue={timeRange.end}
+                  minValue={timeRange.start}
+                  name={"time_range"}
+                  onChange={(time) => setTime(time)}
+                  step={15}
+                  value={time}
+                />
+              </div>
             </div>
-            <span>
-              <TimeRangeSlider
-                disabled={false}
-                format={24}
-                maxValue={"23:59"}
-                minValue={"00:00"}
-                name={"time_range"}
-                // onChangeStart={this.changeStartHandler}
-                // onChangeComplete={this.changeCompleteHandler}
-                //onChange={(time) => setTime(time)}
-                step={15}
-                //value={time}
-              />
-            </span>
-          </div>
+          ) : null}
           <div className="flex justify-center gap-x-3 mt-10">
             <YellowButton
               text="Yes"
@@ -79,6 +82,7 @@ ConfirmationPopup.propTypes = {
   open: PropTypes.bool,
   setOpen: PropTypes.func,
   onClick: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default ConfirmationPopup;

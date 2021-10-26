@@ -10,9 +10,9 @@ const UpcomingSessions = () => {
   const [searchSession, setSearchSession] = useState("");
   const { upcomingSessions } = useContext(SessionContext);
 
-  const renderCards = (sessions) => {
+  const renderCards = () => {
     const searchTerm = searchSession.toLowerCase();
-    const filteredSessions = sessions.filter(
+    const filteredSessions = upcomingSessions.filter(
       (s) =>
         s.title.toLowerCase().includes(searchTerm) ||
         s.module.toLowerCase().includes(searchTerm)
@@ -66,9 +66,7 @@ const UpcomingSessions = () => {
           <CreateNewStudySession setOpen={setOpenNewForm} open={openNewForm} />
         </div>
       </div>
-      <div className="flex flex-col gap-y-3">
-        {renderCards(upcomingSessions)}
-      </div>
+      <div className="flex flex-col gap-y-3">{renderCards()}</div>
     </div>
   );
 };

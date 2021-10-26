@@ -27,6 +27,45 @@ export const SessionProvider = ({ children }) => {
     }
   };
 
+  const joinSession = async (username, session, time) => {
+    try {
+      const newParticipants = [...session.participants, username];
+      const response = await sessionApi.put(`/${session._id}`, {
+        participants: newParticipants,
+        time,
+      });
+      const index = upcomingSessions.findIndex((s) => s._id == session._id);
+      setJoinedSessions([...joinedSessions, response.data.session]);
+      setUpcomingSessions([
+        ...upcomingSessions.slice(0, index),
+        ...upcomingSessions.slice(index + 1),
+      ]);
+      return "";
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  };
+
+  const leaveSession = async (username, session) => {
+    try {
+      // update to remove from chat db as well
+      const newParticipants = session.participants.filter(
+        (p) => p !== username
+      );
+      await sessionApi.put(`/${session._id}`, {
+        participants: newParticipants,
+      });
+      const index = joinedSessions.findIndex((s) => s._id == session._id);
+      setJoinedSessions([
+        ...joinedSessions.slice(0, index),
+        ...joinedSessions.slice(index + 1),
+      ]);
+      return "";
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  };
+
   const updateMySessions = async (session) => {
     try {
       const response = await sessionApi.put(`/${session._id}`, session);
@@ -86,6 +125,8 @@ export const SessionProvider = ({ children }) => {
         updateMySessions,
         addMySession,
         deleteMySession,
+        joinSession,
+        leaveSession,
       }}
     >
       {children}
