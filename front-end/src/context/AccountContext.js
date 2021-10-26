@@ -7,6 +7,7 @@ export const AccountProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [edit, setEdit] = useState("");
   const [modules, setModules] = useState([]);
   const [profilePic, setProfilePic] = useState("");
   const [jwtSalt, setJwtSalt] = useState("");
@@ -18,6 +19,7 @@ export const AccountProvider = ({ children }) => {
     setSaltHeader(user.jwtSalt);
     setUsername(user.username);
     setEmail(user.email);
+    setEdit(user.email);
     if (user.modules) {
       setModules(user.modules);
     }
@@ -31,9 +33,9 @@ export const AccountProvider = ({ children }) => {
       .catch((err) => console.log(err));
   };
 
-  const handleUpdateEmail = async (newEmail) => {
+  const handleUpdateEmail = async (edit) => {
     await api
-      .post("/user/updateEmail", { newEmail, username })
+      .post("/user/updateEmail", { edit, email })
       .catch((err) => console.log(err));
   };
 
@@ -70,6 +72,8 @@ export const AccountProvider = ({ children }) => {
         setProfilePic,
         jwtSalt,
         setJwtSalt,
+        edit,
+        setEdit,
         handleUpdateSalt,
         handleAddModules,
         handleDeleteModule,

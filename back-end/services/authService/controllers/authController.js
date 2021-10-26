@@ -136,6 +136,7 @@ exports.logout = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   const { oldpassword, newpassword, confirmNewpassword } = req.body;
+  const user = await User.findOne({ email: req.body.email.email });
 
   if (!oldpassword || !newpassword || !confirmNewpassword) {
     return res
@@ -146,9 +147,8 @@ exports.updatePassword = async (req, res) => {
       .status(200)
       .json({ message: "The new passwords do not match", valid: false });
   } else {
-    const user = User.findOne({ email: req.body.email.email });
-
     try {
+      console.log(user);
       await user.comparePassword(oldpassword);
     } catch (err) {
       return res
@@ -178,11 +178,12 @@ exports.updatePassword = async (req, res) => {
 };
 
 exports.updateEmail = async (req, res) => {
-  const { username, newEmail } = req.body;
+  const { edit, email } = req.body;
+
   try {
     const updatedUser = await User.findOneAndUpdate(
-      { username: username },
-      { email: newEmail },
+      { email: email },
+      { email: edit },
       { new: true }
     );
 

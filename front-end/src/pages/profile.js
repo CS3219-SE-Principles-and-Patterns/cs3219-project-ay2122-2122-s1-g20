@@ -9,8 +9,9 @@ const ProfilePage = () => {
   const {
     username,
     setUsername,
+    edit,
+    setEdit,
     email,
-    setEmail,
     handleUpdateUsername,
     handleUpdateEmail,
   } = useContext(AccountContext);
@@ -30,8 +31,8 @@ const ProfilePage = () => {
           />
           <EditableInput
             label="Email"
-            value={email}
-            setValue={setEmail}
+            value={edit}
+            setValue={setEdit}
             onSubmit={handleUpdateEmail}
           />
         </div>
