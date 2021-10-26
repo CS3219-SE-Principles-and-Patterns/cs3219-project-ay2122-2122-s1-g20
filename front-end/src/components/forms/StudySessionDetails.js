@@ -88,7 +88,9 @@ const StudySessionDetails = ({ setOpen, open, studySession }) => {
                 Members:
               </span>
               <span className="col-span-3 text-lg text-white">
-                {studySession.participants.join(", ")}
+                {studySession.participants.length === 0
+                  ? "None"
+                  : studySession.participants.join(", ")}
               </span>
             </div>
           </div>

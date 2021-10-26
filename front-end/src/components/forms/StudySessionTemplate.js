@@ -238,7 +238,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
             <label className="text-lg text-white col-span-1 justify-self-end">
               Time
             </label>
-            <div className="col-span-2 flex flex-col pb-4">
+            <div className="col-span-2 flex flex-col pb-4 pl-2">
               <div className="flex justify-between">
                 <span className="text-lg text-white">{session.time.start}</span>
                 <span className="text-lg text-white">{session.time.end}</span>
