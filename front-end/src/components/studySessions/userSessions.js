@@ -13,7 +13,6 @@ export default function UserSessions() {
   const isCreatedSessions = true;
 
   const { mySessions, joinedSessions } = useContext(SessionContext);
-  console.log("list of joined", joinedSessions);
   const tabs = [
     { name: "Your created study sessions", current: isTab0 },
     { name: "Your joined sessions", current: isTab1 },

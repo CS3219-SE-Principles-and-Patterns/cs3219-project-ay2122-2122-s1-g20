@@ -59,6 +59,12 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
     setIsLoading(false);
   };
 
+  const isPastSession = () => {
+    const dateArr = studySession.date.split("-");
+    const studySessionDate = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+    return studySessionDate < new Date();
+  };
+
   return (
     <div>
       <SessionCardTemplate studySession={studySession} theme="yellow">
@@ -71,9 +77,11 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
           </button>
           {isCreatedSessions ? (
             <>
-              <button onClick={handleEdit}>
-                <FaPen color="#8488A3" />
-              </button>
+              {!isPastSession() ? (
+                <button onClick={handleEdit}>
+                  <FaPen color="#8488A3" />
+                </button>
+              ) : null}
               <button onClick={handleDeletePopup}>
                 <FaTrash color="#8488A3" />
               </button>
