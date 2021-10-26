@@ -30,10 +30,15 @@ const Messenger = ({ account, displayChat, enable }) => {
         content: messageFromSocket.content,
       };
       setOldMessages((prevState) => prevState.concat(newMessage));
-      return () => {
-        socket.removeAllListeners("receive-message");
-      };
     });
+    socket.io.on("reconnect", () => {
+      console.log("reconnected");
+      socket.emit("join-room", group);
+    });
+    return () => {
+      socket.removeAllListeners("receive-message");
+      socket.removeAllListeners("join-room");
+    };
   }, []);
 
   const handleSendMessage = async () => {
@@ -43,7 +48,6 @@ const Messenger = ({ account, displayChat, enable }) => {
       content: message,
     };
     socket.emit("send-message", messageForSocket, group);
-    //const originalMessages = oldMessages;
     const newMessage = {
       group_id: group,
       sender: username,
