@@ -9,7 +9,7 @@ const ChangePasswordForm = (email) => {
   const [newpassword, setNewpassword] = useState("");
   const [confirmNewpassword, setConfirmNewpassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
   const resetFields = () => {
@@ -25,25 +25,32 @@ const ChangePasswordForm = (email) => {
 
   const handleDoneEdit = async () => {
     setIsLoading(true);
-    const res = await api
-      .post("/user/updatePassword", {
-        email,
-        oldpassword,
-        newpassword,
-        confirmNewpassword,
-      })
-      .catch((err) => console.log(err));
 
-    console.log(res);
+    try {
+      const res = await api
+        .post("/user/updatePassword", {
+          email,
+          oldpassword,
+          newpassword,
+          confirmNewpassword,
+        })
+        .catch((err) => console.log(err));
 
-    if (res.status != 200) {
-      setAlertMessage(res.data.message);
+      console.log(res);
+
+      if (!res.data.valid) {
+        setAlertMessage(res.data.message);
+        setIsError(true);
+      } else {
+        setAlertMessage(res.data.message);
+        setIsError(false);
+      }
+      handleUpdateDone();
+    } catch (err) {
       setIsError(true);
-    } else {
-      setAlertMessage(res.data.message);
-      setIsError(false);
+      setAlertMessage("Invalid password entered");
+      handleUpdateDone();
     }
-    handleUpdateDone();
   };
 
   const handleUpdateDone = () => {
