@@ -99,7 +99,7 @@ exports.login = async (req, res) => {
       { userId: user._id },
       process.env.TOKEN_KEY + jwtSalt
     );
-    // Check that email is verified before logging in
+    // Check that email is verified beforee logging in
     if (user.isVerified === false) {
       return res
         .status(422)
@@ -131,6 +131,86 @@ exports.logout = async (req, res) => {
       .json({ user: updatedUser, message: "Salt changed upon logout" });
   } catch (err) {
     return res.status(422).json({ message: "Error logging out" });
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  const { oldpassword, newpassword, confirmNewpassword } = req.body;
+  const user = await User.findOne({ email: req.body.email.email });
+
+  if (!oldpassword || !newpassword || !confirmNewpassword) {
+    return res
+      .status(200)
+      .json({ message: "Please provide an input", valid: false });
+  } else if (newpassword != confirmNewpassword) {
+    return res
+      .status(200)
+      .json({ message: "The new passwords do not match", valid: false });
+  } else {
+    try {
+      console.log(user);
+      await user.comparePassword(oldpassword);
+    } catch (err) {
+      return res
+        .status(200)
+        .json({ message: "Old password did not match", valid: false });
+    }
+
+    try {
+      User.findOne({ email: req.body.email.email })
+        .then((user) => {
+          user.password = newpassword;
+          return user.save();
+        })
+        .then((result) => {
+          return res
+            .status(200)
+            .json({ message: "Password changed successful!", valid: true });
+        });
+    } catch (err) {
+      return res.status(200).json({
+        message:
+          "Invalid password entered. Check that you entered the right passwords",
+        valid: false,
+      });
+    }
+  }
+};
+
+exports.updateEmail = async (req, res) => {
+  const { edit, email } = req.body;
+
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email },
+      { email: edit },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .json({ user: updatedUser, message: "Updated user email" });
+  } catch (err) {
+    console.log(err);
+    return res.status(422).json({ message: "Error updating email" });
+  }
+};
+
+exports.updateUsername = async (req, res) => {
+  const { email, newUsername } = req.body;
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email },
+      { username: newUsername },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .json({ user: updatedUser, message: "Updated username" });
+  } catch (err) {
+    console.log(err);
+    return res.status(422).json({ message: "Error updating username" });
   }
 };
 
@@ -250,8 +330,7 @@ exports.verifyToken = async (req, res) => {
       console.log(err);
       return res.status(401).json({ error: "You must be logged in." });
     } else {
-      return res.status(200).json({message: "Authenticated"});
+      return res.status(200).json({ message: "Authenticated" });
     }
   });
 };
-
