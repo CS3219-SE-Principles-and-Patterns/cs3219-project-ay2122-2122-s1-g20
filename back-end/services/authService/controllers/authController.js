@@ -137,15 +137,26 @@ exports.logout = async (req, res) => {
 exports.updatePassword = async (req, res) => {
   const { oldpassword, newpassword, confirmNewpassword } = req.body;
 
-  if (newpassword != confirmNewpassword) {
-    console.log("no match");
-    res.status(422).json({ message: "The new passwords do not match" });
+  if (!oldpassword || !newpassword || !confirmNewpassword) {
+    return res
+      .status(200)
+      .json({ message: "Please provide an input", valid: false });
+  } else if (newpassword != confirmNewpassword) {
+    return res
+      .status(200)
+      .json({ message: "The new passwords do not match", valid: false });
   } else {
     const user = User.findOne({ email: req.body.email.email });
 
     try {
-      //await user.comparePassword(oldpassword);
+      await user.comparePassword(oldpassword);
+    } catch (err) {
+      return res
+        .status(200)
+        .json({ message: "Old password did not match", valid: false });
+    }
 
+    try {
       User.findOne({ email: req.body.email.email })
         .then((user) => {
           user.password = newpassword;
@@ -154,10 +165,14 @@ exports.updatePassword = async (req, res) => {
         .then((result) => {
           return res
             .status(200)
-            .json({ message: "Password changed successful!" });
+            .json({ message: "Password changed successful!", valid: true });
         });
     } catch (err) {
-      return res.status(422).json({ message: "Invalid password entered." });
+      return res.status(200).json({
+        message:
+          "Invalid password entered. Check that you entered the right passwords",
+        valid: false,
+      });
     }
   }
 };
