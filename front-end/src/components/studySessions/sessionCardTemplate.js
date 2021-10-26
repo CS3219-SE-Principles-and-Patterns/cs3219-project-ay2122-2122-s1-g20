@@ -32,6 +32,9 @@ const SessionCardTemplate = ({ studySession, theme, children }) => {
             <p className="text-purple-dark lg:text-md">
               Time: {studySession.time.start} - {studySession.time.end}
             </p>
+            <p className="text-purple-dark lg:text-md">
+              Time Limit: {studySession.timeLimit} hrs
+            </p>
           </div>
         </div>
         {children}
