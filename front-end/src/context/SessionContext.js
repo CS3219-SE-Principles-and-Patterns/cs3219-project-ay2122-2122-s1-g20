@@ -62,9 +62,9 @@ export const SessionProvider = ({ children }) => {
     }
   };
 
-  const getUpcomingSessions = async () => {
+  const getUpcomingSessions = async (username) => {
     try {
-      const response = await sessionApi.get("/upcoming");
+      const response = await sessionApi.get(`/upcoming/${username}`);
       setUpcomingSessions(response.data.sessions);
     } catch (error) {
       throw new Error(error.response.data.message);

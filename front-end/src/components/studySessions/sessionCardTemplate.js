@@ -23,7 +23,7 @@ const SessionCardTemplate = ({ studySession, theme, children }) => {
           </div>
           <div className="flex flex-col items-start">
             <p className="text-purple-dark lg:text-md">
-              Capacity: {studySession.participants.length}/
+              Capacity: {studySession.participants.length + 1}/
               {studySession.capacity}
             </p>
             <p className="text-purple-dark lg:text-md">

@@ -13,7 +13,7 @@ const StudySessionsHome = () => {
 
   const fetchData = async () => {
     try {
-      await getUpcomingSessions();
+      await getUpcomingSessions(username);
       await getMySessions(username);
       await getJoinedSessions(username);
     } catch (error) {

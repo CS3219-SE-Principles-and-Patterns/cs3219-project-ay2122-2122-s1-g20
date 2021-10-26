@@ -6,12 +6,18 @@ import { useContext } from "react";
 import { SessionContext } from "../../context/SessionContext";
 
 const UpcomingSessions = () => {
-  const [loadNewForm, setLoadNewForm] = useState(false);
   const [openNewForm, setOpenNewForm] = useState(false);
+  const [searchSession, setSearchSession] = useState("");
   const { upcomingSessions } = useContext(SessionContext);
 
   const renderCards = (sessions) => {
-    return sessions.map((session) => (
+    const searchTerm = searchSession.toLowerCase();
+    const filteredSessions = sessions.filter(
+      (s) =>
+        s.title.toLowerCase().includes(searchTerm) ||
+        s.module.toLowerCase().includes(searchTerm)
+    );
+    return filteredSessions.map((session) => (
       <div key={session.title}>
         <BlueSessionCard studySession={session} />
       </div>
@@ -43,6 +49,8 @@ const UpcomingSessions = () => {
               placeholder="Search for study sessions"
               type="search"
               name="search"
+              onChange={(event) => setSearchSession(event.target.value)}
+              value={searchSession}
             />
           </div>
         </form>
@@ -55,12 +63,7 @@ const UpcomingSessions = () => {
           >
             +
           </button>
-          <CreateNewStudySession
-            setOpen={setOpenNewForm}
-            setLoad={setLoadNewForm}
-            open={openNewForm}
-            load={loadNewForm}
-          />
+          <CreateNewStudySession setOpen={setOpenNewForm} open={openNewForm} />
         </div>
       </div>
       <div className="flex flex-col gap-y-3">
