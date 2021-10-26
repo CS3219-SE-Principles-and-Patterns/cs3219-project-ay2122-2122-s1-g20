@@ -10,9 +10,10 @@ function classNames(...classes) {
 export default function UserSessions() {
   const [isTab0, setIsTab0] = useState(true);
   const [isTab1, setIsTab1] = useState(false);
+  const isCreatedSessions = true;
 
   const { mySessions, joinedSessions } = useContext(SessionContext);
-
+  console.log("list of joined", joinedSessions);
   const tabs = [
     { name: "Your created study sessions", current: isTab0 },
     { name: "Your joined sessions", current: isTab1 },
@@ -28,10 +29,13 @@ export default function UserSessions() {
     }
   };
 
-  const renderCards = (sessions) => {
+  const renderCards = (sessions, isCreatedSessions) => {
     return sessions.map((session) => (
       <div key={session.title}>
-        <YellowSessionCard studySession={session} />
+        <YellowSessionCard
+          studySession={session}
+          isCreatedSessions={isCreatedSessions}
+        />
       </div>
     ));
   };
@@ -68,7 +72,9 @@ export default function UserSessions() {
         ))}
       </nav>
       <div className="flex flex-col gap-y-3">
-        {isTab0 ? renderCards(mySessions) : renderCards(joinedSessions)}
+        {isTab0
+          ? renderCards(mySessions, isCreatedSessions)
+          : renderCards(joinedSessions, !isCreatedSessions)}
       </div>
     </div>
   );

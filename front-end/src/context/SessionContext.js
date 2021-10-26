@@ -46,6 +46,26 @@ export const SessionProvider = ({ children }) => {
     }
   };
 
+  const leaveSession = async (username, session) => {
+    try {
+      // update to remove from chat db as well
+      const newParticipants = session.participants.filter(
+        (p) => p !== username
+      );
+      await sessionApi.put(`/${session._id}`, {
+        participants: newParticipants,
+      });
+      const index = joinedSessions.findIndex((s) => s._id == session._id);
+      setJoinedSessions([
+        ...joinedSessions.slice(0, index),
+        ...joinedSessions.slice(index + 1),
+      ]);
+      return "";
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  };
+
   const updateMySessions = async (session) => {
     try {
       const response = await sessionApi.put(`/${session._id}`, session);
@@ -106,6 +126,7 @@ export const SessionProvider = ({ children }) => {
         addMySession,
         deleteMySession,
         joinSession,
+        leaveSession,
       }}
     >
       {children}

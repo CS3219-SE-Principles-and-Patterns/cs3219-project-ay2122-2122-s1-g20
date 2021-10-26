@@ -10,7 +10,7 @@ const BlueSessionCard = ({ studySession }) => {
 
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [time, setTime] = useState({ start: "00:00", end: "23:59" });
+  const [time, setTime] = useState(studySession.time);
 
   const handleJoin = async () => {
     try {
