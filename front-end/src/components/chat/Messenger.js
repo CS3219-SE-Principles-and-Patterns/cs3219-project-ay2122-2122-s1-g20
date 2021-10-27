@@ -2,47 +2,60 @@ import React, { useState, useEffect, useRef } from "react";
 import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
-//handle left right positioning
-const Messenger = ({ account, displayChat }) => {
+
+const Messenger = ({ account, displayChat, enable }) => {
   const [message, setMessage] = useState("");
   const [oldMessages, setOldMessages] = useState([]);
   const [toggle, setToggle] = useState(false); //update receiving of message whenever someone else send
 
   const username = account.username;
-  //const profilePic = account.profilePic;
+  const profilePic = account.profilePic;
   const group = displayChat._id;
-  console.log(displayChat._id);
 
-  socket.on("connect", () => {
+  /*
+  socket.once("connect", () => {
     console.log(socket.id);
   });
-
-  socket.on("receive-message", (message) => {
-    const newMessage = {
-      group_id: group,
-      sender: username,
-      timestamp: Date.now(),
-      content: message,
+  */
+  useEffect(() => {
+    socket.on("receive-message", (messageFromSocket) => {
+      console.log("receive by client");
+      console.log(messageFromSocket);
+      const newMessage = {
+        group_id: group,
+        sender: messageFromSocket.sender,
+        profilePic: messageFromSocket.profilePic,
+        timestamp: Date.now(),
+        content: messageFromSocket.content,
+      };
+      setOldMessages((prevState) => prevState.concat(newMessage));
+    });
+    socket.io.on("reconnect", () => {
+      console.log("reconnected");
+      socket.emit("join-room", group);
+    });
+    return () => {
+      socket.removeAllListeners("receive-message");
+      socket.removeAllListeners("join-room");
     };
-    const originalMessages = oldMessages;
-    setOldMessages(originalMessages.concat(newMessage));
-    setToggle(!toggle);
-
-    console.log(oldMessages);
-  });
+  }, []);
 
   const handleSendMessage = async () => {
-    socket.emit("send-message", message, group);
-    console.log(message);
-    const originalMessages = oldMessages;
+    const messageForSocket = {
+      sender: username,
+      profilePic: profilePic,
+      content: message,
+    };
+    socket.emit("send-message", messageForSocket, group);
     const newMessage = {
       group_id: group,
       sender: username,
       timestamp: Date.now(),
+      profilePic: profilePic,
       content: message,
     };
     setMessage("");
-    setOldMessages(originalMessages.concat(newMessage));
+    setOldMessages(oldMessages.concat(newMessage));
 
     const res = await fetch("http://localhost:9000/api/messages", {
       method: "POST",
@@ -57,7 +70,9 @@ const Messenger = ({ account, displayChat }) => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
   useEffect(() => {
     scrollToBottom();
@@ -71,8 +86,8 @@ const Messenger = ({ account, displayChat }) => {
       setOldMessages(data.messages);
     };
     getOldMessages();
-    console.log(oldMessages);
-  }, [displayChat, toggle]);
+    setToggle(!toggle);
+  }, [displayChat]);
 
   const setMessageChange = (event) => {
     setMessage(event.target.value);
@@ -97,23 +112,29 @@ const Messenger = ({ account, displayChat }) => {
               <ChatBubble
                 key={index}
                 message={message}
+                pic={message.profilePic}
                 toggle={checkSender(message.sender)}
               />
             ))}
             <div ref={messagesEndRef} />
           </div>
-
-          <div className="absolute inset-x-0 bottom-0 flex flex-row h-16">
-            <input
-              onChange={setMessageChange}
-              value={message}
-              placeholder="Write a message"
-              className="w-full placeholder-white bg-purple border-black border-2 pl-2 text-lg"
-            ></input>
-            <button className="pl-2 pr-2 bg-grey" onClick={handleSendMessage}>
-              Send
-            </button>
-          </div>
+          {enable ? (
+            <div className="absolute inset-x-0 bottom-0 flex flex-row h-16">
+              <input
+                onChange={setMessageChange}
+                value={message}
+                placeholder="Write a message"
+                className="w-full placeholder-white bg-purple border-black border-2 pl-2 text-lg"
+              ></input>
+              <button className="pl-2 pr-2 bg-grey" onClick={handleSendMessage}>
+                Send
+              </button>
+            </div>
+          ) : (
+            <div className="absolute inset-x-0 bottom-0 flex flex-row h-16 pt-4 bg-purple justify-center">
+              Join the group to start chatting
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -27,7 +27,10 @@ const http = require("http").createServer(app);
 const options = {
   cors: {
     origin: "http://localhost:3000",
-  }
+  },
+  transports: ['websocket'],
+  pingInterval: 1000 * 60 * 5,
+  pingTimeout: 1000 * 60 * 3
 }
 
 const io = require("socket.io")(http, options);
@@ -36,6 +39,7 @@ io.on("connection", (socket)=>{
     console.log("user connected");
     console.log(socket.id);
     socket.on("send-message", (message, group) => {
+      console.log(message);
       socket.to(group).emit("receive-message", (message));
     })
     socket.on("join-room", group => {
