@@ -44,7 +44,7 @@ export const SessionProvider = ({ children }) => {
         participants: newParticipants,
         time,
       });
-      const index = upcomingSessions.findIndex((s) => s._id == session._id);
+      const index = upcomingSessions.findIndex((s) => s._id === session._id);
       setJoinedSessions([...joinedSessions, response.data.session]);
       setUpcomingSessions([
         ...upcomingSessions.slice(0, index),
@@ -65,7 +65,7 @@ export const SessionProvider = ({ children }) => {
       await sessionApi.put(`/${session._id}`, {
         participants: newParticipants,
       });
-      const index = joinedSessions.findIndex((s) => s._id == session._id);
+      const index = joinedSessions.findIndex((s) => s._id === session._id);
       setJoinedSessions([
         ...joinedSessions.slice(0, index),
         ...joinedSessions.slice(index + 1),
@@ -79,7 +79,7 @@ export const SessionProvider = ({ children }) => {
   const updateMySessions = async (session) => {
     try {
       const response = await sessionApi.put(`/${session._id}`, session);
-      const index = mySessions.findIndex((s) => s._id == session._id);
+      const index = mySessions.findIndex((s) => s._id === session._id);
       setMySessions([
         ...mySessions.slice(0, index),
         response.data.session,
