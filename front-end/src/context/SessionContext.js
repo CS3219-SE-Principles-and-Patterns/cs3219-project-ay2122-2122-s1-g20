@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { sessionApi } from "../utils/api";
+import moment from "moment";
 
 export const SessionContext = React.createContext();
 
@@ -29,6 +30,15 @@ export const SessionProvider = ({ children }) => {
 
   const joinSession = async (username, session, time) => {
     try {
+      let start_time = moment(time.start, "HH:mm");
+      let end_time = moment(time.end, "HH:mm");
+      let difference = moment.duration(end_time.diff(start_time));
+      let minutes_difference = parseInt(difference.asMinutes());
+      if (minutes_difference < session.timeLimit * 60) {
+        return new Error(
+          "Your indicated time range is less than the time limit set by the creator of this study session!"
+        );
+      }
       const newParticipants = [...session.participants, username];
       const response = await sessionApi.put(`/${session._id}`, {
         participants: newParticipants,
