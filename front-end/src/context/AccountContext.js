@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setTokenHeader, setSaltHeader } from "../utils/api";
+import { setTokenHeader, setSaltHeader, api } from "../utils/api";
 
 export const AccountContext = React.createContext();
 
@@ -7,54 +7,36 @@ export const AccountProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [modules, setModules] = useState([
-    {
-      title: "DNSIAND",
-      moduleCode: "CS3219",
-    },
-    {
-      title: "helps",
-      moduleCode: "CS3235",
-    },
-    {
-      title: "helps",
-      moduleCode: "CS1231",
-    },
-    {
-      title: "helps",
-      moduleCode: "CS3342",
-    },
-
-    {
-      title: "helps",
-      moduleCode: "CS5555",
-    },
-  ]);
+  const [edit, setEdit] = useState("");
+  const [modules, setModules] = useState([]);
   const [profilePic, setProfilePic] = useState("");
   const [jwtSalt, setJwtSalt] = useState("");
 
   const setUser = (user, token) => {
     setToken(token);
+    setJwtSalt(user.jwtSalt);
+    setTokenHeader(token);
+    setSaltHeader(user.jwtSalt);
     setUsername(user.username);
     setEmail(user.email);
+    setEdit(user.email);
     if (user.modules) {
       setModules(user.modules);
     }
     if (user.profilePic) {
       setProfilePic(user.profilePic);
     }
-    setTokenHeader(token);
-    setJwtSalt(user.jwtSalt);
-    setSaltHeader(user.jwtSalt);
   };
-  const handleUpdateUsername = (newUsername) => {
-    setUsername(newUsername); // comment this line out after api integration is done
-    // await api call to update username in backend, change to async function
+  const handleUpdateUsername = async (newUsername) => {
+    await api
+      .post("/user/updateUsername", { newUsername, email })
+      .catch((err) => console.log(err));
   };
 
-  const handleUpdateEmail = (newEmail) => {
-    setEmail(newEmail); // comment this line out after api integration is done
-    // await api call to update username in backend, change to async function
+  const handleUpdateEmail = async (edit) => {
+    await api
+      .post("/user/updateEmail", { edit, email })
+      .catch((err) => console.log(err));
   };
 
   const handleAddModules = (newModule) => {
@@ -90,6 +72,8 @@ export const AccountProvider = ({ children }) => {
         setProfilePic,
         jwtSalt,
         setJwtSalt,
+        edit,
+        setEdit,
         handleUpdateSalt,
         handleAddModules,
         handleDeleteModule,

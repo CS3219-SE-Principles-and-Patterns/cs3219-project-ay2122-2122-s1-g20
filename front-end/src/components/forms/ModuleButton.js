@@ -3,24 +3,24 @@ import PropTypes from "prop-types";
 
 const ModuleButton = ({
   moduleCode,
-  selectedMod,
-  setSelectedMod,
+  session,
+  setSession,
   // addSelectedMods,
   // removeSelectedMods,
 }) => {
   // const [selected, setSelected] = useState(selectedMods.includes(moduleCode));
-  const [selected, setSelected] = useState(selectedMod === moduleCode);
+  const [selected, setSelected] = useState(session.module === moduleCode);
   useEffect(() => {
-    if (selectedMod !== moduleCode) {
+    if (session.module !== moduleCode) {
       setSelected(false);
     }
-  }, [selectedMod]);
+  }, [session]);
 
   const handleSelectMod = () => {
     if (selected) {
-      setSelectedMod("");
+      setSession({ ...session, module: "" });
     } else {
-      setSelectedMod(moduleCode);
+      setSession({ ...session, module: moduleCode });
     }
     setSelected(!selected);
   };
@@ -43,8 +43,8 @@ const ModuleButton = ({
 
 ModuleButton.propTypes = {
   moduleCode: PropTypes.string,
-  selectedMods: PropTypes.array,
-  addSelectedMods: PropTypes.func,
+  session: PropTypes.object,
+  setSession: PropTypes.func,
 };
 
 export default ModuleButton;

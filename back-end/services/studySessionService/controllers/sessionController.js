@@ -4,28 +4,83 @@ const mongoose = require("mongoose");
 const Session = require("../model/session");
 
 // Get upcoming study session
-// exports.getUpcomingSession = (req, res, next) => {
-//   Session.findById(sid)
-//     .then((post) => {
-//       if (!post) {
-//         const error = new Error("Could not find study session.");
-//         error.status = 404;
-//         throw error;
-//       }
-//       return Session.findByIdAndRemove(sid);
-//     })
-//     .then((result) => {
-//       res
-//         .status(200)
-//         .json({ message: "Study session is successfully deleted!" });
-//     })
-//     .catch((err) => {
-//       if (!err.statusCode) {
-//         err.statusCode = 500;
-//       }
-//       res.status(500).json({ message: "Error with deleting study session." });
-//     });
-// };
+exports.getUpcomingSessions = (req, res, next) => {
+  const username = req.params.username;
+  // get list of modules [{moduleCode: "", title: ""}]
+  // mock data ---- to be replaced after gateway api is implemented
+  const modules = [
+    { moduleCode: "CS3219", title: "test" },
+    { moduleCode: "CS2102", title: "edad" },
+  ];
+  const moduleList = modules.map((mod) => mod.moduleCode);
+
+  Session.find({ module: { $in: moduleList } })
+    .find({ owner: { $ne: username } })
+    .find({ participants: { $ne: username } })
+    .then((sessions) => {
+      // session === array of session objects
+      res.status(200).json({ length: sessions.length, sessions });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({ message: "Error in getting upcoming sessions." });
+    });
+};
+
+// Get my created study session that has not expired yet
+exports.getMySessions = (req, res, next) => {
+  // remove uid from params after gateway api is implemented
+  const username = req.params.username;
+  Session.find({ owner: username })
+    .sort("-date")
+    .then((sessions) => {
+      // session === array of session objects
+      // const mySessions = session.filter((s) => {
+      //   const dateArr = s.date.split("-");
+      //   const date = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+      //   return date >= new Date();
+      // });
+      res.status(200).json({ length: sessions.length, sessions });
+    })
+    .catch((err) => {
+      res
+        .status(404)
+        .json({ message: "Error in getting my created sessions." });
+    });
+};
+
+// Get my created study session
+exports.getJoinedSessions = (req, res, next) => {
+  // remove USERNAME from params after gateway api is implemented
+  const username = req.params.username;
+  Session.find({ participants: username })
+    .then((sessions) => {
+      // session === array of session objects
+      // const joinedSessions = session.filter((s) => {
+      //   const dateArr = s.date.split("-");
+      //   const date = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+      //   return date < new Date();
+      // });
+      res.status(200).json({ length: sessions.length, sessions });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({ message: "Error in getting joined sessions." });
+    });
+};
+
+exports.getASession = (req, res, next) => {
+  // remove USERNAME from params after gateway api is implemented
+  const sid = req.params.sid;
+  Session.findById(sid)
+    .then((session) => {
+      console.log(session);
+      res.status(200).json({ session });
+    })
+    .catch((err) => {
+      res.status(404).json({ message: "Session does not exist." });
+    });
+};
 
 // Create study session
 exports.createSession = async (req, res, next) => {
@@ -48,7 +103,7 @@ exports.createSession = async (req, res, next) => {
     const session = new Session(req.body);
     const createdSession = await session.save();
     return res.status(200).json({
-      studySessionId: createdSession._id,
+      session: createdSession,
       message: "Study session successfully created!",
     });
   } catch (error) {
@@ -90,44 +145,48 @@ exports.deleteSession = (req, res, next) => {
 // Edit study session
 exports.editStudySession = (req, res, next) => {
   const sid = req.params.sid;
-  const title = req.body.title;
-  const capacity = req.body.capacity;
-  const time = req.body.time;
-  const timeLimit = req.body.timeLimit;
-  const module = req.body.module;
-  const date = req.body.date;
-  const isOnline = req.body.isOnline;
-  const participants = req.body.participants;
+  // const title = req.body.title;
+  // const capacity = req.body.capacity;
+  // const time = req.body.time;
+  // const timeLimit = req.body.timeLimit;
+  // const module = req.body.module;
+  // const date = req.body.date;
+  // const isOnline = req.body.isOnline;
+  // const participants = req.body.participants;
 
-  Session.findById(sid) // mongoose built in function
-    .then((session) => {
-      if (!session) {
-        const error = new Error("Could not find study session.");
-        error.status = 404;
-        throw error;
-      }
-      session.title = title;
-      session.capacity = capacity;
-      session.time = time;
-      session.timeLimit = timeLimit;
-      session.participants = participants;
-      session.end = end;
-      session.module = module;
-      session.date = date;
-      session.isOnline = isOnline;
-      return session.save();
-    })
+  Session.findByIdAndUpdate(sid, req.body, { new: true }) // mongoose built in function
+    // .then((session) => {
+    //   if (!session) {
+    //     const error = new Error("Could not find study session.");
+    //     error.status = 404;
+    //     throw error;
+    //   }
+    //   session.title = title;
+    //   session.capacity = capacity;
+    //   session.time = time;
+    //   session.timeLimit = timeLimit;
+    //   session.participants = participants;
+    //   session.module = module;
+    //   session.date = date;
+    //   session.isOnline = isOnline;
+    //   return session.save();
+    // })
     .then((result) => {
       res
         .status(200)
-        .json({ message: "Study session details updated!", post: result });
+        .json({ message: "Study session details updated!", session: result });
     })
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
       }
       console.log(err);
-      res.status(500).json({ message: "Error with editing study session." });
+      var message = "Error with updating study session.";
+      if (err.code === 11000) {
+        message =
+          "Title of study session already exists, please try again with a different title.";
+      }
+      res.status(err.statusCode).json({ message });
     });
 };
 

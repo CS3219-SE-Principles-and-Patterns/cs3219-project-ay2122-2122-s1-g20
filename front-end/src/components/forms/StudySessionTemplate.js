@@ -7,13 +7,30 @@ import { AccountContext } from "../../context/AccountContext";
 import ModuleButton from "./ModuleButton";
 import TimeRangeSlider from "react-time-range-slider";
 import YellowButton from "../YellowButton";
+import AlertMessage from "../alerts/AlertMessage";
+import { SessionContext } from "../../context/SessionContext";
 
 const StudySessionTemplate = ({ setOpen, open, studySession }) => {
+  const { updateMySessions, addMySession } = useContext(SessionContext);
+
   const capitalizeFirstLetter = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
-  const { modules } = useContext(AccountContext);
-  const [name, setName] = useState(studySession ? studySession.title : "");
+  const { modules, username } = useContext(AccountContext);
+  const [session, setSession] = useState(
+    studySession
+      ? studySession
+      : {
+          title: "",
+          isOnline: "",
+          capacity: "",
+          module: "",
+          date: "",
+          time: { start: "00:00", end: "23:59" },
+          timeLimit: "",
+        }
+  );
+
   const [isOnlineOption, setIsOnlineOption] = useState(
     studySession
       ? {
@@ -22,39 +39,6 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
         }
       : null
   );
-  const [isOnline, setIsOnline] = useState(
-    studySession ? studySession.isOnline : ""
-  );
-  const [capacity, setCapacity] = useState(
-    studySession ? studySession.capacity : ""
-  );
-  const [selectedMod, setSelectedMod] = useState(
-    studySession ? studySession.module : ""
-  );
-  const [selectedDayOption, setSelectedDayOption] = useState(
-    studySession
-      ? {
-          value: studySession.date,
-          label: capitalizeFirstLetter(studySession.date),
-        }
-      : null
-  );
-  const [selectedDay, setSelectedDay] = useState(
-    studySession ? studySession.date : ""
-  );
-  const [time, setTime] = useState(
-    studySession
-      ? studySession.time
-      : {
-          start: "00:00",
-          end: "23:59",
-        }
-  );
-  const [timeLimit, setTimeLimit] = useState(
-    studySession ? studySession.timeLimit : ""
-  );
-
-  console.log(isOnline, selectedDay);
 
   // const addSelectedMods = (moduleCode) => {
   //   setSelectedMod([...selectedMod, moduleCode]);
@@ -63,67 +47,44 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   // const removeSelectedMods = (moduleCode) => {
   //   setSelectedMod(selectedMod.filter((mod) => mod != moduleCode));
   // };
+  const [isLoading, setIsLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const resetStates = () => {
-    setName("");
-    setCapacity("");
-    setIsOnline("");
-    setIsOnlineOption(null);
-    setSelectedMod("");
-    setSelectedDay("");
-    setSelectedDayOption(null);
-    setTime({
-      start: "00:00",
-      end: "23:59",
+    setSession({
+      owner: username,
+      title: "",
+      isOnline: "",
+      capacity: "",
+      module: "",
+      date: "",
+      time: { start: "00:00", end: "23:59" },
+      timeLimit: "",
     });
+    setIsOnlineOption(null);
   };
 
   const renderModuleOptions = modules.map((mod) => (
     <div key={mod.moduleCode}>
       <ModuleButton
         moduleCode={mod.moduleCode}
-        selectedMod={selectedMod}
-        setSelectedMod={setSelectedMod}
+        session={session}
+        setSession={setSession}
       ></ModuleButton>
     </div>
   ));
-
-  const options = [
-    { value: "monday", label: "Monday" },
-    { value: "tuesday", label: "Tuesday" },
-    { value: "wednesday", label: "Wednesday" },
-    { value: "thursday", label: "Thursday" },
-    { value: "friday", label: "Friday" },
-    { value: "saturday", label: "Saturday" },
-    { value: "sunday", label: "Sunday" },
-  ];
 
   const typeOptions = [
     { value: "online", label: "Online" },
     { value: "offline", label: "Offline" },
   ];
 
-  const handleSelectDay = (selectedOption) => {
-    setSelectedDay(selectedOption.value);
-    setSelectedDayOption(selectedOption);
+  const handleSelectDay = (event) => {
+    setSession({ ...session, date: event.target.value });
   };
   const handleSelectType = (selectedOption) => {
-    setIsOnline(selectedOption.value);
+    setSession({ ...session, isOnline: selectedOption.value });
     setIsOnlineOption(selectedOption);
-  };
-
-  const customStyles = {
-    indicatorSeparator: () => {},
-    control: (provided) => ({
-      ...provided,
-      borderRadius: "16px",
-      padding: "6px",
-      width: "10.5rem",
-    }),
-    menuList: (provided) => ({
-      ...provided,
-      height: "6rem",
-    }),
   };
 
   const typeStyles = {
@@ -135,17 +96,45 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
     }),
   };
 
+  const handleSubmitForm = () => {
+    setIsLoading(true);
+    if (studySession) {
+      handleSave();
+    } else {
+      handleCreate();
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await updateMySessions(session);
+      setAlertMessage(response);
+      setOpen(false);
+    } catch (err) {
+      setAlertMessage(err.message);
+    }
+    setIsLoading(false);
+  };
+
+  const handleCreate = async () => {
+    try {
+      const response = await addMySession(session);
+      setAlertMessage(response);
+      setOpen(false);
+    } catch (err) {
+      setAlertMessage(err.message);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div className="w-10">
-      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={false}>
-        <form
-          className="bg-blue-dark px-32 py-10 rounded-2xl"
-          action="#"
-          method="POST"
-        >
+      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
+        <form className="bg-blue-dark px-24 py-10 rounded-2xl" action="#">
           <button
             className="bg-purple-dark text-white mr-2 mt-2 absolute top-1 right-1 p-2 rounded-full"
-            onClick={() => {
+            onClick={(event) => {
+              event.preventDefault();
               setOpen(false);
               if (!studySession) {
                 resetStates();
@@ -154,16 +143,24 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
           >
             <VscChromeClose />
           </button>
+          {alertMessage !== "" ? (
+            // <div className="pl-28">
+            <AlertMessage isError={alertMessage} message={alertMessage} />
+          ) : // </div>
+          null}
           <p className="text-3xl font-semibold text-grey-whitetinge ml-6">
             {studySession ? "Edit" : "Create a new"} study session
           </p>
+
           <div className="mt-4 grid grid-cols-6 items-center gap-x-2">
             <label className="text-lg text-white col-span-1 justify-self-end">
               Name
             </label>
             <input
-              onChange={(event) => setName(event.target.value)}
-              value={name}
+              onChange={(event) =>
+                setSession({ ...session, title: event.target.value })
+              }
+              value={session.title}
               type="text"
               placeholder="Enter name"
               id="groupName"
@@ -178,9 +175,12 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
             </label>
             <input
               onChange={(event) =>
-                setCapacity(event.target.value.replace(/\D/, ""))
+                setSession({
+                  ...session,
+                  capacity: event.target.value.replace(/\D/, ""),
+                })
               }
-              value={capacity}
+              value={session.capacity}
               type="text"
               placeholder="Enter capacity"
               id="capacity"
@@ -207,17 +207,26 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
             <label className="text-lg text-white col-span-1 justify-self-end">
               Modules
             </label>
-            <div className="col-span-5 grid grid-cols-4 gap-2">
+            <div className="col-span-5 grid grid-cols-3 gap-2">
               {renderModuleOptions}
             </div>
           </div>
           <div className="mt-2 grid grid-cols-6 gap-x-2 items-center">
             {/* <div className="mt-2 flex flex-col justify-between"> */}
             <label className="text-lg text-white col-span-1 justify-self-end">
-              Day and Time
+              Date
             </label>
-            <div className="col-span-2">
-              <Select
+            <input
+              onChange={handleSelectDay}
+              value={session.date}
+              type="date"
+              placeholder="Select Date"
+              id="date"
+              name="date"
+              required
+              className="p-3 rounded-2xl col-span-2"
+            />
+            {/* <Select
                 value={selectedDayOption}
                 onChange={handleSelectDay}
                 options={options}
@@ -225,13 +234,14 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
                 autoFocus
                 isSearchable={false}
                 styles={customStyles}
-              />
-            </div>
-
-            <div className="col-span-3 flex flex-col pb-4">
+              /> */}
+            <label className="text-lg text-white col-span-1 justify-self-end">
+              Time
+            </label>
+            <div className="col-span-2 flex flex-col pb-4 pl-2">
               <div className="flex justify-between">
-                <span className="text-lg text-white">{time.start}</span>
-                <span className="text-lg text-white">{time.end}</span>
+                <span className="text-lg text-white">{session.time.start}</span>
+                <span className="text-lg text-white">{session.time.end}</span>
               </div>
               <span>
                 <TimeRangeSlider
@@ -242,9 +252,9 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
                   name={"time_range"}
                   // onChangeStart={this.changeStartHandler}
                   // onChangeComplete={this.changeCompleteHandler}
-                  onChange={(time) => setTime(time)}
+                  onChange={(time) => setSession({ ...session, time })}
                   step={15}
-                  value={time}
+                  value={session.time}
                 />
               </span>
             </div>
@@ -261,9 +271,12 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
             </label>
             <input
               onChange={(event) =>
-                setTimeLimit(event.target.value.replace(/\D/, ""))
+                setSession({
+                  ...session,
+                  timeLimit: event.target.value.replace(/\D/, ""),
+                })
               }
-              value={timeLimit}
+              value={session.timeLimit}
               type="text"
               placeholder="Enter time limit (hrs)"
               id="timeLimit"
@@ -275,7 +288,8 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
           <div className="flex justify-center mt-6">
             <YellowButton
               text={studySession ? "Save" : "Create"}
-              // onClick={handleSave} OR handleCreate
+              onClick={handleSubmitForm}
+              isLoading={isLoading}
               textSize="text-lg"
               px="px-8"
             />

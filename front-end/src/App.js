@@ -14,64 +14,70 @@ import { AccountProvider } from "./context/AccountContext";
 import EmailVerification from "./pages/start/emailVerification";
 import ErrorPage from "./pages/errors/404";
 import StudySessionsHome from "./pages/studySession/studyHome";
+import PrivateRoute from "./routing/PrivateRoute";
+import { SessionProvider } from "./context/SessionContext";
 
 function App() {
   return (
     <AccountProvider>
-      <div className="App">
-        <BrowserRouter>
-          <Header />
-          <Switch>
-            <Route exact path="/login">
-              <LoginPage />
-            </Route>
-            <Route exact path="/signup">
-              <SignUpPage />
-            </Route>
-            <Route
-              exact
-              path="/signup/confirmation/verified/:uniqueString"
-              component={EmailVerification}
-            />
-            <Route exact path="/signup/confirmation">
-              <SignUpConfirmation />
-            </Route>
-            <Route
-              exact
-              path="/signup/confirmation/verified/:uniqueString"
-              component={EmailVerification}
-            />
-            <Route
-              exact
-              path="/resetPassword/:token"
-              component={ResetPasswordPage}
-            />
-            <Route exact path="/resetPassword">
-              <EmailConfirmationPage />
-            </Route>
+      <SessionProvider>
+        <div className="App">
+          <BrowserRouter>
+            <Header />
+            <Switch>
+              <Route exact path="/login">
+                <LoginPage />
+              </Route>
+              <Route exact path="/signup">
+                <SignUpPage />
+              </Route>
+              <Route
+                exact
+                path="/signup/confirmation/verified/:uniqueString"
+                component={EmailVerification}
+              />
+              <Route exact path="/signup/confirmation">
+                <SignUpConfirmation />
+              </Route>
+              <Route
+                exact
+                path="/signup/confirmation/verified/:uniqueString"
+                component={EmailVerification}
+              />
+              <Route
+                exact
+                path="/resetPassword/:token"
+                component={ResetPasswordPage}
+              />
+              <Route exact path="/resetPassword">
+                <EmailConfirmationPage />
+              </Route>
 
-            {/* After first login - account customization */}
-            <Route path="/setProfilePic">
-              <SetProfilePicPage />
+              {/* After first login - account customization */}
+              <PrivateRoute
+                path="/setProfilePic"
+                exact
+                component={SetProfilePicPage}
+              />
+              <PrivateRoute
+                path="/addModules"
+                exact
+                component={AddModulesPage}
+              />
+            </Switch>
+            <PrivateRoute path="/profile" exact component={ProfilePage} />
+            <PrivateRoute path="/chat" exact component={ChatPage} />
+            <Route path="/error">
+              <ErrorPage />
             </Route>
-            <Route path="/addModules">
-              <AddModulesPage />
-            </Route>
-          </Switch>
-          <Route path="/profile">
-            <ProfilePage />
-          </Route>
-          <Route path="/chat">
-            <ChatPage />
-          </Route>
-          <Route path="/error">
-            <ErrorPage />
-          </Route>
-          <Route path="/studySessions">
-            <StudySessionsHome />
-          </Route>
-        </BrowserRouter>
-      </div>
+            <PrivateRoute
+              path="/studySessions"
+              exact
+              component={StudySessionsHome}
+            />
+          </BrowserRouter>
+        </div>
+      </SessionProvider>
     </AccountProvider>
   );
 }

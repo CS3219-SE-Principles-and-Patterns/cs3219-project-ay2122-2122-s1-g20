@@ -1,11 +1,29 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import BlueSessionCard from "./blueSessionCard";
 import CreateNewStudySession from "../forms/CreateNewStudySession";
 import React, { useState } from "react";
+import BlueSessionCard from "./blueSessionCard";
+import { useContext } from "react";
+import { SessionContext } from "../../context/SessionContext";
 
 const UpcomingSessions = () => {
-  const [loadNewForm, setLoadNewForm] = useState(false);
   const [openNewForm, setOpenNewForm] = useState(false);
+  const [searchSession, setSearchSession] = useState("");
+  const { upcomingSessions } = useContext(SessionContext);
+
+  const renderCards = () => {
+    const searchTerm = searchSession.toLowerCase();
+    const filteredSessions = upcomingSessions.filter(
+      (s) =>
+        s.title.toLowerCase().includes(searchTerm) ||
+        s.module.toLowerCase().includes(searchTerm)
+    );
+    return filteredSessions.map((session) => (
+      <div key={session.title}>
+        <BlueSessionCard studySession={session} />
+      </div>
+    ));
+  };
+
   return (
     <div className="bg-yellow-light h-screen">
       <p className="text-2xl text-purple-dark pt-10 font-medium">
@@ -31,6 +49,8 @@ const UpcomingSessions = () => {
               placeholder="Search for study sessions"
               type="search"
               name="search"
+              onChange={(event) => setSearchSession(event.target.value)}
+              value={searchSession}
             />
           </div>
         </form>
@@ -43,15 +63,10 @@ const UpcomingSessions = () => {
           >
             +
           </button>
-          <CreateNewStudySession
-            setOpen={setOpenNewForm}
-            setLoad={setLoadNewForm}
-            open={openNewForm}
-            load={loadNewForm}
-          />
+          <CreateNewStudySession setOpen={setOpenNewForm} open={openNewForm} />
         </div>
       </div>
-      <BlueSessionCard />
+      <div className="flex flex-col gap-y-3">{renderCards()}</div>
     </div>
   );
 };

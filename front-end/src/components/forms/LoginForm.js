@@ -10,6 +10,7 @@ const LoginForm = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [isError, setisError] = useState(false);
+  const [openAlert, setOpenAlert] = useState(true);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -38,17 +39,22 @@ const LoginForm = () => {
       if (response.status !== 200) {
         setAlertMessage(responseData.message);
         setisError(true);
+        setEmail("");
+        setPassword("");
+        setOpenAlert(true);
         throw new Error(responseData.message);
       }
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         // update user information in account context
         setUser(responseData.user, responseData.token);
         // if first login, route to /profilePic, if not route to home page
         setAlertMessage(responseData.message);
         setisError(false);
+        setEmail("");
+        setPassword("");
         handleNext(
-          responseData.user.profilePic ? "/profile" : "/setProfilePic"
+          responseData.user.profilePic ? "/studySessions" : "/setProfilePic"
         );
       }
     } catch (error) {
@@ -64,8 +70,13 @@ const LoginForm = () => {
 
   return (
     <div className="py-6 align-middle justify-center mt-5">
-      {alertMessage !== "" ? (
-        <AlertMessage isError={isError} message={alertMessage} />
+      {alertMessage !== "" && openAlert ? (
+        <AlertMessage
+          open={openAlert}
+          setOpen={setOpenAlert}
+          isError={isError}
+          message={alertMessage}
+        />
       ) : undefined}
       <form
         onSubmit={handleLogin}
