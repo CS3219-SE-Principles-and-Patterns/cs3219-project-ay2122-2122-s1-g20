@@ -96,7 +96,7 @@ const GroupList = ({
         <div>
           <label
             htmlFor="search"
-            className="block flex text-sm font-medium text-gray-700"
+            className="block flex text-sm font-medium text-gray-700 "
           ></label>
           <input
             onChange={handleSearch}
@@ -105,7 +105,7 @@ const GroupList = ({
             id="search"
             value={search}
             placeholder="Search for chat groups"
-            className="mt-1 placeholder-white appearance-none py-3 sm:w-96 border-none  pl-3 py-2 sm:py-4 rounded-md bg-purple-misc focus:outline-none focus:ring-purple-dark text-xs focus:border-purple-dark sm:text-sm"
+            className="mt-1 w-full placeholder-white appearance-none py-3 border-none  pl-3 py-2 rounded-md bg-purple-misc focus:outline-none focus:ring-purple-dark text-s focus:border-purple-dark "
           />
         </div>
         {tag == "All Chats" ? (

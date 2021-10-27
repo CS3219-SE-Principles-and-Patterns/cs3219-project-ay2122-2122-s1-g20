@@ -3,7 +3,6 @@ import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
 
-//handle left right positioning
 const Messenger = ({ account, displayChat, enable }) => {
   const [message, setMessage] = useState("");
   const [oldMessages, setOldMessages] = useState([]);
@@ -76,7 +75,6 @@ const Messenger = ({ account, displayChat, enable }) => {
     });
   };
   useEffect(() => {
-    //TBD, have to figure out when to call scroll without infinite call loop
     scrollToBottom();
   }, [oldMessages]);
 
