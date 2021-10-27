@@ -12,14 +12,23 @@ const BlueSessionCard = ({ studySession }) => {
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(studySession.time);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [show, setShow] = useState(false);
 
   const handleJoin = async () => {
     try {
       const response = await joinSession(username, studySession, time);
       setOpenConfirmation(false);
+      setShow(true);
+      setAlertMessage(response);
+      setIsError(false);
       console.log(response);
     } catch (err) {
       console.log(err.message);
+      setShow(true);
+      setAlertMessage(err.message);
+      setIsError(true);
     }
     setIsLoading(false);
   };
@@ -56,7 +65,14 @@ const BlueSessionCard = ({ studySession }) => {
           </button>
         )}
       </SessionCardTemplate>
-      <SessionAlerts />
+      {show ? (
+        <SessionAlerts
+          show={show}
+          setShow={setShow}
+          isError={isError}
+          message={alertMessage}
+        />
+      ) : undefined}
     </div>
   );
 };

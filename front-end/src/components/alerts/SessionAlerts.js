@@ -1,11 +1,9 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Transition } from "@headlessui/react";
-import { CheckCircleIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/outline";
 import { XIcon } from "@heroicons/react/solid";
 
-export default function SessionAlerts() {
-  const [show, setShow] = useState(true);
-
+export default function SessionAlerts(props) {
   return (
     <>
       {/* Global notification live region, render this permanently at the end of the document */}
@@ -16,7 +14,7 @@ export default function SessionAlerts() {
         <div className="w-full z-50 flex flex-col items-center space-y-4 sm:items-end">
           {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
           <Transition
-            show={show}
+            show={props.show}
             as={Fragment}
             enter="transform ease-out duration-300 transition"
             enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
@@ -28,25 +26,35 @@ export default function SessionAlerts() {
             <div className="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
               <div className="p-4">
                 <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <CheckCircleIcon
-                      className="h-6 w-6 text-green-400"
-                      aria-hidden="true"
-                    />
-                  </div>
+                  {props.isError ? (
+                    <div className="flex-shrink-0">
+                      <XCircleIcon
+                        className="h-6 w-6 text-red-400"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex-shrink-0">
+                      <CheckCircleIcon
+                        className="h-6 w-6 text-green-400"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  )}
+
                   <div className="ml-3 w-0 flex-1 pt-0.5">
                     <p className="text-sm font-medium text-gray-900">
-                      Successfully saved!
+                      {props.isError ? "An error occurred!" : "Successful!"}
                     </p>
                     <p className="mt-1 text-sm text-gray-500">
-                      Anyone with a link can now view this file.
+                      {props.message}
                     </p>
                   </div>
                   <div className="ml-4 flex-shrink-0 flex">
                     <button
                       className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       onClick={() => {
-                        setShow(false);
+                        props.setShow(false);
                       }}
                     >
                       <span className="sr-only">Close</span>

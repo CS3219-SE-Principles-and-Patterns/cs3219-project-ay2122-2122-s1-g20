@@ -35,7 +35,7 @@ export const SessionProvider = ({ children }) => {
       let difference = moment.duration(end_time.diff(start_time));
       let minutes_difference = parseInt(difference.asMinutes());
       if (minutes_difference < session.timeLimit * 60) {
-        return new Error(
+        throw new Error(
           "Your indicated time range is less than the time limit set by the creator of this study session!"
         );
       }
@@ -50,9 +50,11 @@ export const SessionProvider = ({ children }) => {
         ...upcomingSessions.slice(0, index),
         ...upcomingSessions.slice(index + 1),
       ]);
-      return "";
+      return "You have successfully joined this study session!";
     } catch (error) {
-      throw new Error(error.response.data.message);
+      throw new Error(
+        "Your indicated time range is less than the time limit set by the creator of this study session!"
+      );
     }
   };
 
