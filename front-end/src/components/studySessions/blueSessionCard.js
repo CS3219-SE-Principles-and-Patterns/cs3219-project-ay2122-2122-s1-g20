@@ -3,6 +3,7 @@ import { AccountContext } from "../../context/AccountContext";
 import { SessionContext } from "../../context/SessionContext";
 import ConfirmationPopup from "../forms/ConfirmationPopup";
 import SessionCardTemplate from "./sessionCardTemplate";
+import SessionAlerts from "../alerts/SessionAlerts";
 
 const BlueSessionCard = ({ studySession }) => {
   const { username } = useContext(AccountContext);
@@ -55,6 +56,7 @@ const BlueSessionCard = ({ studySession }) => {
           </button>
         )}
       </SessionCardTemplate>
+      <SessionAlerts />
     </div>
   );
 };
