@@ -40,7 +40,7 @@ export default function UserSessions() {
   };
 
   return (
-    <div className="bg-blue-light pt-10 h-screen">
+    <div className="bg-blue-light pt-10 pb-10">
       <nav
         className="flex ml-10 mr-10 mb-4 z-0 rounded-lg shadow divide-x divide-gray-200"
         aria-label="Tabs"

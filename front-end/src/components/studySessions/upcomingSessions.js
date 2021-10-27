@@ -25,7 +25,7 @@ const UpcomingSessions = () => {
   };
 
   return (
-    <div className="bg-yellow-light h-screen">
+    <div className="bg-yellow-light pb-10">
       <p className="text-2xl text-purple-dark pt-10 font-medium">
         Upcoming study sessions you <br />
         might be interested in
