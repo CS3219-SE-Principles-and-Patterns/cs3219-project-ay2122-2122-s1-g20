@@ -121,7 +121,7 @@ const Messenger = ({ account, displayChat, enable }) => {
             <div ref={messagesEndRef} />
           </div>
           {enable ? (
-            <div className="absolute inset-x-0 bottom-0 flex flex-row h-16">
+            <div className="absolute inset-x-0 pt-4 bottom-0 flex flex-row h-16">
               <input
                 onChange={setMessageChange}
                 value={message}
