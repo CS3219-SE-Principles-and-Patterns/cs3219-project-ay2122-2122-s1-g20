@@ -19,11 +19,14 @@ const BlueSessionCard = ({ studySession }) => {
   const handleJoin = async () => {
     try {
       const response = await joinSession(username, studySession, time);
+      console.log("IN blue" + response);
       setOpenConfirmation(false);
       setShow(true);
-      setAlertMessage(response);
+      setAlertMessage("You have joined this study session!");
       setIsError(false);
-      console.log(response);
+      console.log(alertMessage);
+      console.log(isError);
+      console.log(show);
     } catch (err) {
       console.log(err.message);
       setShow(true);

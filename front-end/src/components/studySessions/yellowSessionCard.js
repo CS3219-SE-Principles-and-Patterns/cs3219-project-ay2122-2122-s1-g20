@@ -9,6 +9,7 @@ import SessionCardTemplate from "./sessionCardTemplate";
 import { useContext } from "react";
 import { SessionContext } from "../../context/SessionContext";
 import { AccountContext } from "../../context/AccountContext";
+import SessionAlerts from "../alerts/SessionAlerts";
 
 const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -18,6 +19,9 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { deleteMySession, leaveSession } = useContext(SessionContext);
   const { username } = useContext(AccountContext);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [show, setShow] = useState(false);
 
   const handleDeletePopup = () => {
     setOpenDeleteModal(true);
@@ -52,8 +56,17 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
     try {
       const response = await leaveSession(username, studySession);
       setOpenLeaveModal(false);
+      setShow(true);
+      setAlertMessage(response);
+      setIsError(false);
+      console.log(alertMessage);
+      console.log(isError);
+      console.log(show);
       console.log(response);
     } catch (err) {
+      setShow(true);
+      setAlertMessage(err.message);
+      setIsError(true);
       console.log(err.message);
     }
     setIsLoading(false);
@@ -125,6 +138,14 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
           studySession={studySession}
         />
       </SessionCardTemplate>
+      {show ? (
+        <SessionAlerts
+          show={show}
+          setShow={setShow}
+          isError={isError}
+          message={alertMessage}
+        />
+      ) : undefined}
     </div>
   );
 };
