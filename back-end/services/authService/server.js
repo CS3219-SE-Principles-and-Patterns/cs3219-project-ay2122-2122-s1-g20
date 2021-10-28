@@ -9,7 +9,7 @@ const profileRoutes = require("./routes/profileRoutes");
 const { verifyToken } = require("./middlewares/requireAuth");
 const groupRoutes = require("./routes/groupRoutes");
 
-dotenv.config({ path: "../../config.env" });
+dotenv.config({ path: "config.env" });
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
