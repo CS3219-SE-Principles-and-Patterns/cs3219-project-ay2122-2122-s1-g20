@@ -35,7 +35,9 @@ app.use(
 
 app.use(
   cors({
-    exposedHeaders: ["x-access-token"],
+    exposedHeaders: ["x-access-token", "jwt-salt" "set-cookie"],
+    credentials: true,
+    origin: true,
   })
 );
 
