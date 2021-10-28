@@ -76,15 +76,18 @@ exports.signup = (req, res) => {
 };
 
 exports.checkToken = (req, res, next) => {
-  console.log("Data 1", req.cookies.token);
-  const req_token = req.cookies.token;
+  //console.log(req);
+  //console.log("here");
+  //console.log("Data 1", req.cookies.token);
   let auth = false;
 
-  if (!req_token) {
-    return res.status(200).json("Please login!");
+  if (!req.cookies.token || !req.cookies.salt) {
+    return res.status(400).json({ message : "Please login!" });
   }
+  const req_token = req.cookies.token;
+  const req_salt = req.cookies.salt;
   try {
-    if (!jwt.verify(req_token, process.env.TOKEN_KEY))
+    if (!jwt.verify(req_token, process.env.TOKEN_KEY + req_salt))
       return res.status(400).json("Invalid token!");
     else {
       auth = true;
@@ -96,50 +99,31 @@ exports.checkToken = (req, res, next) => {
   if (!auth) {
     return res.status(400).json({ message: "Token verification failed!" });
   } else {
-    const data = jwt.verify(req_token, process.env.TOKEN_KEY);
+    const data = jwt.verify(req_token, process.env.TOKEN_KEY + req_salt);
     User.findById(data._id).exec((err, user) => {
       if (err || !user) {
         return res.status(400).json({ error: "User not found!" });
       }
 
       const {
-        token,
         username,
-        setUsername,
         email,
-        setEmail,
         modules,
-        setModules,
         profilePic,
-        setProfilePic,
-        jwtSalt,
-        setJwtSalt,
-        handleUpdateSalt,
-        handleAddModules,
-        handleDeleteModule,
-        handleUpdateUsername,
-        handleUpdateEmail,
+        jwtSalt
       } = user;
 
       return res.status(200).json({
         user: {
-          token,
           username,
-          setUsername,
           email,
-          setEmail,
           modules,
-          setModules,
           profilePic,
-          setProfilePic,
-          jwtSalt,
-          setJwtSalt,
-          handleUpdateSalt,
-          handleAddModules,
-          handleDeleteModule,
-          handleUpdateUsername,
-          handleUpdateEmail,
+          jwtSalt
         },
+        token : {
+          req_token
+        }
       });
     });
   }
@@ -175,10 +159,8 @@ exports.login = async (req, res) => {
         .status(422)
         .json({ message: "Your account is not yet verified." });
     } else {
-      const cookie = req.cookies.token;
-      if (cookie === undefined) {
-        res.cookie("token", token, { httpOnly: true });
-      }
+        res.cookie("token", token, { httpOnly: true, maxAge: 86400000 });
+        res.cookie("salt", jwtSalt, { httpOnly: true, maxAge: 86400000 });
       return res
         .status(200)
         .json({ user, token: token, message: "User successfully logged in!" });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { setTokenHeader, setSaltHeader } from "../utils/api";
 
 export const AccountContext = React.createContext();
@@ -47,6 +47,37 @@ export const AccountProvider = ({ children }) => {
     setJwtSalt(user.jwtSalt);
     setSaltHeader(user.jwtSalt);
   };
+
+  const isAuthenticated = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/user/login", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadData = async () => {
+    isAuthenticated().then(async (res) => {
+      const data = await res.json();
+      if (res.error) {
+        console.log(res.error);
+      } else if (res.status == 200) {
+        setUser(data.user, data.token);
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const handleUpdateUsername = (newUsername) => {
     setUsername(newUsername); // comment this line out after api integration is done
     // await api call to update username in backend, change to async function

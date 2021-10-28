@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
@@ -19,6 +20,8 @@ cloudinary.config({
 
 const app = express();
 const PORT = process.env.AUTH_PORT || config.port;
+
+app.use(cookieParser());
 
 app.use(cors());
 app.use(express.json({ limit: "15360mb" }));
