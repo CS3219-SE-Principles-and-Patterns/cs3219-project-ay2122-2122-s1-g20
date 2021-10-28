@@ -66,6 +66,19 @@ const Messenger = ({ account, displayChat, enable }) => {
         body: JSON.stringify(newMessage),
       });
       console.log(res);
+      //update last modified
+      try {
+        const res = await fetch(`http://localhost:9000/api/groups/${group}`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(newMessage),
+        });
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 

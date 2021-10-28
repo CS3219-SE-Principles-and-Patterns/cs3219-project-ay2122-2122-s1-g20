@@ -24,7 +24,7 @@ const GroupList = ({
     const data = await res.json();
     setGroups(
       data.groups.sort((a, b) => {
-        return a.lastModified - b.lastModified;
+        return b.lastModified - a.lastModified;
       })
     );
   };
@@ -36,7 +36,11 @@ const GroupList = ({
       .get(`/user/account/groups/${account.email}`)
       .then((res) => {
         setGroupsUserIsIn(
-          groups.filter((x) => res.data.groups.includes(x._id))
+          groups
+            .filter((x) => res.data.groups.includes(x._id))
+            .sort((a, b) => {
+              return b.lastModified - a.lastModified;
+            })
         );
         setIsLoading(false);
       })
@@ -96,7 +100,7 @@ const GroupList = ({
         <div>
           <label
             htmlFor="search"
-            className="block flex text-sm font-medium text-gray-700 "
+            className="flex text-sm font-medium text-gray-700 "
           ></label>
           <input
             onChange={handleSearch}
@@ -105,13 +109,13 @@ const GroupList = ({
             id="search"
             value={search}
             placeholder="Search for chat groups"
-            className="mt-1 w-full placeholder-white appearance-none py-3 border-none  pl-3 py-2 rounded-md bg-purple-misc focus:outline-none focus:ring-purple-dark text-s focus:border-purple-dark "
+            className="mt-1 text-sm md:text-l placeholder-white appearance-none py-3 border-none  pl-3 py-2 rounded-md bg-purple-misc focus:outline-none focus:ring-purple-dark text-s focus:border-purple-dark "
           />
         </div>
         {tag == "All Chats" ? (
-          <div className="pl-4 pt-2">
+          <div className="pl-2 pt-2">
             <button
-              className="text-3xl rounded-full bg-purple-dark h-10 w-10 flex items-center justify-center"
+              className="text-3xl rounded-full bg-purple-dark md:h-10 md:w-10 h-8 w-8 flex items-center justify-center"
               onClick={() => {
                 setOpen(true);
               }}

@@ -95,10 +95,10 @@ const GroupBubble = ({
   };
 
   return (
-    <div className=" flex flex-row mt-5 h-20">
+    <div className=" flex flex-row mt-5 md:h-20 h-12">
       <button
         onClick={handlePreview}
-        className="text-xl pt-2 flex flex-row text-left appearance-none w-80  sm:w-96 border-none block pl-3  rounded-md bg-purple-light focus:outline-none focus:ring-purple-dark focus:border-purple-dark"
+        className="text-m md:text-xl pt-2 flex flex-row text-left appearance-none w-60 md:w-96 border-none block pl-3  rounded-md bg-purple-light focus:outline-none focus:ring-purple-dark focus:border-purple-dark"
       >
         {name}
         <div className="pl-6">
@@ -107,7 +107,7 @@ const GroupBubble = ({
       </button>
 
       <button
-        className="rounded bg-gray-100 w-20 text-xl"
+        className="rounded bg-gray-100 w-20 text-m md:text-xl"
         onClick={() => (!join ? handleJoinChat() : setOpen(true))}
       >
         {!join ? "Join" : "Leave"}

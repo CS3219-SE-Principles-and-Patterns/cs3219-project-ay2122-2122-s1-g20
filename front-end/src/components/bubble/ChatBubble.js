@@ -9,7 +9,7 @@ const ChatBubble = ({ message, toggle }) => {
         <div className="mt-2 pl-2 text-xs text-left">
           {message.sender} says:
         </div>
-        <div className="p-2 rounded-tr-bl-br w-3/5 text-left bg-purple-light">
+        <div className="p-2 rounded-tr-bl-br md:w-3/5 text-left md:text-lg text-sm bg-purple-light">
           {message.content}
         </div>
       </div>
@@ -26,7 +26,7 @@ const ChatBubble = ({ message, toggle }) => {
         </div>
         <div className="flex flex-col pt-12">
           <div className="mt-2 text-xs text-right">{message.sender} says:</div>
-          <div className="p-2 rounded-tr-bl-br text-left bg-purple-light w-full">
+          <div className="p-2 rounded-tr-bl-br text-left md:text-lg text-sm bg-purple-light w-full">
             {message.content}
           </div>
         </div>

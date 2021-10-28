@@ -159,6 +159,11 @@ export default function Header() {
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navigation.map((item) => (
                 <a
+                  onClick={(e) => {
+                    //maintain context between tabs navigation
+                    e.preventDefault();
+                    history.push(item.href);
+                  }}
                   key={item.name}
                   href={item.href}
                   className={classNames(
