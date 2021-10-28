@@ -121,20 +121,23 @@ const Messenger = ({ account, displayChat, enable }) => {
             <div ref={messagesEndRef} />
           </div>
           {enable ? (
-            <div className="absolute inset-x-0 bottom-0 flex flex-row h-16">
+            <div className="absolute inset-x-0 pt-4 bottom-0 flex flex-row h-16">
               <input
                 onChange={setMessageChange}
                 value={message}
                 placeholder="Write a message"
-                className="w-full placeholder-white bg-purple border-black border-2 pl-2 text-lg"
+                className="w-full pl-3 placeholder-white bg-purple border-black border-1 text-md"
               ></input>
-              <button className="pl-2 pr-2 bg-grey" onClick={handleSendMessage}>
+              <button
+                className="pl-3 pr-3 text-white bg-purple-dark"
+                onClick={handleSendMessage}
+              >
                 Send
               </button>
             </div>
           ) : (
-            <div className="absolute inset-x-0 bottom-0 flex flex-row h-16 pt-4 bg-purple justify-center">
-              Join the group to start chatting
+            <div className="absolute text-white inset-x-0 bottom-0 flex flex-row h-16 pt-4 bg-purple justify-center">
+              Join the group to start chatting!
             </div>
           )}
         </div>

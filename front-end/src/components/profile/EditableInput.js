@@ -33,9 +33,9 @@ const EditableInput = ({ label, value, setValue, onSubmit }) => {
         label={label}
         value={value}
         setValue={setValue}
-        isDisabled={isDisabled}
+        isDisabled={label === "Email" ? true : isDisabled}
         editButton={
-          !isEdit ? (
+          label === "Email" ? undefined : !isEdit ? (
             <YellowButton
               text="Edit"
               onClick={handleEdit}
@@ -47,7 +47,7 @@ const EditableInput = ({ label, value, setValue, onSubmit }) => {
               text="Done"
               onClick={handleDoneEdit}
               textSize="text-sm"
-              px="px-4"
+              px="px-2"
             />
           )
         }
