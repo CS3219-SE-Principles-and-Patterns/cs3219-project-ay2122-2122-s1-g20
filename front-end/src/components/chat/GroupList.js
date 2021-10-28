@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 import ClipLoader from "react-spinners/ClipLoader";
-import { api } from "../../utils/api";
+import { api, chatApi } from "../../utils/api";
 
 const GroupList = ({
   account,
@@ -18,6 +18,7 @@ const GroupList = ({
   const [groups, setGroups] = useState([]);
   const [display, setDisplay] = useState([]);
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
+  const [groupsUserCreated, setGroupsUserCreated] = useState([]);
 
   const getAllGroups = async () => {
     const res = await fetch("http://localhost:9000/api/groups");
@@ -27,6 +28,15 @@ const GroupList = ({
         return a.lastModified - b.lastModified;
       })
     );
+  };
+
+  const getGroupsUserCreated = async () => {
+    await chatApi
+      .get(`/groups/users/${account.email}`)
+      .then((res) => {
+        setGroupsUserCreated(res.data.groups);
+      })
+      .catch((err) => console.log(err));
   };
 
   const getGroupsUserIsIn = async () => {
@@ -44,6 +54,7 @@ const GroupList = ({
   };
 
   useEffect(() => {
+    getGroupsUserCreated();
     getGroupsUserIsIn();
 
     if (tag == "All Chats") {
@@ -57,6 +68,7 @@ const GroupList = ({
         setDisplay(temp);
       }
     }
+    console.log(groupsUserCreated);
   }, [tag, load]);
 
   const handleSearch = (event) => {

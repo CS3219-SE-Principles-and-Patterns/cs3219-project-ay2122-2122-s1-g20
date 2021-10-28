@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Group = require("../model/group");
 
 exports.create = async (req, res) => {
+  console.log(req);
   try {
     const name = req.body.name;
     const checkGroup = await Group.findOne({ name });
@@ -26,6 +27,41 @@ exports.create = async (req, res) => {
   } catch (err) {
     res.status(422).send({ message: "Error with creating group." });
     console.log(err);
+    return;
+  }
+};
+
+exports.delete = async (req, res) => {
+  try {
+    const id = req.params.group_id;
+    const data = await Group.remove({ _id: id });
+    console.log(data);
+    if (data) {
+      res
+        .status(200)
+        .send({ info: data, message: "Group successfully deleted!" });
+      return;
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(422).send({ message: "Error with deleting group." });
+    return;
+  }
+};
+
+exports.getGroupsCreated  = async (req, res) => {
+  try {
+    const creator = req.params.creator;
+    const data = await Group.find({ creator: creator });
+    if (data) {
+      res
+        .status(200)
+        .send({ groups: data, message: "Groups successfully loaded!" });
+      return;
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(422).send({ message: "Error with getting group." });
     return;
   }
 };
