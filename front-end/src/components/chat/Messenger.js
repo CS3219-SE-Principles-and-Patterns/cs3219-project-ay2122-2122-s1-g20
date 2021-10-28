@@ -41,30 +41,32 @@ const Messenger = ({ account, displayChat, enable }) => {
   }, []);
 
   const handleSendMessage = async () => {
-    const messageForSocket = {
-      sender: username,
-      profilePic: profilePic,
-      content: message,
-    };
-    socket.emit("send-message", messageForSocket, group);
-    const newMessage = {
-      group_id: group,
-      sender: username,
-      timestamp: Date.now(),
-      profilePic: profilePic,
-      content: message,
-    };
-    setMessage("");
-    setOldMessages(oldMessages.concat(newMessage));
+    if (message.trim().length != 0) {
+      const messageForSocket = {
+        sender: username,
+        profilePic: profilePic,
+        content: message,
+      };
+      socket.emit("send-message", messageForSocket, group);
+      const newMessage = {
+        group_id: group,
+        sender: username,
+        timestamp: Date.now(),
+        profilePic: profilePic,
+        content: message,
+      };
+      setMessage("");
+      setOldMessages(oldMessages.concat(newMessage));
 
-    const res = await fetch("http://localhost:9000/api/messages", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(newMessage),
-    });
-    console.log(res);
+      const res = await fetch("http://localhost:9000/api/messages", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(newMessage),
+      });
+      console.log(res);
+    }
   };
 
   const messagesEndRef = useRef(null);
