@@ -11,7 +11,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default async function Header() {
+export default function Header() {
   const history = useHistory();
   const navigation = [
     { name: "StudySessions", href: "/studysessions" },
