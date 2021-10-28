@@ -105,7 +105,7 @@ const GroupList = ({
             </div>
             <input
               id="search-field"
-              className="block w-full bg-purple bg-opacity-50 h-full pl-10 pr-3 py-4 text-white placeholder-gray-500 rounded-xl focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
+              className="block w-full bg-purple bg-opacity-50 h-full pl-10 pr-3 py-4 text-black placeholder-gray-500 rounded-xl focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
               placeholder="Search for study sessions"
               type="search"
               name="search"
