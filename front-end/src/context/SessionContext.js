@@ -22,7 +22,7 @@ export const SessionProvider = ({ children }) => {
     try {
       const response = await sessionApi.post("/", session);
       setMySessions([...mySessions, response.data.session]);
-      return "";
+      return response.data.message;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -50,7 +50,7 @@ export const SessionProvider = ({ children }) => {
         ...upcomingSessions.slice(0, index),
         ...upcomingSessions.slice(index + 1),
       ]);
-      return "You have successfully joined this study session!";
+      return "You have joined this study session!";
     } catch (error) {
       throw new Error(
         "Your indicated time range is less than the time limit set by the creator of this study session!"
@@ -72,7 +72,7 @@ export const SessionProvider = ({ children }) => {
         ...joinedSessions.slice(0, index),
         ...joinedSessions.slice(index + 1),
       ]);
-      return "";
+      return "You left this study session!";
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -87,7 +87,7 @@ export const SessionProvider = ({ children }) => {
         response.data.session,
         ...mySessions.slice(index + 1),
       ]);
-      return "";
+      return response.data.message;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -98,7 +98,7 @@ export const SessionProvider = ({ children }) => {
       await sessionApi.delete(`/${session._id}`);
       const updatedSessions = mySessions.filter((s) => s._id !== session._id);
       setMySessions(updatedSessions);
-      return "";
+      return "You have deleted this study session!";
     } catch (error) {
       throw new Error(error.response.data.message);
     }
