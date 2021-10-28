@@ -41,6 +41,7 @@ app.use(
     exposedHeaders: ["x-access-token", "jwt-salt", "set-cookie"],
     credentials: true,
     origin: true,
+    methods: ["OPTIONS", "GET", "HEAD" , "PUT", "PATCH" , "POST" ,"DELETE"],
   })
 );
 
