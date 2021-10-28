@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { sessionApi } from "../utils/api";
+import moment from "moment";
 
 export const SessionContext = React.createContext();
 
@@ -29,12 +30,21 @@ export const SessionProvider = ({ children }) => {
 
   const joinSession = async (username, session, time) => {
     try {
+      let start_time = moment(time.start, "HH:mm");
+      let end_time = moment(time.end, "HH:mm");
+      let difference = moment.duration(end_time.diff(start_time));
+      let minutes_difference = parseInt(difference.asMinutes());
+      if (minutes_difference < session.timeLimit * 60) {
+        return new Error(
+          "Your indicated time range is less than the time limit set by the creator of this study session!"
+        );
+      }
       const newParticipants = [...session.participants, username];
       const response = await sessionApi.put(`/${session._id}`, {
         participants: newParticipants,
         time,
       });
-      const index = upcomingSessions.findIndex((s) => s._id == session._id);
+      const index = upcomingSessions.findIndex((s) => s._id === session._id);
       setJoinedSessions([...joinedSessions, response.data.session]);
       setUpcomingSessions([
         ...upcomingSessions.slice(0, index),
@@ -55,7 +65,7 @@ export const SessionProvider = ({ children }) => {
       await sessionApi.put(`/${session._id}`, {
         participants: newParticipants,
       });
-      const index = joinedSessions.findIndex((s) => s._id == session._id);
+      const index = joinedSessions.findIndex((s) => s._id === session._id);
       setJoinedSessions([
         ...joinedSessions.slice(0, index),
         ...joinedSessions.slice(index + 1),
@@ -69,7 +79,7 @@ export const SessionProvider = ({ children }) => {
   const updateMySessions = async (session) => {
     try {
       const response = await sessionApi.put(`/${session._id}`, session);
-      const index = mySessions.findIndex((s) => s._id == session._id);
+      const index = mySessions.findIndex((s) => s._id === session._id);
       setMySessions([
         ...mySessions.slice(0, index),
         response.data.session,
