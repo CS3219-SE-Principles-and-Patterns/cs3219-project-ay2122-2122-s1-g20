@@ -12,6 +12,7 @@ module.exports = {
           DEFAULT: "#C4C1DE",
           light: "#EFF0F6",
           misc: "#BBBFDB",
+          bubble: "#C3C1DE",
         },
         blue: {
           light: "#EFF3FA",
