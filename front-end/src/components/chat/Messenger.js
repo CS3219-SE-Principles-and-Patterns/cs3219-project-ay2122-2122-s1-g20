@@ -51,6 +51,7 @@ const Messenger = ({ account, displayChat, enable }) => {
       const newMessage = {
         group_id: group,
         sender: username,
+        email: account.email,
         timestamp: Date.now(),
         profilePic: profilePic,
         content: message,
@@ -109,7 +110,7 @@ const Messenger = ({ account, displayChat, enable }) => {
   };
 
   const checkSender = (sdr) => {
-    if (sdr == username) {
+    if (sdr == account.email) {
       return "right";
     } else {
       return "left";
@@ -128,7 +129,7 @@ const Messenger = ({ account, displayChat, enable }) => {
                 key={index}
                 message={message}
                 pic={message.profilePic}
-                toggle={checkSender(message.sender)}
+                toggle={checkSender(message.email)}
               />
             ))}
             <div ref={messagesEndRef} />
