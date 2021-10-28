@@ -95,19 +95,22 @@ const GroupBubble = ({
   };
 
   return (
-    <div className=" flex flex-row mt-5 md:h-20 h-12">
+
+    <div className="bg-purple-light mb-1 px-10 py-7 flex mt-3 pb-5 ml-10 mr-5 rounded-xl">
       <button
         onClick={handlePreview}
-        className="text-m md:text-xl pt-2 flex flex-row text-left appearance-none w-60 md:w-96 border-none block pl-3  rounded-md bg-purple-light focus:outline-none focus:ring-purple-dark focus:border-purple-dark"
+        className="text-2xl text-purple-dark flex flex-row text-left appearance-none w-80 sm:w-96 border-none block focus:outline-none"
       >
         {name}
-        <div className="pl-6">
-          <div className="bg-purple-200 rounded-md">#{hashtag} </div>
+        <div className="pl-3 mb-1">
+          <div className="bg-purple-bubble text-sm text-white p-2 rounded-2xl">
+            #{hashtag}{" "}
+          </div>
         </div>
       </button>
 
       <button
-        className="rounded bg-gray-100 w-20 text-m md:text-xl"
+        className="text-black hover:text-opacity-50 text-xl"
         onClick={() => (!join ? handleJoinChat() : setOpen(true))}
       >
         {!join ? "Join" : "Leave"}
