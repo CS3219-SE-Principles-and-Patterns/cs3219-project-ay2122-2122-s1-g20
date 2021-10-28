@@ -6,15 +6,8 @@ import ProfilePic from "../components/profile/ProfilePic";
 import { AccountContext } from "../context/AccountContext";
 
 const ProfilePage = () => {
-  const {
-    username,
-    setUsername,
-    edit,
-    setEdit,
-    email,
-    handleUpdateUsername,
-    handleUpdateEmail,
-  } = useContext(AccountContext);
+  const { username, setUsername, edit, setEdit, email, handleUpdateUsername } =
+    useContext(AccountContext);
 
   return (
     <div className="flex flex-row mx-auto mt-10 max-w-screen-lg space-x-10 flex-wrap sm:flex-nowrap justify-center">
@@ -23,17 +16,12 @@ const ProfilePage = () => {
       </div>
       <div className="mb-10 flex flex-col h-full justify-center items-stretch w-8/12 mx-auto">
         <div className="flex flex-row justify-between flex-wrap">
+          <EditableInput label="Email" value={edit} setValue={setEdit} />
           <EditableInput
             label="Username"
             value={username}
             setValue={setUsername}
             onSubmit={handleUpdateUsername}
-          />
-          <EditableInput
-            label="Email"
-            value={edit}
-            setValue={setEdit}
-            onSubmit={handleUpdateEmail}
           />
         </div>
         <EditModules isProfilePage />
