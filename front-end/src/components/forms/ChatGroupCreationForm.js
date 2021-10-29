@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Popup from "reactjs-popup";
 import PropTypes from "prop-types";
 import { VscChromeClose } from "react-icons/vsc";
+import { api } from "../../utils/api";
 
 const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
   const [groupName, setGroupName] = useState("");
@@ -28,6 +29,7 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
     try {
       const value = await checkHashTag();
       console.log(value);
+      //add group
       const res = await fetch("http://localhost:9000/api/groups", {
         method: "POST",
         headers: {
@@ -39,11 +41,23 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
           uid: [userEmail],
           lastModified: Date.now(),
           creator: userEmail,
+          state: "available",
         }),
       });
+      console.log(res);
       const data = await res.json();
       console.log(data);
       if (res.status == 200) {
+        //add group to user
+        await api
+          .post("/user/account/groups", {
+            email: userEmail,
+            groupId: data.group._id,
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => console.log(err));
         handleReset();
         setLoad(!load);
         setOpen(false);

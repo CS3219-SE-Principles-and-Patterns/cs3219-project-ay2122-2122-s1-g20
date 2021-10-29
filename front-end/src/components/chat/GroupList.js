@@ -12,6 +12,7 @@ const GroupList = ({
   setEnable,
   isLoading,
   setIsLoading,
+  setDisabled,
 }) => {
   const [search, setSearchValue] = useState("");
   const [open, setOpen] = useState(false);
@@ -20,10 +21,12 @@ const GroupList = ({
   const [display, setDisplay] = useState([]);
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
   const [groupsUserCreated, setGroupsUserCreated] = useState([]);
+  //const [track, setTrack] = useState(false);
 
   const getAllGroups = async () => {
     const res = await fetch("http://localhost:9000/api/groups");
     const data = await res.json();
+    console.log(data);
     setGroups(
       data.groups.sort((a, b) => {
         return a.lastModified - b.lastModified;
@@ -33,19 +36,30 @@ const GroupList = ({
 
   const getGroupsUserCreated = async () => {
     await chatApi
-      .get(`/groups/users/${account.email}`)
+      .get(`/groups/users/${account.email}`, {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      })
       .then((res) => {
         setGroupsUserCreated(res.data.groups);
       })
       .catch((err) => console.log(err));
   };
 
+  /*
   const getGroupsUserIsIn = async () => {
     setIsLoading(true);
-    getAllGroups();
+    await getGroupsUserCreated();
+    await getAllGroups();
     await api
-      .get(`/user/account/groups/${account.email}`)
+      .get(`/user/account/groups/${account.email}`, {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      })
       .then((res) => {
+        console.log(res);
         setGroupsUserIsIn(
           groups.filter((x) => res.data.groups.includes(x._id))
         );
@@ -53,11 +67,38 @@ const GroupList = ({
       })
       .catch((err) => console.log(err));
   };
+  */
+  const getGroupsUserIsIn = async () => {
+    await api
+      .get(`/user/account/groups/${account.email}`, {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setGroupsUserIsIn(
+          groups.filter((x) => res.data.groups.includes(x._id))
+        );
+      })
+      .catch((err) => console.log(err));
+  };
+  const check = async () => {
+    setIsLoading(true);
+    await getAllGroups();
+    await getGroupsUserCreated();
+    await getGroupsUserIsIn();
+    console.log(groups);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    getGroupsUserCreated();
+    //setIsLoading(true);
+    //getGroupsUserCreated();
+    /*
     getGroupsUserIsIn();
-
+    */
+    check();
     if (tag == "All Chats") {
       setDisplay(groups);
     } else {
@@ -68,8 +109,11 @@ const GroupList = ({
         const temp = groups.filter((x) => x.hashtag == tag);
         setDisplay(temp);
       }
+      console.log(display);
     }
     console.log(groupsUserCreated);
+    console.log(groupsUserIsIn);
+    console.log(groups);
   }, [tag, load]);
 
   const handleSearch = (event) => {
@@ -163,6 +207,7 @@ const GroupList = ({
               joined={tag == "Joined" ? true : groupsUserIsIn.includes(group)}
               setLoad={setLoad}
               load={load}
+              setDisabled={setDisabled}
             />
           ))}
         </div>

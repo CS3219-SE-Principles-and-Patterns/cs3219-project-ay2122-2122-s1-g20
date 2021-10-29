@@ -21,8 +21,11 @@ exports.create = async (req, res) => {
     group.uid = req.body.uid;
     group.lastModified = req.body.lastModified;
     group.creator = req.body.creator;
+    group.state = req.body.state;
     await group.save();
-    res.status(200).send({ message: "Group successfully created!" });
+    //const data = await Group.find();
+    //console.log("WRONG GET: " + data);
+    res.status(200).send({ group: group, message: "Group successfully created!" });
     return;
   } catch (err) {
     res.status(422).send({ message: "Error with creating group." });
@@ -69,6 +72,7 @@ exports.getGroupsCreated  = async (req, res) => {
 exports.get = async (req, res) => {
   try {
     const data = await Group.find();
+    //console.log("GET: " + data);
     if (data) {
       res
         .status(200)
@@ -125,6 +129,20 @@ exports.removeUser = async (req, res) => {
     return;
   } catch (err) {
     res.status(404).send({ message: "Error with removing group members." });
+    return;
+  }
+};
+
+exports.updateState = async (req, res) => {
+  try {
+    const group = await Group.findByIdAndUpdate(req.body.groupId, 
+      { state: "disabled" },
+      { new: true }
+    );
+    res.status(200).send({ group: group, message: "Group disabled" });
+    return;
+  } catch (err) {
+    res.status(404).send({ message: "Error with disabling group" });
     return;
   }
 };
