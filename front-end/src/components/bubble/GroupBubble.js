@@ -29,6 +29,7 @@ const GroupBubble = ({
     if (!isDisabled) {
       setDisabled(false);
       setDisplayChat(group);
+      setEnable(join);
       socket.emit("join-room", id);
     } else {
       setDisabled(true);
@@ -77,7 +78,7 @@ const GroupBubble = ({
     setIsDisabled(true);
     setDisabled(true);
     setOpenDisable(false);
-    //remove everyone from the group?
+    //remove everyone from the group and remove messages?
     const res = fetch("http://localhost:9000/api/group/users/update", {
       method: "POST",
       headers: {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 import ClipLoader from "react-spinners/ClipLoader";
-import { api, chatApi } from "../../utils/api";
+import { api } from "../../utils/api";
 import { SearchIcon } from "@heroicons/react/solid";
 
 const GroupList = ({
@@ -20,8 +20,6 @@ const GroupList = ({
   const [groups, setGroups] = useState([]);
   const [display, setDisplay] = useState([]);
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
-  const [groupsUserCreated, setGroupsUserCreated] = useState([]);
-  //const [track, setTrack] = useState(false);
 
   const getAllGroups = async () => {
     const res = await fetch("http://localhost:9000/api/groups");
@@ -34,40 +32,6 @@ const GroupList = ({
     );
   };
 
-  const getGroupsUserCreated = async () => {
-    await chatApi
-      .get(`/groups/users/${account.email}`, {
-        headers: {
-          "Cache-Control": "no-cache",
-        },
-      })
-      .then((res) => {
-        setGroupsUserCreated(res.data.groups);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  /*
-  const getGroupsUserIsIn = async () => {
-    setIsLoading(true);
-    await getGroupsUserCreated();
-    await getAllGroups();
-    await api
-      .get(`/user/account/groups/${account.email}`, {
-        headers: {
-          "Cache-Control": "no-cache",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        setGroupsUserIsIn(
-          groups.filter((x) => res.data.groups.includes(x._id))
-        );
-        setIsLoading(false);
-      })
-      .catch((err) => console.log(err));
-  };
-  */
   const getGroupsUserIsIn = async () => {
     await api
       .get(`/user/account/groups/${account.email}`, {
@@ -86,18 +50,11 @@ const GroupList = ({
   const check = async () => {
     setIsLoading(true);
     await getAllGroups();
-    await getGroupsUserCreated();
     await getGroupsUserIsIn();
-    console.log(groups);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    //setIsLoading(true);
-    //getGroupsUserCreated();
-    /*
-    getGroupsUserIsIn();
-    */
     check();
     if (tag == "All Chats") {
       setDisplay(groups);
@@ -111,9 +68,6 @@ const GroupList = ({
       }
       console.log(display);
     }
-    console.log(groupsUserCreated);
-    console.log(groupsUserIsIn);
-    console.log(groups);
   }, [tag, load]);
 
   const handleSearch = (event) => {
