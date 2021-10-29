@@ -10,20 +10,34 @@ const GroupBubble = ({
   setEnable,
   userEmail,
   joined,
+  setDisabled,
 }) => {
   const name = group.name;
   const hashtag = group.hashtag;
   const id = group._id;
+  const isCreator = group.creator == userEmail ? true : false;
+  const state = group.state;
+  console.log(isCreator);
   const [join, setJoin] = useState(joined);
   const [open, setOpen] = useState(false); //popout of leaving confirmation
+  const [openDisable, setOpenDisable] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(
+    state == "disabled" ? true : false
+  );
 
   const handlePreview = () => {
-    setDisplayChat(group);
-    setEnable(join);
-    socket.emit("join-room", id);
+    if (!isDisabled) {
+      setDisabled(false);
+      setDisplayChat(group);
+      setEnable(join);
+      socket.emit("join-room", id);
+    } else {
+      setDisabled(true);
+    }
   };
   const handleJoinChat = async () => {
     setJoin(true);
+    setEnable(true);
 
     const newGroupJoined = {
       email: userEmail,
@@ -59,10 +73,27 @@ const GroupBubble = ({
     //socket.emit("join-room", id); //same to be done when user clicks on name of joined chats
   };
 
+  const handleDisableChat = async () => {
+    console.log("disable");
+    setIsDisabled(true);
+    setDisabled(true);
+    setOpenDisable(false);
+    //remove everyone from the group and remove messages?
+    const res = fetch("http://localhost:9000/api/group/users/update", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ groupId: id }),
+    });
+    console.log(res);
+  };
+
   const handleLeaveChat = async () => {
     setDisplayChat("");
     setOpen(false);
     setJoin(false);
+    setEnable(false);
 
     const groupToLeave = {
       email: userEmail,
@@ -108,25 +139,72 @@ const GroupBubble = ({
           </div>
         </div>
       </button>
+      {isDisabled ? (
+        <div className="text-red-500 text-xl m-4"> DISABLED </div>
+      ) : (
+        <div>
+          {isCreator ? (
+            <button
+              className="text-red-500 hover:text-opacity-50 text-xl m-4"
+              onClick={() => setOpenDisable(true)}
+            >
+              Disable
+            </button>
+          ) : (
+            ""
+          )}
 
-      <button
-        className="text-black hover:text-opacity-50 text-xl"
-        onClick={() => (!join ? handleJoinChat() : setOpen(true))}
-      >
-        {!join ? "Join" : "Leave"}
-      </button>
+          <Popup
+            open={openDisable}
+            modal
+            closeOnDocumentClick={false}
+            lockScroll={true}
+          >
+            <div className="flex flex-col bg-blue-dark p-10">
+              Confirm to disable? Chat will be deleted after 2 days {open}
+              <button
+                className="p-2 bg-red-400"
+                onClick={() => handleDisableChat()}
+              >
+                Yes
+              </button>
+              <button
+                className="p-2 bg-grey"
+                onClick={() => setOpenDisable(false)}
+              >
+                No
+              </button>
+            </div>
+          </Popup>
 
-      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
-        <div className="flex flex-col bg-blue-dark p-10">
-          Confirm to leave? {open}
-          <button className="p-2 bg-red-400" onClick={() => handleLeaveChat()}>
-            Yes
+          <button
+            className="text-black hover:text-opacity-50 text-xl"
+            onClick={() => (!join ? handleJoinChat() : setOpen(true))}
+          >
+            {!join ? "Join" : "Leave"}
           </button>
-          <button className="p-2 bg-grey" onClick={() => setOpen(false)}>
-            No
-          </button>
+
+          <Popup
+            open={open}
+            modal
+            closeOnDocumentClick={false}
+            lockScroll={true}
+          >
+            <div className="flex flex-col bg-blue-dark p-10">
+              Confirm to leave? {open}
+              <button
+                className="p-2 bg-red-400"
+                onClick={() => handleLeaveChat()}
+              >
+                Yes
+              </button>
+              <button className="p-2 bg-grey" onClick={() => setOpen(false)}>
+                No
+              </button>
+            </div>
+          </Popup>
         </div>
-      </Popup>
+      )}
     </div>
   );
 };

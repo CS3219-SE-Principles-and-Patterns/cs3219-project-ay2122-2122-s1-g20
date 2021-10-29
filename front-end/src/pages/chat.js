@@ -9,6 +9,7 @@ const ChatPage = () => {
   const [enable, setEnable] = useState(false);
   const [tag, setTag] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     setDisplayChat("");
@@ -29,6 +30,7 @@ const ChatPage = () => {
               tag={tag}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
+              setDisabled={setDisabled}
             />
           </div>
           <div className="col-span-3">
@@ -36,6 +38,7 @@ const ChatPage = () => {
               account={context}
               displayChat={displayChat}
               enable={enable}
+              disabled={disabled}
             />
           </div>
         </div>

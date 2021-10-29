@@ -3,7 +3,7 @@ import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
 
-const Messenger = ({ account, displayChat, enable }) => {
+const Messenger = ({ account, displayChat, enable, disabled }) => {
   const [message, setMessage] = useState("");
   const [oldMessages, setOldMessages] = useState([]);
   const [toggle, setToggle] = useState(false); //update receiving of message whenever someone else send
@@ -11,6 +11,7 @@ const Messenger = ({ account, displayChat, enable }) => {
   const username = account.username;
   const profilePic = account.profilePic;
   const group = displayChat._id;
+  console.log(disabled);
 
   /*
   socket.once("connect", () => {
@@ -51,7 +52,6 @@ const Messenger = ({ account, displayChat, enable }) => {
       const newMessage = {
         group_id: group,
         sender: username,
-        email: account.email,
         timestamp: Date.now(),
         profilePic: profilePic,
         content: message,
@@ -67,19 +67,6 @@ const Messenger = ({ account, displayChat, enable }) => {
         body: JSON.stringify(newMessage),
       });
       console.log(res);
-      //update last modified
-      try {
-        const res = await fetch(`http://localhost:9000/api/groups/${group}`, {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(newMessage),
-        });
-        console.log(res);
-      } catch (err) {
-        console.log(err);
-      }
     }
   };
 
@@ -110,7 +97,7 @@ const Messenger = ({ account, displayChat, enable }) => {
   };
 
   const checkSender = (sdr) => {
-    if (sdr == account.email) {
+    if (sdr == username) {
       return "right";
     } else {
       return "left";
@@ -118,40 +105,49 @@ const Messenger = ({ account, displayChat, enable }) => {
   };
   return (
     <div>
-      {displayChat.length == 0 ? (
-        " "
+      {disabled ? (
+        <div className="place-content-center text-center m-8">
+          This chat has been disabled by the owner and will be deleted in 2
+          days!
+        </div>
       ) : (
-        <div className="flex flex-col h-screen relative pb-16  md:w-auto">
-          <StudyHeader group={displayChat} />
-          <div className="pr-10 pl-2 overflow-y-auto">
-            {oldMessages.map((message, index) => (
-              <ChatBubble
-                key={index}
-                message={message}
-                pic={message.profilePic}
-                toggle={checkSender(message.email)}
-              />
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-          {enable ? (
-            <div className="absolute inset-x-0 pt-4 bottom-0 flex flex-row h-16">
-              <input
-                onChange={setMessageChange}
-                value={message}
-                placeholder="Write a message"
-                className="w-full pl-3 placeholder-white bg-purple border-black border-1 text-md"
-              ></input>
-              <button
-                className="pl-3 pr-3 text-white bg-purple-dark"
-                onClick={handleSendMessage}
-              >
-                Send
-              </button>
-            </div>
+        <div>
+          {displayChat.length == 0 ? (
+            " "
           ) : (
-            <div className="absolute text-white inset-x-0 bottom-0 flex flex-row h-16 pt-4 bg-purple justify-center">
-              Join the group to start chatting!
+            <div className="flex flex-col h-screen relative pb-16  md:w-auto">
+              <StudyHeader group={displayChat} />
+              <div className="pr-10 pl-2 overflow-y-auto">
+                {oldMessages.map((message, index) => (
+                  <ChatBubble
+                    key={index}
+                    message={message}
+                    pic={message.profilePic}
+                    toggle={checkSender(message.sender)}
+                  />
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+              {enable ? (
+                <div className="absolute inset-x-0 pt-4 bottom-0 flex flex-row h-16">
+                  <input
+                    onChange={setMessageChange}
+                    value={message}
+                    placeholder="Write a message"
+                    className="w-full pl-3 placeholder-white bg-purple border-black border-1 text-md"
+                  ></input>
+                  <button
+                    className="pl-3 pr-3 text-white bg-purple-dark"
+                    onClick={handleSendMessage}
+                  >
+                    Send
+                  </button>
+                </div>
+              ) : (
+                <div className="absolute text-white inset-x-0 bottom-0 flex flex-row h-16 pt-4 bg-purple justify-center">
+                  Join the group to start chatting!
+                </div>
+              )}
             </div>
           )}
         </div>
