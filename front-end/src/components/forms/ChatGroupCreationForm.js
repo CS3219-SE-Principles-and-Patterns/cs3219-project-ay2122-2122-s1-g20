@@ -9,6 +9,7 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
   const [chitchat, setChitchat] = useState(false);
   const [makan, setMakan] = useState(true);
   const [sports, setSports] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleGroupNameChange = (event) => {
     setGroupName(event.target.value);
@@ -26,6 +27,7 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError(false);
     try {
       const value = await checkHashTag();
       console.log(value);
@@ -47,6 +49,10 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
       console.log(res);
       const data = await res.json();
       console.log(data);
+      if (res.status == 400) {
+        setError(true);
+        return;
+      }
       if (res.status == 200) {
         //add group to user
         await api
@@ -98,7 +104,20 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
 
   return (
     <div className="w-1">
-      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
+      <Popup
+        open={open}
+        modal
+        closeOnDocumentClick={false}
+        lockScroll={true}
+        nested
+      >
+        <div>
+          <Popup open={error} nested>
+            <span className="text-sm">
+              Please choose another group name as this group already exists!
+            </span>
+          </Popup>
+        </div>
         <form onSubmit={handleSubmit} action="#" method="POST">
           <div className="bg-blue-dark p-20">
             <button
@@ -126,8 +145,10 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
                 className={"p-2 mx-10 rounded-md"}
               />
             </div>
-            <label className="text-lg text-white"> Hashtag Identifier </label>
-            <div className="flex space-x-4 mx-6">
+            <label className="text-lg text-white my-3">
+              Hashtag Identifier
+            </label>
+            <div className="flex space-x-4 mx-6 my-3">
               <button
                 className={
                   "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
