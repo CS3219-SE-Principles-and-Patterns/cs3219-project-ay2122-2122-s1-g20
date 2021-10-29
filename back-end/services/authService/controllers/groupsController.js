@@ -8,7 +8,6 @@ exports.getGroups = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.params.email }).exec();
     const data = user.groups;
-    console.log(data);
     res
       .status(200)
       .send({ groups: data, message: "Groups successfully loaded!" });
@@ -32,8 +31,6 @@ exports.addGroup = async (req, res) => {
       { groups: newGroups },
       { new: true }
     );
-    const user2 = await User.findOne({ email: req.body.email }).exec();
-    console.log("USER2: " + user2.groups);
     res.status(200).send({ user: updatedUser, message: "User updated" });
     return;
   } catch (err) {

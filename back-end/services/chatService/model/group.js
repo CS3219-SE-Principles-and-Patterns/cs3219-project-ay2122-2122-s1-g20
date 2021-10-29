@@ -27,6 +27,9 @@ const groupSchema = mongoose.Schema({
     state: {
         type: String,
         required: true
+    },
+    timeOfDisable : {
+        type: Number,
     }
 });
 

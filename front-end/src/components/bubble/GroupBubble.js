@@ -77,6 +77,7 @@ const GroupBubble = ({
     setIsDisabled(true);
     setDisabled(true);
     setOpenDisable(false);
+    //remove everyone from the group?
     const res = fetch("http://localhost:9000/api/group/users/update", {
       method: "POST",
       headers: {

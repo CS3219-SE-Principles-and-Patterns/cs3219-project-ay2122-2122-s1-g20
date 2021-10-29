@@ -136,7 +136,7 @@ exports.removeUser = async (req, res) => {
 exports.updateState = async (req, res) => {
   try {
     const group = await Group.findByIdAndUpdate(req.body.groupId, 
-      { state: "disabled" },
+      { state: "disabled", timeOfDisable: Date.now() },
       { new: true }
     );
     res.status(200).send({ group: group, message: "Group disabled" });
@@ -146,3 +146,12 @@ exports.updateState = async (req, res) => {
     return;
   }
 };
+
+exports.checkAndDeleteGroups =  () => {
+  const check = Date.now() - 172800000;
+  Group.deleteMany({state: "disabled", timeOfDisable: {$lte: check}}).then(function(){
+    console.log("deleted");
+  }).catch(function(err){
+    console.log(err);
+  });
+}
