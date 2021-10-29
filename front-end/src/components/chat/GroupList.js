@@ -27,7 +27,7 @@ const GroupList = ({
     console.log(data);
     setGroups(
       data.groups.sort((a, b) => {
-        return a.lastModified - b.lastModified;
+        return b.lastModified - a.lastModified;
       })
     );
   };
@@ -42,7 +42,11 @@ const GroupList = ({
       .then((res) => {
         console.log(res);
         setGroupsUserIsIn(
-          groups.filter((x) => res.data.groups.includes(x._id))
+          groups
+            .filter((x) => res.data.groups.includes(x._id))
+            .sort((a, b) => {
+              return b.lastModified - a.lastModified;
+            })
         );
       })
       .catch((err) => console.log(err));
@@ -107,7 +111,7 @@ const GroupList = ({
         <div className="pl-8 col-span-8 pr-8 pt-4 flex">
           <label
             htmlFor="search"
-            className="block flex text-sm font-medium text-gray-700 "
+            className="flex text-sm font-medium text-gray-700 "
           ></label>
           <div className="relative w-full text-gray-400 focus-within:text-gray-600">
             <div className="absolute p-3 inset-y-0 flex items-center pointer-events-none">

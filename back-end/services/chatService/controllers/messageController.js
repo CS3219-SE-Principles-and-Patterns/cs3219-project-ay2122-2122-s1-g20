@@ -11,6 +11,7 @@ exports.add = async (req, res) => {
     message.timestamp = req.body.timestamp;
     message.content = req.body.content;
     message.profilePic = req.body.profilePic;
+    message.email = req.body.email;
     await message.save();
     res.status(200).send({ message: "Message successfully sent!" });
     return;
