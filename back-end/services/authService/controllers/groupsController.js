@@ -20,7 +20,6 @@ exports.getGroups = async (req, res) => {
 
 exports.addGroup = async (req, res) => {
   //req includes email and groupId
-  console.log(req.body.groupId);
   try {
     const user = await User.findOne({ email: req.body.email }).exec();
     //console.log(user);
@@ -51,7 +50,6 @@ exports.removeGroup = async (req, res) => {
     return;
   } catch (err) {
     res.status(404).send({ message: "Error with removing groups." });
-    console.log(err);
     return;
   }
 };

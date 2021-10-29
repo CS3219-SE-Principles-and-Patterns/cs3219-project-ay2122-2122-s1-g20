@@ -23,8 +23,6 @@ exports.create = async (req, res) => {
     group.creator = req.body.creator;
     group.state = req.body.state;
     await group.save();
-    //const data = await Group.find();
-    //console.log("WRONG GET: " + data);
     res.status(200).send({ group: group, message: "Group successfully created!" });
     return;
   } catch (err) {
@@ -38,7 +36,6 @@ exports.delete = async (req, res) => {
   try {
     const id = req.params.group_id;
     const data = await Group.remove({ _id: id });
-    console.log(data);
     if (data) {
       res
         .status(200)
@@ -72,7 +69,6 @@ exports.getGroupsCreated  = async (req, res) => {
 exports.get = async (req, res) => {
   try {
     const data = await Group.find();
-    //console.log("GET: " + data);
     if (data) {
       res
         .status(200)
