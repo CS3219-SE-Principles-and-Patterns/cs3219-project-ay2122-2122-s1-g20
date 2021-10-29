@@ -126,7 +126,6 @@ const GroupBubble = ({
   };
 
   return (
-
     <div className="bg-purple-light mb-1 px-10 py-7 flex mt-3 pb-5 ml-10 mr-5 rounded-xl">
       <button
         onClick={handlePreview}

@@ -13,7 +13,6 @@ const ChatBubble = ({ message, toggle }) => {
         <div className="mt-4 pl-2 text-xs text-left">
           {message.sender} says:
         </div>
-
       </div>
       <div className="p-2 rounded-b-2xl -mt-5 rounded-tr-2xl ml-16 mb-2 rounded-tr-bl-br w-max text-left bg-purple-light">
         <div className="bg-purple-light text-sm p-3">{message.content}</div>
