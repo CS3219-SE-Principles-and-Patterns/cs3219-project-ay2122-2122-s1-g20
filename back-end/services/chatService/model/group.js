@@ -23,6 +23,13 @@ const groupSchema = mongoose.Schema({
     creator: {
         type: String,
         required: true
+    },
+    state: {
+        type: String,
+        required: true
+    },
+    timeOfDisable : {
+        type: Number,
     }
 });
 

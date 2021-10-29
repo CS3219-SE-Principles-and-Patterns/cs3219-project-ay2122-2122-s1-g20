@@ -4,6 +4,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const dotenv = require("dotenv");
 const routes = require("./routes/routes");
+const cron = require('node-cron');
+const method = require('./controllers/groupController');
 
 dotenv.config({ path: "../../config.env" });
 
@@ -62,3 +64,9 @@ mongoose
       useUnifiedTopology: true,
     })
     .then(() => console.log("DB connection successful!"));
+
+cron.schedule('59 23 * * *', function() {
+  method.checkAndDeleteGroups();
+});
+
+console.log(Date.now());

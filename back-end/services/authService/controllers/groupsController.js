@@ -22,6 +22,7 @@ exports.addGroup = async (req, res) => {
   //req includes email and groupId
   try {
     const user = await User.findOne({ email: req.body.email }).exec();
+    //console.log(user);
     const currentGroups = user.groups;
     const newGroups = currentGroups.concat(req.body.groupId);
     const updatedUser = await User.findOneAndUpdate(
@@ -32,7 +33,8 @@ exports.addGroup = async (req, res) => {
     res.status(200).send({ user: updatedUser, message: "User updated" });
     return;
   } catch (err) {
-    res.status(404).send({ message: "Error with adding groups." });
+    console.log(err);
+    res.status(404).send({ message: "Error with adding groups." }); //change status code
     return;
   }
 };
@@ -48,7 +50,6 @@ exports.removeGroup = async (req, res) => {
     return;
   } catch (err) {
     res.status(404).send({ message: "Error with removing groups." });
-    console.log(err);
     return;
   }
 };
