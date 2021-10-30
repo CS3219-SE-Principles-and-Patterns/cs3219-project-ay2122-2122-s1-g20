@@ -29,6 +29,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
           time: { start: "00:00", end: "23:59" },
           timeLimit: "",
           owner: username,
+          participants: [username],
         }
   );
 
