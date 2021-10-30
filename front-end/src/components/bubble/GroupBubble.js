@@ -126,25 +126,26 @@ const GroupBubble = ({
   };
 
   return (
-    <div className="bg-purple-light mb-1 px-10 py-7 flex mt-3 pb-5 ml-10 mr-5 rounded-xl">
+    <div className="bg-purple-light mb-1 px-5 py-2 md:px-10 md:py-5 block  md:flex  mt-3 pb-5 ml-10 mr-5 rounded-xl">
       <button
         onClick={handlePreview}
-        className="text-2xl text-purple-dark flex flex-row text-left appearance-none w-80 sm:w-96 border-none block focus:outline-none"
+        className="object-contain w-full md:text-2xl text-xl text-purple-dark flex md:flex-row flex-col-reverse text-left appearance-none w-80 sm:w-96 border-none block focus:outline-none"
       >
         {name}
-        <div className="pl-3 mb-1">
-          <div className="bg-purple-bubble text-sm text-white p-2 rounded-2xl">
+        <div className="md:pl-3 mb-1">
+          <div className="bg-purple-bubble md:text-sm text-xs text-white p-1 md:p-2 rounded-2xl">
             #{hashtag}{" "}
           </div>
         </div>
       </button>
+
       {isDisabled ? (
         <div className="text-red-500 text-xl m-4"> DISABLED </div>
       ) : (
-        <div>
+        <div className="justify-center flex flex-col md:pt-0  pt-2 object-contain w-full">
           {isCreator ? (
             <button
-              className="text-red-500 hover:text-opacity-50 text-xl m-4"
+              className="text-red-500 hover:text-opacity-50 md:text-xl text-l md:ml-2"
               onClick={() => setOpenDisable(true)}
             >
               Disable
@@ -177,7 +178,7 @@ const GroupBubble = ({
           </Popup>
 
           <button
-            className="text-black hover:text-opacity-50 text-xl"
+            className="text-black hover:text-opacity-50 md:text-xl text:l"
             onClick={() => (!join ? handleJoinChat() : setOpen(true))}
           >
             {!join ? "Join" : "Leave"}

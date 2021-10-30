@@ -108,9 +108,9 @@ const GroupList = ({
   };
 
   return (
-    <div className="overflow-y-auto">
+    <div className="overflow-y-auto h-screen">
       <div className="pt-4 grid gap-0 grid-cols-9 flex justify-center">
-        <div className="pl-8 col-span-8 pr-8 pt-4 flex">
+        <div className="pl-8 col-span-8 md:pr-8 pr-2 pt-4 flex">
           <label
             htmlFor="search"
             className="flex text-sm font-medium text-gray-700 "
@@ -121,8 +121,8 @@ const GroupList = ({
             </div>
             <input
               id="search-field"
-              className="block w-full bg-purple bg-opacity-50 h-full pl-10 pr-3 py-4 text-black placeholder-gray-500 rounded-xl focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
-              placeholder="Search for study sessions"
+              className="block w-full bg-purple bg-opacity-50 h-full pl-10 pr-3 py-4 text-black placeholder-gray-500 rounded-xl focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent text-xs sm:text-sm"
+              placeholder="Search for group chats"
               type="search"
               name="search"
               onChange={handleSearch}
@@ -131,9 +131,9 @@ const GroupList = ({
           </div>
         </div>
         {tag == "All Chats" ? (
-          <div className="pt-3 pr-3">
+          <div className="pt-3 md:pr-3 pr-1">
             <button
-              className="text-3xl text-white mt-3 rounded-full bg-purple-dark h-10 w-10 flex items-center justify-center"
+              className="text-white mt-3 rounded-full bg-purple-dark h-10 w-10 text-3xl flex items-center justify-center"
               onClick={() => {
                 setOpen(true);
               }}
@@ -155,7 +155,7 @@ const GroupList = ({
       {isLoading ? (
         <ClipLoader loading={isLoading} size={10} />
       ) : (
-        <div className="pt-4 grid relative mr-6 gap-0 justify-center">
+        <div className="overflow-x-hidden pt-4 w-full relative mr-6 gap-0 justify-center">
           {display.map((group, index) => (
             <GroupBubble
               key={index}

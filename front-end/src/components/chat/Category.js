@@ -15,7 +15,7 @@ const Category = ({ tag, setTag }) => {
           }}
           value="All Chats"
           onClick={handleFilterChange}
-          className="text-md w-5/6 h-16 sm:text-lg justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark mt-6"
+          className="text-md w-5/6 h-16 md:text-lg sm:text-base text-sm justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark mt-6"
         >
           All Chats
         </button>
@@ -29,7 +29,7 @@ const Category = ({ tag, setTag }) => {
           }}
           value="Joined"
           onClick={handleFilterChange}
-          className="w-5/6 h-16 text-md sm:text-lg justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
+          className="w-5/6 h-16 md:text-lg sm:text-base text-sm justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
         >
           Joined
         </button>
@@ -43,7 +43,7 @@ const Category = ({ tag, setTag }) => {
           }}
           value="chitchat"
           onClick={handleFilterChange}
-          className="w-5/6 h-16 text-md sm:text-lg justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
+          className="w-5/6 h-16 md:text-lg sm:text-base text-sm justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
         >
           #chitchat
         </button>
@@ -57,7 +57,7 @@ const Category = ({ tag, setTag }) => {
           }}
           value="makan"
           onClick={handleFilterChange}
-          className="w-5/6 h-16 text-md sm:text-lg justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
+          className="w-5/6 h-16 md:text-lg sm:text-base text-sm justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
         >
           #makan
         </button>
@@ -71,7 +71,7 @@ const Category = ({ tag, setTag }) => {
           }}
           value="sports"
           onClick={handleFilterChange}
-          className="w-5/6 h-16 text-md sm:text-lg justify-cente border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
+          className="w-5/6 h-16 md:text-lg sm:text-base text-sm justify-cente border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
         >
           #sports
         </button>
@@ -85,7 +85,7 @@ const Category = ({ tag, setTag }) => {
           }}
           value="Study Groups"
           onClick={handleFilterChange}
-          className="w-5/6 h-16 text-md sm:text-lg justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
+          className="w-5/6 h-16 md:text-lg sm:text-base text-sm justify-center border-transparent rounded-md shadow-sm font-normal text-purple-dark bg-purple hover:bg-opacity-75 mt-6"
         >
           Study Groups
         </button>
