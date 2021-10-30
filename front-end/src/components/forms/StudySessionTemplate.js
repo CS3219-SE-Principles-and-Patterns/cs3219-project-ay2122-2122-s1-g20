@@ -72,6 +72,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
       date: "",
       time: { start: "00:00", end: "23:59" },
       timeLimit: "",
+      participants: [username],
     });
     setIsOnlineOption(null);
   };
