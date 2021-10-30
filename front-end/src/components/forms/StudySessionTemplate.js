@@ -28,6 +28,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
           date: "",
           time: { start: "00:00", end: "23:59" },
           timeLimit: "",
+          owner: username,
         }
   );
 
@@ -118,14 +119,10 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   const handleSave = async () => {
     try {
       const response = await updateMySessions(session);
-      console.log(response);
       setAlertMessage(response);
       setIsError(false);
       setShow(true);
       setOpen(false);
-      console.log(alertMessage);
-      console.log(show);
-      console.log(isError);
     } catch (err) {
       setAlertMessage(err.message);
       setIsError(true);
