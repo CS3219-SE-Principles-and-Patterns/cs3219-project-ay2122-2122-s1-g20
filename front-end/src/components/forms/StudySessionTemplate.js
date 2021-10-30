@@ -1,13 +1,13 @@
 import { VscChromeClose } from "react-icons/vsc";
 import Popup from "reactjs-popup";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 import { AccountContext } from "../../context/AccountContext";
 import ModuleButton from "./ModuleButton";
 import TimeRangeSlider from "react-time-range-slider";
 import YellowButton from "../YellowButton";
-import AlertMessage from "../alerts/AlertMessage";
+import SessionAlerts from "../alerts/SessionAlerts";
 import { SessionContext } from "../../context/SessionContext";
 
 const StudySessionTemplate = ({ setOpen, open, studySession }) => {
@@ -28,6 +28,8 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
           date: "",
           time: { start: "00:00", end: "23:59" },
           timeLimit: "",
+          owner: username,
+          participants: [username],
         }
   );
 
@@ -49,6 +51,16 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   // };
   const [isLoading, setIsLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [show, setShow] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setAlertMessage({});
+      setIsError({});
+      setShow({});
+    };
+  }, []);
 
   const resetStates = () => {
     setSession({
@@ -70,7 +82,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
         moduleCode={mod.moduleCode}
         session={session}
         setSession={setSession}
-      ></ModuleButton>
+      />
     </div>
   ));
 
@@ -109,9 +121,14 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
     try {
       const response = await updateMySessions(session);
       setAlertMessage(response);
+      setIsError(false);
+      setShow(true);
       setOpen(false);
     } catch (err) {
       setAlertMessage(err.message);
+      setIsError(true);
+      setShow(true);
+      setOpen(true);
     }
     setIsLoading(false);
   };
@@ -120,9 +137,14 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
     try {
       const response = await addMySession(session);
       setAlertMessage(response);
+      setIsError(false);
+      setShow(true);
       setOpen(false);
     } catch (err) {
       setAlertMessage(err.message);
+      setIsError(true);
+      setShow(true);
+      setOpen(true);
     }
     setIsLoading(false);
   };
@@ -143,11 +165,6 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
           >
             <VscChromeClose />
           </button>
-          {alertMessage !== "" ? (
-            // <div className="pl-28">
-            <AlertMessage isError={alertMessage} message={alertMessage} />
-          ) : // </div>
-          null}
           <p className="text-3xl font-semibold text-grey-whitetinge ml-6">
             {studySession ? "Edit" : "Create a new"} study session
           </p>
@@ -296,6 +313,14 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
           </div>
         </form>
       </Popup>
+      {show ? (
+        <SessionAlerts
+          show={show}
+          setShow={setShow}
+          isError={isError}
+          message={alertMessage}
+        />
+      ) : undefined}
     </div>
   );
 };

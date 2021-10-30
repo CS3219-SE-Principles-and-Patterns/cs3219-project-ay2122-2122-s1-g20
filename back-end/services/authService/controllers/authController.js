@@ -142,7 +142,7 @@ exports.updatePassword = async (req, res) => {
     return res
       .status(200)
       .json({ message: "Please provide an input", valid: false });
-  } else if (newpassword != confirmNewpassword) {
+  } else if (newpassword !== confirmNewpassword) {
     return res
       .status(200)
       .json({ message: "The new passwords do not match", valid: false });

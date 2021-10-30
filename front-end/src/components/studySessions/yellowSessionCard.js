@@ -6,9 +6,10 @@ import ConfirmationPopup from "../forms/ConfirmationPopup";
 import EditStudySession from "../forms/EditStudySession";
 import StudySessionDetails from "../forms/StudySessionDetails";
 import SessionCardTemplate from "./sessionCardTemplate";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { SessionContext } from "../../context/SessionContext";
 import { AccountContext } from "../../context/AccountContext";
+import SessionAlerts from "../alerts/SessionAlerts";
 
 const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -18,6 +19,17 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { deleteMySession, leaveSession } = useContext(SessionContext);
   const { username } = useContext(AccountContext);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setAlertMessage({});
+      setIsError({});
+      setShow({});
+    };
+  }, []);
 
   const handleDeletePopup = () => {
     setOpenDeleteModal(true);
@@ -40,10 +52,14 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const handleDelete = async () => {
     try {
       const response = await deleteMySession(studySession);
-      setOpenDeleteModal(false);
       console.log(response);
+      setOpenDeleteModal(false);
+      setShow(true);
+      setAlertMessage(response);
+      setIsError(false);
     } catch (err) {
-      console.log(err.message);
+      setAlertMessage(err.message);
+      setIsError(true);
     }
     setIsLoading(false);
   };
@@ -52,8 +68,13 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
     try {
       const response = await leaveSession(username, studySession);
       setOpenLeaveModal(false);
-      console.log(response);
+      setShow(true);
+      setAlertMessage(response);
+      setIsError(false);
     } catch (err) {
+      setShow(true);
+      setAlertMessage(err.message);
+      setIsError(true);
       console.log(err.message);
     }
     setIsLoading(false);
@@ -125,6 +146,14 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
           studySession={studySession}
         />
       </SessionCardTemplate>
+      {show ? (
+        <SessionAlerts
+          show={show}
+          setShow={setShow}
+          isError={isError}
+          message={alertMessage}
+        />
+      ) : undefined}
     </div>
   );
 };
