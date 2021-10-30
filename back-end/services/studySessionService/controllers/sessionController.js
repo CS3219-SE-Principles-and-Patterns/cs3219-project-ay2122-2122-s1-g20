@@ -85,21 +85,6 @@ exports.getASession = (req, res, next) => {
 // Create study session
 exports.createSession = async (req, res, next) => {
   try {
-    // sample data
-    //   {
-    //     "title": "testing",
-    //     "capacity": 5,
-    //     "owner": "sylviaokt",
-    //     "timeLimit": "1",
-    //     "time": {
-    //         "start": "14:00",
-    //         "end": "16:00"
-    //     },
-    //     "module": "CS3219",
-    //     "date": "tuesday",
-    //     "participants": ["sylviaokt","andreatan", "mabelkang", "limhaishan"],
-    //     "isOnline": "online"
-    // }
     const session = new Session(req.body);
     const createdSession = await session.save();
     return res.status(200).json({

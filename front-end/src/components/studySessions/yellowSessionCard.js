@@ -6,7 +6,7 @@ import ConfirmationPopup from "../forms/ConfirmationPopup";
 import EditStudySession from "../forms/EditStudySession";
 import StudySessionDetails from "../forms/StudySessionDetails";
 import SessionCardTemplate from "./sessionCardTemplate";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { SessionContext } from "../../context/SessionContext";
 import { AccountContext } from "../../context/AccountContext";
 import SessionAlerts from "../alerts/SessionAlerts";
@@ -22,6 +22,14 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setAlertMessage({});
+      setIsError({});
+      setShow({});
+    };
+  }, []);
 
   const handleDeletePopup = () => {
     setOpenDeleteModal(true);
@@ -44,10 +52,14 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const handleDelete = async () => {
     try {
       const response = await deleteMySession(studySession);
-      setOpenDeleteModal(false);
       console.log(response);
+      setOpenDeleteModal(false);
+      setShow(true);
+      setAlertMessage(response);
+      setIsError(false);
     } catch (err) {
-      console.log(err.message);
+      setAlertMessage(err.message);
+      setIsError(true);
     }
     setIsLoading(false);
   };
@@ -59,10 +71,6 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
       setShow(true);
       setAlertMessage(response);
       setIsError(false);
-      console.log(alertMessage);
-      console.log(isError);
-      console.log(show);
-      console.log(response);
     } catch (err) {
       setShow(true);
       setAlertMessage(err.message);

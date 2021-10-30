@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../../context/AccountContext";
 import { SessionContext } from "../../context/SessionContext";
 import ConfirmationPopup from "../forms/ConfirmationPopup";
@@ -16,19 +16,22 @@ const BlueSessionCard = ({ studySession }) => {
   const [isError, setIsError] = useState(false);
   const [show, setShow] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      setAlertMessage({});
+      setIsError({});
+      setShow({});
+    };
+  }, []);
+
   const handleJoin = async () => {
     try {
       const response = await joinSession(username, studySession, time);
-      console.log("IN blue" + response);
       setOpenConfirmation(false);
       setShow(true);
-      setAlertMessage("You have joined this study session!");
+      setAlertMessage(response);
       setIsError(false);
-      console.log(alertMessage);
-      console.log(isError);
-      console.log(show);
     } catch (err) {
-      console.log(err.message);
       setShow(true);
       setAlertMessage(err.message);
       setIsError(true);

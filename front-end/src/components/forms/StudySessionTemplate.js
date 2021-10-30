@@ -1,6 +1,6 @@
 import { VscChromeClose } from "react-icons/vsc";
 import Popup from "reactjs-popup";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
 import { AccountContext } from "../../context/AccountContext";
@@ -51,6 +51,14 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [show, setShow] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setAlertMessage({});
+      setIsError({});
+      setShow({});
+    };
+  }, []);
 
   const resetStates = () => {
     setSession({

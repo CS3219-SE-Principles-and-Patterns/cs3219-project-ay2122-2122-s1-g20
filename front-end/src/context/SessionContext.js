@@ -95,10 +95,10 @@ export const SessionProvider = ({ children }) => {
 
   const deleteMySession = async (session) => {
     try {
-      await sessionApi.delete(`/${session._id}`);
+      const response = await sessionApi.delete(`/${session._id}`);
       const updatedSessions = mySessions.filter((s) => s._id !== session._id);
       setMySessions(updatedSessions);
-      return "You have deleted this study session!";
+      return response.data.message;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
