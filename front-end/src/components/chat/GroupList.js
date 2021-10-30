@@ -41,13 +41,15 @@ const GroupList = ({
       })
       .then((res) => {
         console.log(res);
-        setGroupsUserIsIn(
-          groups
-            .filter((x) => res.data.groups.includes(x._id))
-            .sort((a, b) => {
-              return b.lastModified - a.lastModified;
-            })
-        );
+        const temp = groups
+          .filter((x) => res.data.groups.includes(x._id))
+          .sort((a, b) => {
+            return b.lastModified - a.lastModified;
+          });
+        setGroupsUserIsIn(temp);
+        if (tag == "Joined") {
+          setDisplay(temp);
+        }
       })
       .catch((err) => console.log(err));
   };
