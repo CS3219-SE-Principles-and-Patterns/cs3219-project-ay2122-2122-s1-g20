@@ -6,7 +6,7 @@ const ChatBubble = ({ message, toggle }) => {
     <div>
       <div className="p-2 flex">
         <img
-          className="h-12 w-12 rounded-full"
+          className="md:h-12 md:w-12 w-8 h-8 rounded-full"
           src={message.profilePic}
           alt=""
         />

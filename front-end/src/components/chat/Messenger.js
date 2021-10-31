@@ -28,6 +28,7 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
         profilePic: messageFromSocket.profilePic,
         timestamp: Date.now(),
         content: messageFromSocket.content,
+        email: messageFromSocket.email,
       };
       setOldMessages((prevState) => prevState.concat(newMessage));
     });
@@ -41,12 +42,15 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
     };
   }, []);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+
     if (message.trim().length != 0) {
       const messageForSocket = {
         sender: username,
         profilePic: profilePic,
         content: message,
+        email: account.email,
       };
       socket.emit("send-message", messageForSocket, group);
       const newMessage = {
@@ -55,6 +59,7 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
         timestamp: Date.now(),
         profilePic: profilePic,
         content: message,
+        email: messageForSocket.email,
       };
       setMessage("");
       setOldMessages(oldMessages.concat(newMessage));
@@ -67,6 +72,20 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
         body: JSON.stringify(newMessage),
       });
       console.log(res);
+
+      //update last modified
+      try {
+        const res = await fetch(`http://localhost:9000/api/groups/${group}`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(newMessage),
+        });
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -97,7 +116,7 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
   };
 
   const checkSender = (sdr) => {
-    if (sdr == username) {
+    if (sdr == account.email) {
       return "right";
     } else {
       return "left";
@@ -117,19 +136,24 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
           ) : (
             <div className="flex flex-col h-screen relative pb-16  md:w-auto">
               <StudyHeader group={displayChat} />
-              <div className="pr-10 pl-2 overflow-y-auto">
+              <div className="pr-2 md:pr-10 pl-2 overflow-y-auto">
                 {oldMessages.map((message, index) => (
                   <ChatBubble
                     key={index}
                     message={message}
                     pic={message.profilePic}
-                    toggle={checkSender(message.sender)}
+                    toggle={checkSender(message.email)}
                   />
                 ))}
                 <div ref={messagesEndRef} />
               </div>
               {enable ? (
-                <div className="absolute inset-x-0 pt-4 bottom-0 flex flex-row h-16">
+                <form
+                  onSubmit={handleSendMessage}
+                  action="#"
+                  method="POST"
+                  className="absolute inset-x-0 pt-4 bottom-0 flex flex-row h-16"
+                >
                   <input
                     onChange={setMessageChange}
                     value={message}
@@ -142,7 +166,7 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
                   >
                     Send
                   </button>
-                </div>
+                </form>
               ) : (
                 <div className="absolute text-white inset-x-0 bottom-0 flex flex-row h-16 pt-4 bg-purple justify-center">
                   Join the group to start chatting!

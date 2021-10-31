@@ -126,13 +126,13 @@ const GroupBubble = ({
   };
 
   return (
-    <div className="bg-purple-light mb-1 px-5 py-2 md:px-10 md:py-5 block  md:flex  mt-3 pb-5 ml-10 mr-5 rounded-xl">
+    <div className="bg-purple-light mb-1 px-5 py-2 md:px-10 md:py-5 block lg:grid lg:grid-cols-7 mt-3 pb-5 ml-10 mr-5 rounded-xl">
       <button
         onClick={handlePreview}
-        className="object-contain w-full md:text-2xl text-xl text-purple-dark flex md:flex-row flex-col-reverse text-left appearance-none w-80 sm:w-96 border-none block focus:outline-none"
+        className="lg:col-span-6  md:w-auto w-full md:text-xl text-l text-purple-dark flex md:flex-row flex-col-reverse text-left appearance-none w-80 sm:w-96 border-none block focus:outline-none"
       >
         {name}
-        <div className="md:pl-3 mb-1">
+        <div className="md:pl-2 md:pr-4">
           <div className="bg-purple-bubble md:text-sm text-xs text-white p-1 md:p-2 rounded-2xl">
             #{hashtag}{" "}
           </div>
@@ -140,12 +140,12 @@ const GroupBubble = ({
       </button>
 
       {isDisabled ? (
-        <div className="text-red-500 text-xl m-4"> DISABLED </div>
+        <div className=" text-red-500 text-lg"> DISABLED </div>
       ) : (
-        <div className="justify-center flex flex-col md:pt-0  pt-2 object-contain w-full">
+        <div className="justify-center flex flex-col md:pt-0  pt-2 md:p-0 object-contain w-full">
           {isCreator ? (
             <button
-              className="text-red-500 hover:text-opacity-50 md:text-xl text-l md:ml-2"
+              className="text-red-500 hover:text-opacity-50 pt-2 md:text-xl text-l"
               onClick={() => setOpenDisable(true)}
             >
               Disable
@@ -178,7 +178,7 @@ const GroupBubble = ({
           </Popup>
 
           <button
-            className="text-black hover:text-opacity-50 md:text-xl text:l"
+            className="text-black pt-2 lg:pt-0 hover:text-opacity-50 md:text-xl text:l"
             onClick={() => (!join ? handleJoinChat() : setOpen(true))}
           >
             {!join ? "Join" : "Leave"}
