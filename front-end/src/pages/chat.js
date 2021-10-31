@@ -30,6 +30,7 @@ const ChatPage = () => {
               tag={tag}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
+              disabled={disabled}
               setDisabled={setDisabled}
             />
           </div>

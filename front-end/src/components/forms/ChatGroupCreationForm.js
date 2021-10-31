@@ -4,7 +4,14 @@ import PropTypes from "prop-types";
 import { VscChromeClose } from "react-icons/vsc";
 import { api } from "../../utils/api";
 
-const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
+const ChatGroupCreationForm = ({
+  setOpen,
+  setLoad,
+  open,
+  load,
+  userEmail,
+  setNewGroup,
+}) => {
   const [groupName, setGroupName] = useState("");
   const [chitchat, setChitchat] = useState(false);
   const [makan, setMakan] = useState(true);
@@ -54,6 +61,7 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
         return;
       }
       if (res.status == 200) {
+        setNewGroup(data.group);
         //add group to user
         await api
           .post("/user/account/groups", {
