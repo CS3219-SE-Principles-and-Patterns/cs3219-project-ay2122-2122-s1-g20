@@ -99,6 +99,15 @@ exports.getASession = (req, res, next) => {
 // Create study session
 exports.createSession = async (req, res, next) => {
   try {
+    const current_date = new Date();
+    if (
+      Date.parse(req.body.date) <
+      current_date.setDate(current_date.getDate() - 1)
+    ) {
+      return res.status(500).json({
+        message: "Your indicated date is over, please choose another date!",
+      });
+    }
     const session = new Session(req.body);
     const createdSession = await session.save();
     return res.status(200).json({
