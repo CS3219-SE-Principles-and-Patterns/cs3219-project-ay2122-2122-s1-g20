@@ -67,6 +67,7 @@ exports.getJoinedSessions = (req, res, next) => {
   // remove USERNAME from params after gateway api is implemented
   const username = req.params.username;
   Session.find({ participants: username })
+    .find({ owner: { $ne: username } })
     .then((sessions) => {
       // session === array of session objects
       // const joinedSessions = session.filter((s) => {
