@@ -103,101 +103,98 @@ const ChatGroupCreationForm = ({ setOpen, setLoad, open, load, userEmail }) => {
   };
 
   return (
-    <div className="w-1">
-      <Popup
-        open={open}
-        modal
-        closeOnDocumentClick={false}
-        lockScroll={true}
-        nested
-      >
-        <div>
-          <Popup open={error} nested>
-            <span className="text-sm">
-              Please choose another group name as this group already exists!
-            </span>
-          </Popup>
-        </div>
-        <form onSubmit={handleSubmit} action="#" method="POST">
-          <div className="bg-blue-dark p-20">
-            <button
-              className="bg-white absolute top-1 right-1 p-0.5 rounded-full"
-              onClick={() => {
-                handleReset();
-                setOpen(false);
-              }}
-            >
-              <VscChromeClose />
-            </button>
-            <div className="text-3xl text-grey-whitetinge py-5">
-              Create a new chat
-            </div>
-            <div className="my-3">
-              <label className="text-lg text-white"> Group name </label>
-              <input
-                onChange={handleGroupNameChange}
-                type="text"
-                placeholder="Enter name"
-                value={groupName}
-                id="groupName"
-                name="groupName"
-                required
-                className={"p-2 mx-10 rounded-md"}
-              />
-            </div>
-            <label className="text-lg text-white my-3">
-              Hashtag Identifier
-            </label>
-            <div className="flex space-x-4 mx-6 my-3">
-              <button
-                className={
-                  "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
-                  (chitchat ? "bg-purple-200" : "bg-purple-light")
-                }
-                onClick={() => {
-                  checkStates("chitchat");
-                }}
-                type="button"
-              >
-                #chitchat
-              </button>
-              <button
-                className={
-                  "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
-                  (makan ? "bg-purple-200" : "bg-purple-light")
-                }
-                onClick={() => {
-                  checkStates("makan");
-                }}
-                type="button"
-              >
-                #makan
-              </button>
-              <button
-                className={
-                  "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
-                  (sports ? "bg-purple-200" : "bg-purple-light")
-                }
-                onClick={() => {
-                  checkStates("sports");
-                }}
-                type="button"
-              >
-                #sports
-              </button>
-            </div>
-            <div className="flex justify-center m-4">
-              <button
-                className="w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium text-black bg-yellow-dark hover:bg-opacity-75 mt-6"
-                type="submit"
-              >
-                Create
-              </button>
-            </div>
+    <Popup
+      open={open}
+      modal
+      closeOnDocumentClick={false}
+      lockScroll={true}
+      nested
+      className="h-auto"
+    >
+      <div>
+        <Popup open={error} nested>
+          <span className="text-sm">
+            Please choose another group name as this group already exists!
+          </span>
+        </Popup>
+      </div>
+      <form onSubmit={handleSubmit} action="#" method="POST">
+        <div className="bg-blue-dark sm:p-10 p-2">
+          <button
+            className="bg-white absolute right-8 top-4 p-0.5 rounded-full"
+            onClick={() => {
+              handleReset();
+              setOpen(false);
+            }}
+          >
+            <VscChromeClose className="m-1" />
+          </button>
+          <div className="text-3xl text-grey-whitetinge py-5">
+            Create a new chat
           </div>
-        </form>
-      </Popup>
-    </div>
+          <div className="my-3">
+            <label className="text-lg text-white"> Group name </label>
+            <input
+              onChange={handleGroupNameChange}
+              type="text"
+              placeholder="Enter name"
+              value={groupName}
+              id="groupName"
+              name="groupName"
+              required
+              className={"p-2 mx-10 rounded-md"}
+            />
+          </div>
+          <label className="text-lg text-white my-3">Hashtag Identifier</label>
+          <div className="flex space-x-4 mx-6 my-3">
+            <button
+              className={
+                "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
+                (chitchat ? "bg-purple-200" : "bg-purple-light")
+              }
+              onClick={() => {
+                checkStates("chitchat");
+              }}
+              type="button"
+            >
+              #chitchat
+            </button>
+            <button
+              className={
+                "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
+                (makan ? "bg-purple-200" : "bg-purple-light")
+              }
+              onClick={() => {
+                checkStates("makan");
+              }}
+              type="button"
+            >
+              #makan
+            </button>
+            <button
+              className={
+                "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
+                (sports ? "bg-purple-200" : "bg-purple-light")
+              }
+              onClick={() => {
+                checkStates("sports");
+              }}
+              type="button"
+            >
+              #sports
+            </button>
+          </div>
+          <div className="flex justify-center m-4">
+            <button
+              className="w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium text-black bg-yellow-dark hover:bg-opacity-75 mt-6"
+              type="submit"
+            >
+              Create
+            </button>
+          </div>
+        </div>
+      </form>
+    </Popup>
   );
 };
 
