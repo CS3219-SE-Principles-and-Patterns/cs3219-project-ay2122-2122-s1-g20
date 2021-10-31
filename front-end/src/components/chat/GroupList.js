@@ -110,7 +110,7 @@ const GroupList = ({
   return (
     <div className="overflow-y-auto h-screen">
       <div className="pt-4 grid gap-0 grid-cols-9 flex justify-center">
-        <div className="pl-8 col-span-8 md:pr-8 pr-2 pt-4 flex">
+        <div className="pl-10 col-span-7 md:pr-8 pr-2 pt-4 flex">
           <label
             htmlFor="search"
             className="flex text-sm font-medium text-gray-700 "
@@ -131,7 +131,7 @@ const GroupList = ({
           </div>
         </div>
         {tag == "All Chats" ? (
-          <div className="pt-3 md:pr-3 pr-1">
+          <div className="pt-3">
             <button
               className="text-white mt-3 rounded-full bg-purple-dark h-10 w-10 text-3xl flex items-center justify-center"
               onClick={() => {
