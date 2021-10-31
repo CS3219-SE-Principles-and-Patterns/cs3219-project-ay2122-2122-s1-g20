@@ -20,16 +20,20 @@ const GroupList = ({
   const [groups, setGroups] = useState([]);
   const [display, setDisplay] = useState([]);
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
+  const [leave, setLeave] = useState(false);
+  const [newGroup, setNewGroup] = useState([]);
+  const [status, setStatus] = useState(false);
+
+  console.log(newGroup);
+  console.log(groups);
 
   const getAllGroups = async () => {
     const res = await fetch("http://localhost:9000/api/groups");
     const data = await res.json();
-    console.log(data);
-    setGroups(
-      data.groups.sort((a, b) => {
-        return b.lastModified - a.lastModified;
-      })
-    );
+    const temp = data.groups.sort((a, b) => {
+      return b.lastModified - a.lastModified;
+    });
+    setGroups(temp);
   };
 
   const getGroupsUserIsIn = async () => {
@@ -57,24 +61,35 @@ const GroupList = ({
     setIsLoading(true);
     await getAllGroups();
     await getGroupsUserIsIn();
+    if (tag == "All Chats") {
+      setDisplay(groups);
+    }
     setIsLoading(false);
   };
 
   useEffect(() => {
     check();
-    if (tag == "All Chats") {
-      setDisplay(groups);
-    } else {
-      if (tag == "Joined") {
-        setDisplay(groupsUserIsIn);
-      }
-      if (tag != "Joined") {
-        const temp = groups.filter((x) => x.hashtag == tag);
-        setDisplay(temp);
-      }
-      console.log(display);
+    if (tag == "Joined") {
+      setDisplay(groupsUserIsIn);
     }
-  }, [tag, load]);
+    if (tag != "Joined" && tag != "All Chats") {
+      console.log(groups);
+      const temp = groups.filter((x) => x.hashtag == tag);
+      setDisplay(temp);
+    }
+  }, [tag, leave]);
+
+  useEffect(() => {
+    getAllGroups();
+  }, [status]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setGroupsUserIsIn((prevState) => prevState.concat(newGroup));
+    setDisplay(display.concat(newGroup));
+    setIsLoading(false);
+    setGroups(groups.concat(newGroup));
+  }, [newGroup]);
 
   const handleSearch = (event) => {
     const input = event.target.value;
@@ -146,6 +161,7 @@ const GroupList = ({
               open={open}
               load={load}
               userEmail={account.email}
+              setNewGroup={setNewGroup}
             />
           </div>
         ) : (
@@ -168,6 +184,10 @@ const GroupList = ({
               setLoad={setLoad}
               load={load}
               setDisabled={setDisabled}
+              leave={leave}
+              setLeave={setLeave}
+              status={status}
+              setStatus={setStatus}
             />
           ))}
         </div>

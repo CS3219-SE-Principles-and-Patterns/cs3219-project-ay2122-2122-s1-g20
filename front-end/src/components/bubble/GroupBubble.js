@@ -11,6 +11,10 @@ const GroupBubble = ({
   userEmail,
   joined,
   setDisabled,
+  leave,
+  setLeave,
+  status,
+  setStatus,
 }) => {
   const name = group.name;
   const hashtag = group.hashtag;
@@ -78,6 +82,7 @@ const GroupBubble = ({
     setIsDisabled(true);
     setDisabled(true);
     setOpenDisable(false);
+    setStatus(!status);
     //remove everyone from the group and remove messages?
     const res = fetch("http://localhost:9000/api/group/users/update", {
       method: "POST",
@@ -94,6 +99,7 @@ const GroupBubble = ({
     setOpen(false);
     setJoin(false);
     setEnable(false);
+    setLeave(!leave);
 
     const groupToLeave = {
       email: userEmail,
