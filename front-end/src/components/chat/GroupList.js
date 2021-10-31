@@ -20,6 +20,7 @@ const GroupList = ({
   const [groups, setGroups] = useState([]);
   const [display, setDisplay] = useState([]);
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
+  const [leave, setLeave] = useState(false);
 
   const getAllGroups = async () => {
     const res = await fetch("http://localhost:9000/api/groups");
@@ -74,7 +75,7 @@ const GroupList = ({
       }
       console.log(display);
     }
-  }, [tag, load]);
+  }, [tag, load, leave]);
 
   const handleSearch = (event) => {
     const input = event.target.value;
@@ -168,6 +169,8 @@ const GroupList = ({
               setLoad={setLoad}
               load={load}
               setDisabled={setDisabled}
+              leave={leave}
+              setLeave={setLeave}
             />
           ))}
         </div>

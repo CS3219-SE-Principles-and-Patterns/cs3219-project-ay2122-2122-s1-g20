@@ -11,6 +11,8 @@ const GroupBubble = ({
   userEmail,
   joined,
   setDisabled,
+  leave,
+  setLeave,
 }) => {
   const name = group.name;
   const hashtag = group.hashtag;
@@ -94,6 +96,7 @@ const GroupBubble = ({
     setOpen(false);
     setJoin(false);
     setEnable(false);
+    setLeave(!leave);
 
     const groupToLeave = {
       email: userEmail,
