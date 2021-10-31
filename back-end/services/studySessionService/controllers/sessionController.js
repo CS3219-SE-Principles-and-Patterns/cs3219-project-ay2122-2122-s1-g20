@@ -1,7 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 const Session = require("../model/session");
+
+const today = moment().startOf("day");
 
 // Get upcoming study session
 exports.getUpcomingSessions = (req, res, next) => {
@@ -17,8 +20,18 @@ exports.getUpcomingSessions = (req, res, next) => {
   Session.find({ module: { $in: moduleList } })
     .find({ owner: { $ne: username } })
     .find({ participants: { $ne: username } })
+    // Convert date of type string to Date, and then filter for those with date greater than current date
+    .find({
+      $expr: {
+        $gte: [
+          {
+            $toDate: "$date",
+          },
+          "$$NOW",
+        ],
+      },
+    })
     .then((sessions) => {
-      // session === array of session objects
       res.status(200).json({ length: sessions.length, sessions });
     })
     .catch((err) => {
