@@ -3,7 +3,7 @@ on:
     branches: [ main ]
     paths:
       - '.github/workflows/front_end.yml'
-      - 'frontend/**/*'
+      - 'front-end/**/*'
 
 name: Front-end
 
