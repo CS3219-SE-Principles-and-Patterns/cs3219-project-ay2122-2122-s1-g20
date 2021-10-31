@@ -99,65 +99,6 @@ exports.signup = async (req, res) => {
   }
 };
 
-// exports.signup = (req, res) => {
-//   const { email, username, password } = req.body;
-//   // generating salt to be used with jwt
-//   const jwtSalt = bcrypt.genSaltSync(10);
-//   User.findOne({ email: email })
-//     .then((user) => {
-//       if (user) {
-//         return res.status(409).json({
-//           message: "This email is already registered.",
-//         });
-//       }
-//       return crypto.randomBytes(20).toString("hex");
-//     })
-//     .then((uniqueString) => {
-//       const user = new User({
-//         email,
-//         username,
-//         password,
-//         uniqueString,
-//         jwtSalt,
-//       });
-//       user.save();
-//       const token = jwt.sign(
-//         { userId: user._id },
-//         process.env.TOKEN_KEY + jwtSalt
-//       );
-//       const accessToken = oAuth2Client.getAccessToken();
-//       const transporter = nodemailer.createTransport({
-//         service: "gmail",
-//         auth: {
-//           type: "OAuth2",
-//           user: "studybuddycs3219@gmail.com",
-//           clientId: process.env.OAUTH_CLIENTID,
-//           clientSecret: process.env.OAUTH_CLIENT_SECRET,
-//           refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-//           accessToken: accessToken,
-//         },
-//       });
-//
-//       const result = transporter.sendMail({
-//         to: email,
-//         subject: "Please verify your email for your StudyBuddy account.",
-//         html: `
-//         <p>Please verify your study buddy account!</p>
-//         <p>Click this <a href="http://localhost:3000/signup/confirmation/verified/${uniqueString}">link</a> to verify your email.</p>
-//       `,
-//       });
-//       console.log("in sign up function");
-//       console.log(result);
-//       return res
-//         .status(200)
-//         .json({ token: token, message: "User successfully created!" });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(422).json({ message: "Error with creating user." });
-//     });
-// };
-
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -317,29 +258,44 @@ exports.postReset = (req, res, next) => {
       })
       .then((result) => {
         const accessToken = oAuth2Client.getAccessToken();
+
         const transporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
             type: "OAuth2",
             user: "studybuddycs3219@gmail.com",
-            clientId: process.env.OAUTH_CLIENTID,
-            clientSecret: process.env.OAUTH_CLIENT_SECRET,
-            refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+            clientId: CLIENT_ID,
+            clientSecret: CLEINT_SECRET,
+            refreshToken: REFRESH_TOKEN,
             accessToken: accessToken,
           },
         });
-        transporter.sendMail({
+
+        const mailOptions = {
           to: req.body.email,
           subject: "Password reset",
           html: `
           <p>You requested a password reset for your StudyBuddy account!</p>
           <p>Click this <a href="http://localhost:3000/resetPassword/${token}">link</a> to set a new password.</p>
         `,
+        };
+
+        const sent_mail = transporter.sendMail(mailOptions, (err, info) => {
+          if (err) {
+            return console.log(err);
+          }
+
+          console.log("Message sent: %s", info.message);
+          console.log("Message URL: %s", nodemailer.getTestMessageUrl(info));
         });
-        console.log(token);
-        res
+
+        return res
           .status(200)
-          .json({ token: token, message: "Reset password email sent!" });
+          .json({
+            result: sent_mail,
+            token: token,
+            message: "Reset password email sent!",
+          });
       })
       .catch((err) => {
         console.log(err);
