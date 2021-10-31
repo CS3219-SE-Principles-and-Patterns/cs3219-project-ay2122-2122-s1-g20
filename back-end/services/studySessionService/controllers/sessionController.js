@@ -1,7 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 const Session = require("../model/session");
+
+const today = moment().startOf("day");
 
 // Get upcoming study session
 exports.getUpcomingSessions = (req, res, next) => {
@@ -17,8 +20,18 @@ exports.getUpcomingSessions = (req, res, next) => {
   Session.find({ module: { $in: moduleList } })
     .find({ owner: { $ne: username } })
     .find({ participants: { $ne: username } })
+    // Convert date of type string to Date, and then filter for those with date greater than current date
+    .find({
+      $expr: {
+        $gte: [
+          {
+            $toDate: "$date",
+          },
+          "$$NOW",
+        ],
+      },
+    })
     .then((sessions) => {
-      // session === array of session objects
       res.status(200).json({ length: sessions.length, sessions });
     })
     .catch((err) => {
@@ -54,6 +67,7 @@ exports.getJoinedSessions = (req, res, next) => {
   // remove USERNAME from params after gateway api is implemented
   const username = req.params.username;
   Session.find({ participants: username })
+    .find({ owner: { $ne: username } })
     .then((sessions) => {
       // session === array of session objects
       // const joinedSessions = session.filter((s) => {
@@ -85,6 +99,15 @@ exports.getASession = (req, res, next) => {
 // Create study session
 exports.createSession = async (req, res, next) => {
   try {
+    const current_date = new Date();
+    if (
+      Date.parse(req.body.date) <
+      current_date.setDate(current_date.getDate() - 1)
+    ) {
+      return res.status(500).json({
+        message: "Your indicated date is over, please choose another date!",
+      });
+    }
     const session = new Session(req.body);
     const createdSession = await session.save();
     return res.status(200).json({
