@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import AlertMessage from "../alerts/AlertMessage";
 
 const SignUpForm = () => {
@@ -12,7 +12,7 @@ const SignUpForm = () => {
   const [isError, setisError] = useState(false);
   const [openAlert, setOpenAlert] = useState(true);
 
-  // let history = useHistory();
+  let history = useHistory();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -70,11 +70,10 @@ const SignUpForm = () => {
           setPassword("");
           setEmail("");
 
-          if (alertMessage !== "") {
-            setTimeout(() => {
-              history.push("/signup/confirmation");
-            }, 3000);
-          }
+          setTimeout(() => {
+            history.push("/signup/confirmation");
+            console.log("route");
+          }, 3000);
 
           // history.push("/signup/confirmation");
         }
