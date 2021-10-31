@@ -10,14 +10,14 @@ const User = require("../model/user");
 
 const CLIENT_ID =
   "683134824367-ik7dnbigqoiqr5plf35lgkmnhjlo1arl.apps.googleusercontent.com";
-const CLEINT_SECRET = "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";
+const CLIENT_SECRET = "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";
 const REDIRECT_URI = "https://developers.google.com/oauthplayground";
 const REFRESH_TOKEN =
   "1//048qX2wDcetOGCgYIARAAGAQSNwF-L9IrstcyboGZNxRGVtcIqun9IJvXQCqEQU863jcFOjXqZgPjuuki4iwuOk9FcXg6SrlqRIM";
 
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
-  CLEINT_SECRET,
+  CLIENT_SECRET,
   REDIRECT_URI
 );
 
@@ -69,7 +69,7 @@ exports.signup = async (req, res) => {
         type: "OAuth2",
         user: "studybuddycs3219@gmail.com",
         clientId: CLIENT_ID,
-        clientSecret: CLEINT_SECRET,
+        clientSecret: CLIENT_SECRET,
         refreshToken: REFRESH_TOKEN,
         accessToken: accessToken,
       },
@@ -265,7 +265,7 @@ exports.postReset = (req, res, next) => {
             type: "OAuth2",
             user: "studybuddycs3219@gmail.com",
             clientId: CLIENT_ID,
-            clientSecret: CLEINT_SECRET,
+            clientSecret: CLIENT_SECRET,
             refreshToken: REFRESH_TOKEN,
             accessToken: accessToken,
           },
@@ -289,13 +289,13 @@ exports.postReset = (req, res, next) => {
           console.log("Message URL: %s", nodemailer.getTestMessageUrl(info));
         });
 
-        return res
-          .status(200)
-          .json({
-            result: sent_mail,
-            token: token,
-            message: "Reset password email sent!",
-          });
+        console.log(sent_mail);
+
+        return res.status(200).json({
+          result: sent_mail,
+          token: token,
+          message: "Reset password email sent!",
+        });
       })
       .catch((err) => {
         console.log(err);
