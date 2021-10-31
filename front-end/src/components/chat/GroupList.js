@@ -12,7 +12,6 @@ const GroupList = ({
   setEnable,
   isLoading,
   setIsLoading,
-  disabled,
   setDisabled,
 }) => {
   const [search, setSearchValue] = useState("");
@@ -23,6 +22,7 @@ const GroupList = ({
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
   const [leave, setLeave] = useState(false);
   const [newGroup, setNewGroup] = useState([]);
+  const [status, setStatus] = useState(false);
 
   console.log(newGroup);
   console.log(groups);
@@ -79,7 +79,9 @@ const GroupList = ({
     }
   }, [tag, leave]);
 
-  console.log(disabled);
+  useEffect(() => {
+    getAllGroups();
+  }, [status]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -184,6 +186,8 @@ const GroupList = ({
               setDisabled={setDisabled}
               leave={leave}
               setLeave={setLeave}
+              status={status}
+              setStatus={setStatus}
             />
           ))}
         </div>
