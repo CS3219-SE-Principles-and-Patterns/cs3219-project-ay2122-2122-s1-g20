@@ -58,7 +58,13 @@ function AlertMessage(props) {
                 className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
               >
                 <span className="sr-only">Dismiss</span>
-                <XIcon className="h-5 w-5" aria-hidden="true" />
+                <XIcon
+                  onClick={() => {
+                    props.setOpen(false);
+                  }}
+                  className="h-5 w-5"
+                  aria-hidden="true"
+                />
               </button>
             </div>
           </div>
