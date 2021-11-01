@@ -3,6 +3,9 @@ name: Deploy to production
 on:
   push:
     branches: [ main ]
+    paths:
+      - '.github/workflows/front_end-deploy.yml'
+      - 'front-end/**/*'
 
 jobs:
 
