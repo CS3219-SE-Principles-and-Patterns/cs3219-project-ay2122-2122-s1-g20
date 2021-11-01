@@ -241,69 +241,71 @@ exports.updateUsername = async (req, res) => {
 exports.postReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
     if (err) {
-      console.log(err);
       return res.status(422).json({ message: "Error generating bytes." });
-    }
-    const token = buffer.toString("hex");
-    User.findOne({ email: req.body.email })
-      .then((user) => {
-        if (!user) {
-          return res
-            .status(422)
-            .json({ message: "No account with this email found." });
-        }
-        user.resetToken = token;
-        user.resetTokenExpiration = Date.now() + 3600000;
-        return user.save();
-      })
-      .then((result) => {
-        oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
-        const accessToken = oAuth2Client.getAccessToken();
-        console.log("Access token: %s", accessToken.toString());
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            type: "OAuth2",
-            user: "studybuddycs3219@gmail.com",
-            clientId: CLIENT_ID,
-            clientSecret: CLIENT_SECRET,
-            refreshToken: REFRESH_TOKEN,
-            accessToken: accessToken,
-          },
-        });
+    } else {
+      const token = buffer.toString("hex");
+      User.findOne({ email: req.body.email })
+        .then((user) => {
+          if (!user) {
+            throw new Error("No account with this email found.");
+          } else {
+            user.resetToken = token;
+            user.resetTokenExpiration = Date.now() + 3600000;
+            return user.save();
+          }
+        })
+        .then((result) => {
+          oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+          const accessToken = oAuth2Client.getAccessToken();
+          console.log("Access token: %s", accessToken.toString());
+          const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              type: "OAuth2",
+              user: "studybuddycs3219@gmail.com",
+              clientId: CLIENT_ID,
+              clientSecret: CLIENT_SECRET,
+              refreshToken: REFRESH_TOKEN,
+              accessToken: accessToken,
+            },
+          });
 
-        const mailOptions = {
-          to: req.body.email,
-          subject: "Password reset",
-          html: `
+          const mailOptions = {
+            to: req.body.email,
+            subject: "Password reset",
+            html: `
           <p>You requested a password reset for your StudyBuddy account!</p>
           <p>Click this <a href="http://localhost:3000/resetPassword/${token}">link</a> to set a new password.</p>
         `,
-        };
+          };
 
-        const sent_mail = transporter.sendMail(mailOptions, (err, info) => {
-          if (err) {
-            return console.log(err);
+          const sent_mail = transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+              return console.log(err);
+            }
+
+            console.log("Message sent: %s", info.message);
+            console.log("Message URL: %s", nodemailer.getTestMessageUrl(info));
+          });
+
+          console.log(sent_mail);
+
+          return res.status(200).json({
+            result: sent_mail,
+            token: token,
+            message: "Reset password email sent!",
+          });
+        })
+        .catch((err) => {
+          if (err.message) {
+            res.status(422).json({ message: err.message });
+          } else {
+            res
+              .status(422)
+              .json({ message: "There is an error with sending email!" });
           }
-
-          console.log("Message sent: %s", info.message);
-          console.log("Message URL: %s", nodemailer.getTestMessageUrl(info));
         });
-
-        console.log(sent_mail);
-
-        return res.status(200).json({
-          result: sent_mail,
-          token: token,
-          message: "Reset password email sent!",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        res
-          .status(422)
-          .json({ message: "There is an error with sending email!" });
-      });
+    }
   });
 };
 

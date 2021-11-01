@@ -55,7 +55,6 @@ const ResetPasswordForm = () => {
         }
 
         if (response.status === 200) {
-          // Route to home page
           setAlertMessage(responseData.message);
           setIsError(false);
           setPassword("");
