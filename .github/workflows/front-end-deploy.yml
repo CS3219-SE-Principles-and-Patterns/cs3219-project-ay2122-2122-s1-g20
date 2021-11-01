@@ -43,8 +43,9 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.FRONTEND_REPO }}
           IMAGE_TAG: 1.0
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-          docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
+          cd front-end
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 #      - name: Update kube config
 #        run: aws eks update-kubeconfig --name simple-bank --region eu-west-1
 #

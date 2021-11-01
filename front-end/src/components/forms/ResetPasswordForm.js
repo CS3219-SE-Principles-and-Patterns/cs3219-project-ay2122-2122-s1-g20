@@ -59,7 +59,6 @@ const ResetPasswordForm = () => {
           setIsError(false);
           setPassword("");
           setPasswordConfirmation("");
-          console.log(responseData.message);
         }
       }
     } catch (error) {
