@@ -21,8 +21,6 @@ const oAuth2Client = new google.auth.OAuth2(
   REDIRECT_URI
 );
 
-oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
-
 google.options({ auth: oAuth2Client }); // Apply the settings globally
 
 exports.signup = async (req, res) => {
@@ -51,8 +49,10 @@ exports.signup = async (req, res) => {
       process.env.TOKEN_KEY + jwtSalt
     );
 
+    oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
     const accessToken = await oAuth2Client.getAccessToken();
-    console.log(accessToken);
+    console.log("Access token: %s", accessToken.toString());
 
     const mailOptions = {
       to: email,
@@ -257,8 +257,9 @@ exports.postReset = (req, res, next) => {
         return user.save();
       })
       .then((result) => {
+        oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
         const accessToken = oAuth2Client.getAccessToken();
-
+        console.log("Access token: %s", accessToken.toString());
         const transporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
