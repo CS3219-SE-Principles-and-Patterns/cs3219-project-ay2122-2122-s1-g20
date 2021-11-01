@@ -123,7 +123,7 @@ exports.login = async (req, res) => {
       { userId: user._id },
       process.env.TOKEN_KEY + jwtSalt
     );
-    // Check that email is verified beforee logging in
+
     if (user.isVerified === false) {
       return res
         .status(422)
