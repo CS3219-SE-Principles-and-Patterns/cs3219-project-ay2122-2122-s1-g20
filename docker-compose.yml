@@ -1,0 +1,93 @@
+version: '3.8'
+services:
+  front-end:
+    image: studybuddycs3219-frontend
+    build:
+      context: ./front-end
+      dockerfile: ./Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - default
+    volumes:
+      - front-end_node_modules:/app/node_modules
+      - ./front-end:/app
+
+  auth:
+    image: studybuddycs3219-authservice
+    build:
+      context: ./back-end/services/authService
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./back-end/services/authService/config.env
+    environment:
+      - EMAIL=studybuddycs3219@gmail.com
+      - WORD=StudyBuddyCS3219
+      - OAUTH_REDIRECT_URI = https://developers.google.com/oauthplayground
+      - OAUTH_CLIENTID=683134824367-ik7dnbigqoiqr5plf35lgkmnhjlo1arl.apps.googleusercontent.com
+      - OAUTH_CLIENT_SECRET=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
+      - OAUTH_REFRESH_TOKEN=1//048qX2wDcetOGCgYIARAAGAQSNwF-L9IrstcyboGZNxRGVtcIqun9IJvXQCqEQU863jcFOjXqZgPjuuki4iwuOk9FcXg6SrlqRIM
+      - AUTH_PORT=8080
+      - HOST=localhost
+      - AUTH_HOST_URL=http://localhost:8080/
+      - TOKEN_KEY=L7cBIECqGn4FgT1kdzNUYCCFxiUb0h8e5AtpRexv5rtnx21x1dCA1iKGMDktdMrn2HNdIY/sqCs9NUopVhqQvS34O8or3qvw7w12ZAE29LBCQFo++e9vU2wK0+Pf/0S4g3Mut+g25+enqkKLPMZ4agOE+QbV0NzEH89KDC1llPntFsS9wonkybH1nlzpue8EWzA/TQ6xie+t6cYtt4LgqaNp/49iNRHqnU1EZg==
+      - CLOUD_NAME=studybuddy3219
+      - CLOUDINARY_API_KEY=348187799369111
+      - CLOUDINARY_API_SECRET=ZArIFIUyK9y47uIopjvJ98zBttY
+      - DATABASE=mongodb+srv://member:<PASSWORD>@cluster0.amwuq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      - DATABASE_PASSWORD=GkQnFaTGmqqz3HxZ
+    ports:
+      - 8080:8080
+    networks:
+      - default
+    volumes:
+      - auth_node_modules:/app/node_modules
+      - ./back-end/services/authService:/app
+
+  chat:
+    image: studybuddycs3219-chatservice
+    build:
+      context: ./back-end/services/chatService
+      dockerfile: ./Dockerfile
+    environment:
+      - CHAT_PORT=9000
+      - HOST=localhost
+      - CHAT_HOST_URL=http://localhost:9000/
+      - DATABASE=mongodb+srv://member:<PASSWORD>@cluster0.amwuq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      - DATABASE_PASSWORD=GkQnFaTGmqqz3HxZ
+    ports:
+      - 9000:9000
+    networks:
+      - default
+    volumes:
+      - chat_node_modules:/app/node_modules
+      - ./back-end/services/chatService:/app
+
+  studySession:
+    image: studybuddycs3219-studysessionservice
+    build:
+      context: ./back-end/services/studySessionService
+      dockerfile: ./Dockerfile
+    environment:
+      - STUDY_PORT=1025
+      - STUDY_HOST_URL=http://localhost:1025/
+      - DATABASE=mongodb+srv://member:<PASSWORD>@cluster0.amwuq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      - DATABASE_PASSWORD=GkQnFaTGmqqz3HxZ
+    ports:
+      - 1025:1025
+    networks:
+      - default
+    volumes:
+      - studySession_node_modules:/app/node_modules
+      - ./back-end/services/studySessionService:/app
+
+volumes:
+  auth_node_modules:
+  studySession_node_modules:
+  chat_node_modules:
+  front-end_node_modules:
+
+networks:
+  default:
+    name: studyBuddy-development
+    driver: bridge
