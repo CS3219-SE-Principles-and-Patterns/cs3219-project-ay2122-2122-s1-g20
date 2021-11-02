@@ -4,20 +4,20 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '.github/workflows/front-end-deploy.yml'
-      - 'front-end/**/*'
+      - '.github/workflows/auth-deploy.yml'
+      - 'back-end/services/authService/**/*'
 
 env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  ECR_REPOSITORY: ${{ secrets.FRONTEND_REPO }}
+  ECR_REPOSITORY: ${{ secrets.AUTH_REPO }}
   IMAGE_TAG: latest
   AWS_DEFAULT_OUTPUT: json
 
 jobs:
   build-and-push:
-    name: Push Front-end to ECR
+    name: Push Auth Service to ECR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,7 +34,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build and tag the image
-        working-directory: ./front-end
+        working-directory: ./back-end/services/authService
         run:
           # Build and tag the image
           docker build -t $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG .

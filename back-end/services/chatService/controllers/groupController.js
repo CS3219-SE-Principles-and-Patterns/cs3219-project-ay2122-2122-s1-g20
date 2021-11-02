@@ -23,7 +23,9 @@ exports.create = async (req, res) => {
     group.creator = req.body.creator;
     group.state = req.body.state;
     await group.save();
-    res.status(200).send({ group: group, message: "Group successfully created!" });
+    res
+      .status(200)
+      .send({ group: group, message: "Group successfully created!" });
     return;
   } catch (err) {
     res.status(422).send({ message: "Error with creating group." });
@@ -49,7 +51,7 @@ exports.delete = async (req, res) => {
   }
 };
 
-exports.getGroupsCreated  = async (req, res) => {
+exports.getGroupsCreated = async (req, res) => {
   try {
     const creator = req.params.creator;
     const data = await Group.find({ creator: creator });
@@ -136,7 +138,9 @@ exports.removeUser = async (req, res) => {
     const group = await Group.findById(req.body.groupId).exec();
     group.uid.pull(req.body.email);
     await group.save();
-    res.status(200).send({ group: group, message: "Group members updated" });
+    res
+      .status(200)
+      .send({ group: group, message: "Group members are updated!" });
     return;
   } catch (err) {
     res.status(404).send({ message: "Error with removing group members." });
@@ -146,11 +150,12 @@ exports.removeUser = async (req, res) => {
 
 exports.updateState = async (req, res) => {
   try {
-    const group = await Group.findByIdAndUpdate(req.body.groupId, 
+    const group = await Group.findByIdAndUpdate(
+      req.body.groupId,
       { state: "disabled", timeOfDisable: Date.now() },
       { new: true }
     );
-    res.status(200).send({ group: group, message: "Group disabled" });
+    res.status(200).send({ group: group, message: "Group is disabled." });
     return;
   } catch (err) {
     res.status(404).send({ message: "Error with disabling group" });
@@ -158,11 +163,13 @@ exports.updateState = async (req, res) => {
   }
 };
 
-exports.checkAndDeleteGroups =  () => {
+exports.checkAndDeleteGroups = () => {
   const check = Date.now() - 172800000;
-  Group.deleteMany({state: "disabled", timeOfDisable: {$lte: check}}).then(function(){
-    console.log("deleted");
-  }).catch(function(err){
-    console.log(err);
-  });
-}
+  Group.deleteMany({ state: "disabled", timeOfDisable: { $lte: check } })
+    .then(function () {
+      console.log("deleted");
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+};
