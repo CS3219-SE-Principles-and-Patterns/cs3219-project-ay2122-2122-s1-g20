@@ -131,7 +131,6 @@ exports.addUser = async (req, res) => {
 };
 
 exports.removeUser = async (req, res) => {
-  //req includes email and groupId
   try {
     const group = await Group.findById(req.body.groupId).exec();
     group.uid.pull(req.body.email);
