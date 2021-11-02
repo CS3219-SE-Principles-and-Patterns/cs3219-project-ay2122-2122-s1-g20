@@ -102,7 +102,6 @@ exports.retrieveGroup = async (req, res) => {
 };
 
 exports.updateGroup = async (req, res) => {
-  //req includes groupId
   try {
     const group = await Group.findById(req.params.group_id).exec();
     group.lastModified = req.body.timestamp;
