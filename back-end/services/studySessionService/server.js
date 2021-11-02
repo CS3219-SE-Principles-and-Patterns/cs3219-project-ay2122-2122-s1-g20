@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 
 const sessionRoutes = require("./routes/sessionRoutes");
 
-dotenv.config({ path: "../../config.env" });
+dotenv.config({ path: "../config.env" });
 
 const app = express();
 const PORT = process.env.STUDY_PORT || config.port;
