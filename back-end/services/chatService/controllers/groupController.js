@@ -116,7 +116,6 @@ exports.updateGroup = async (req, res) => {
 };
 
 exports.addUser = async (req, res) => {
-  //req includes email and groupId
   try {
     console.log("ADD");
     const group = await Group.findById(req.body.groupId).exec();
