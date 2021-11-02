@@ -37,8 +37,7 @@ jobs:
         working-directory: ./front-end
         run:
           # Build and tag the image
-          docker build \
-            -t $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG .
       - name: Push the image into ECR
         run:
           docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG

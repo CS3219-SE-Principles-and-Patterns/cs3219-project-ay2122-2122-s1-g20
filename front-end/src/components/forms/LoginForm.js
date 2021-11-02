@@ -47,7 +47,6 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         setUser(responseData.user, responseData.token);
-        // if first login, route to /profilePic, if not route to home page
         setAlertMessage(responseData.message);
         setisError(false);
         setEmail("");
