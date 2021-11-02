@@ -4,7 +4,7 @@ services:
     image: studybuddycs3219-frontend
     build:
       context: ./front-end
-      dockerfile: ../Dockerfile
+      dockerfile: ./Dockerfile
     ports:
       - 3000:3000
     networks:
@@ -14,10 +14,10 @@ services:
       - ./front-end:/app
 
   auth:
-    image: studybuddycs3219-authService
+    image: studybuddycs3219-authservice
     build:
       context: ./back-end/services/authService
-      dockerfile: ../Dockerfile
+      dockerfile: ./Dockerfile
     env_file:
       - ./back-end/services/authService/config.env
     environment:
@@ -45,10 +45,10 @@ services:
       - ./back-end/services/authService:/app
 
   chat:
-    image: studybuddycs3219-chatService
+    image: studybuddycs3219-chatservice
     build:
       context: ./back-end/services/chatService
-      dockerfile: ../Dockerfile
+      dockerfile: ./Dockerfile
     environment:
       - CHAT_PORT=9000
       - HOST=localhost
@@ -64,10 +64,10 @@ services:
       - ./back-end/services/chatService:/app
 
   studySession:
-    image: studybuddycs3219-studySessionService
+    image: studybuddycs3219-studysessionservice
     build:
       context: ./back-end/services/studySessionService
-      dockerfile: ../Dockerfile
+      dockerfile: ./Dockerfile
     environment:
       - STUDY_PORT=1025
       - STUDY_HOST_URL=http://localhost:1025/
