@@ -11,12 +11,12 @@ const app = express();
 const PORT = process.env.STUDY_PORT || config.port;
 
 app.use(cors());
-app.use(express.json({ limit: "15360mb" }));
+app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
-    limit: "15360mb",
-    parameterLimit: 500000000,
+    // limit: "15360mb",
+    // parameterLimit: 500000000,
   })
 );
 
