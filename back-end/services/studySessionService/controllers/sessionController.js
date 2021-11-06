@@ -62,7 +62,6 @@ exports.getMySessions = (req, res, next) => {
     });
 };
 
-// Get my created study session
 exports.getJoinedSessions = (req, res, next) => {
   // remove USERNAME from params after gateway api is implemented
   const username = req.params.username;

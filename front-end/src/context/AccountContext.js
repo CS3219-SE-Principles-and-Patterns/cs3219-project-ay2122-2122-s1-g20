@@ -27,6 +27,19 @@ export const AccountProvider = ({ children }) => {
       setProfilePic(user.profilePic);
     }
   };
+
+  // useEffect(() => {
+  //   const token = JSON.parse(localStorage.getItem("token"));
+  //
+  //   if (token) {
+  //     setToken(token);
+  //   }
+  // }, []);
+  //
+  // useEffect(() => {
+  //   localStorage.setItem("token", JSON.stringify(token));
+  // }, [token]);
+
   const handleUpdateUsername = async (newUsername) => {
     await api
       .post("/user/updateUsername", { newUsername, email })

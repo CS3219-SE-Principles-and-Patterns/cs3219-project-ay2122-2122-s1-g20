@@ -10,8 +10,9 @@ function PrivateRoute({ component: Component, ...rest }) {
 
   useEffect(() => {
     setIsLoading(true);
+    console.log(token);
     const authenticate = async () => {
-      if (token != "") {
+      if (token !== "") {
         await api
           .post("/user/authentication")
           .then((res) => {
