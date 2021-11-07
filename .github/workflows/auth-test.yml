@@ -23,6 +23,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: echo "Switching directories"
       - run: cd back-end/services/authService
+      - run: find authService
       - run: echo "Installing dependencies"
       - run: npm i
       - run: echo "Starting tests for authService"
