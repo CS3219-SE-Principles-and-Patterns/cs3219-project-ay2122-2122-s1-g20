@@ -1,3 +1,4 @@
+const Cookies = require("universal-cookie");
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
@@ -100,18 +101,16 @@ exports.signup = async (req, res) => {
 };
 
 exports.checkToken = (req, res, next) => {
-  //console.log(req);
-  //console.log("here");
-  //console.log("Data 1", req.cookies.token);
   let auth = false;
+  const token = req.headers["x-access-token"];
+  const salt = req.headers["jwt-salt"];
 
-  if (!req.cookies.token || !req.cookies.salt) {
+  if (!token || !salt) {
     return res.status(400).json({ message : "Please login!" });
   }
-  const req_token = req.cookies.token;
-  const req_salt = req.cookies.salt;
+
   try {
-    if (!jwt.verify(req_token, process.env.TOKEN_KEY + req_salt))
+    if (!jwt.verify(token, process.env.TOKEN_KEY + salt))
       return res.status(400).json("Invalid token!");
     else {
       auth = true;
@@ -123,8 +122,9 @@ exports.checkToken = (req, res, next) => {
   if (!auth) {
     return res.status(400).json({ message: "Token verification failed!" });
   } else {
-    const data = jwt.verify(req_token, process.env.TOKEN_KEY + req_salt);
-    User.findById(data._id).exec((err, user) => {
+    const data = jwt.verify(token, process.env.TOKEN_KEY + salt);
+    console.log(data);
+    User.findById(data.userId).exec((err, user) => {
       if (err || !user) {
         return res.status(400).json({ error: "User not found!" });
       }
@@ -146,7 +146,7 @@ exports.checkToken = (req, res, next) => {
           jwtSalt
         },
         token : {
-          req_token
+          token
         }
       });
     });
@@ -183,8 +183,6 @@ exports.login = async (req, res) => {
         .status(422)
         .json({ message: "Your account is not yet verified." });
     } else {
-        res.cookie("token", token, { httpOnly: true, maxAge: 86400000 });
-        res.cookie("salt", jwtSalt, { httpOnly: true, maxAge: 86400000 });
       return res
         .status(200)
         .json({ user, token: token, message: "User successfully logged in!" });

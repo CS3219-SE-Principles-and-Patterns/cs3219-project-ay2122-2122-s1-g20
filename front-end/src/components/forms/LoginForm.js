@@ -2,6 +2,7 @@ import React, { useContext, useState, useCallback } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { AccountContext } from "../../context/AccountContext";
 import AlertMessage from "../alerts/AlertMessage";
+import Cookies from "universal-cookie";
 
 const LoginForm = () => {
   const { setUser } = useContext(AccountContext);
@@ -11,6 +12,8 @@ const LoginForm = () => {
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [isError, setisError] = useState(false);
   const [openAlert, setOpenAlert] = useState(true);
+
+  const cookies = new Cookies();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -28,7 +31,6 @@ const LoginForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify({
           email: email,
           password: password,
@@ -48,6 +50,12 @@ const LoginForm = () => {
 
       if (response.status === 200) {
         setUser(responseData.user, responseData.token);
+        cookies.set("token", responseData.token, {
+          path: "/",
+        });
+        cookies.set("salt", responseData.user.jwtSalt, {
+          path: "/",
+        });
         setAlertMessage(responseData.message);
         setisError(false);
         setEmail("");

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { setTokenHeader, setSaltHeader, api } from "../utils/api";
+import Cookies from "universal-cookie";
 
 export const AccountContext = React.createContext();
 
@@ -11,6 +12,8 @@ export const AccountProvider = ({ children }) => {
   const [modules, setModules] = useState([]);
   const [profilePic, setProfilePic] = useState("");
   const [jwtSalt, setJwtSalt] = useState("");
+
+  const cookies = new Cookies();
 
   const setUser = (user, token) => {
     setToken(token);
@@ -34,6 +37,8 @@ export const AccountProvider = ({ children }) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": cookies.get("token", { path: "/" }),
+          "jwt-salt": cookies.get("salt", { path: "/" }),
         },
       });
       console.log(response);
@@ -49,7 +54,7 @@ export const AccountProvider = ({ children }) => {
       if (res.error) {
         console.log(res.error);
       } else if (res.status == 200) {
-        setUser(data.user, data.token);
+        setUser(data.user, data.token.token);
       }
     });
   };
