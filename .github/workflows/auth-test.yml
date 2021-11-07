@@ -21,13 +21,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - working-directory: ./back-end/services/authService
-      - run: find back-end
-      - run: find authService
-      - run: echo "Switching directories"
-     # - run: cd back-end/services/authService
-      - run: echo "Installing dependencies"
-      - run: npm i
-      - run: echo "Starting tests for authService"
-      - run: npm test
+      - name: Installing dependencies
+        working-directory: ./back-end/services/authService
+        run: npm i
+      - name: Running tests
+        working-directory: ./back-end/services/authService
+        run: npm test
       - run: echo "End of tests"
