@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 chai.should();
 const testGroup = new Group({
   hashtag: "test",
-  name: "testing1",
+  name: Math.random().toString(36).substr(2, 5),
   uid: ["test@gmail.com"],
   lastModified: 123,
   creator: "test@gmail.com",
@@ -66,12 +66,12 @@ describe("Groups", () => {
           res.body.should.have
             .property("message")
             .eql("Group successfully deleted!");
-
           done();
         });
     });
   });
 });
+
 describe("Messages", () => {
   // Test to add a message
   it("should add a new messages record", (done) => {
