@@ -28,7 +28,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     };
     const timer = setTimeout(() => {
       authenticate();
-    }, 100);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [token]);
 

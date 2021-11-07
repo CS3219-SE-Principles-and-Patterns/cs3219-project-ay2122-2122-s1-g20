@@ -99,6 +99,58 @@ exports.signup = async (req, res) => {
   }
 };
 
+exports.checkToken = (req, res, next) => {
+  let auth = false;
+  const token = req.headers["x-access-token"];
+  const salt = req.headers["jwt-salt"];
+
+  if (!token || !salt) {
+    return res.status(400).json({ message : "Please login!" });
+  }
+
+  try {
+    if (!jwt.verify(token, process.env.TOKEN_KEY + salt))
+      return res.status(400).json("Invalid token!");
+    else {
+      auth = true;
+    }
+  } catch (error) {
+    console.log("Invalid token!");
+  }
+
+  if (!auth) {
+    return res.status(400).json({ message: "Token verification failed!" });
+  } else {
+    const data = jwt.verify(token, process.env.TOKEN_KEY + salt);
+    User.findById(data.userId).exec((err, user) => {
+      if (err || !user) {
+        return res.status(400).json({ error: "User not found!" });
+      }
+
+      const {
+        username,
+        email,
+        modules,
+        profilePic,
+        jwtSalt
+      } = user;
+
+      return res.status(200).json({
+        user: {
+          username,
+          email,
+          modules,
+          profilePic,
+          jwtSalt
+        },
+        token : {
+          token
+        }
+      });
+    });
+  }
+};
+
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -129,7 +181,6 @@ exports.login = async (req, res) => {
         .status(422)
         .json({ message: "Your account is not yet verified." });
     } else {
-      delete user.password;
       return res
         .status(200)
         .json({ user, token: token, message: "User successfully logged in!" });

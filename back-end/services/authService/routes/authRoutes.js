@@ -7,6 +7,8 @@ router.put("/signup", authController.signup);
 
 router.post("/login", authController.login);
 
+router.get("/login", authController.checkToken);
+
 router.post("/logout", authController.logout);
 
 router.post("/updateEmail", authController.updateEmail);
