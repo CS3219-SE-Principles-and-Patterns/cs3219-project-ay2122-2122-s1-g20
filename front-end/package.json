@@ -39,8 +39,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "cypress-run": "cypress run",
-    "int-test": "start-server-and-test npm http://localhost:3000 cypress-run"
+    "cypress": "cypress run"
   },
   "eslintConfig": {
     "extends": [
