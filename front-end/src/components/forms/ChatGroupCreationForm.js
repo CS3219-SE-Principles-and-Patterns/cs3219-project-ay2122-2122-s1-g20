@@ -37,8 +37,6 @@ const ChatGroupCreationForm = ({
     setError(false);
     try {
       const value = await checkHashTag();
-      console.log(value);
-      //add group
       const res = await fetch("http://localhost:9000/api/groups", {
         method: "POST",
         headers: {
