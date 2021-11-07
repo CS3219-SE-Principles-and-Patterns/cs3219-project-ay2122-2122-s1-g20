@@ -5,6 +5,7 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { AccountContext } from "../../context/AccountContext";
 import { api } from "../../utils/api";
 import { useHistory } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -27,6 +28,9 @@ export default function Header() {
       setIsLoggedIn(true);
     }
   });
+
+  const cookies = new Cookies();
+  const past = new Date(Date.now() - 86400000);
 
   const handleLogout = async (event) => {
     event.preventDefault();
@@ -135,7 +139,19 @@ export default function Header() {
                         <Menu.Item>
                           {({ active }) => (
                             <a
-                              onClick={() => handleLogout}
+                              onClick={() => {
+                                cookies.set("token", " ", {
+                                  path: "/",
+                                  expires: past,
+                                });
+                                cookies.set("salt", " ", {
+                                  path: "/",
+                                  expires: past,
+                                });
+                                cookies.remove("token");
+                                cookies.remove("salt");
+                                handleLogout();
+                              }}
                               href="/login"
                               className={classNames(
                                 active ? "bg-gray-100" : "",

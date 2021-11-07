@@ -3,6 +3,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
@@ -19,8 +21,13 @@ cloudinary.config({
 const app = express();
 const PORT = process.env.AUTH_PORT || config.port;
 
+app.use(cookieParser());
+
 app.use(cors());
 app.use(express.json({ limit: "15360mb" }));
+app.use(
+  session({ secret: "my secret", resave: false, saveUninitialized: false })
+);
 app.use(
   express.urlencoded({
     extended: true,
@@ -31,7 +38,10 @@ app.use(
 
 app.use(
   cors({
-    exposedHeaders: ["x-access-token"],
+    exposedHeaders: ["x-access-token", "jwt-salt", "set-cookie"],
+    credentials: true,
+    origin: true,
+    methods: ["OPTIONS", "GET", "HEAD" , "PUT", "PATCH" , "POST" ,"DELETE"],
   })
 );
 
