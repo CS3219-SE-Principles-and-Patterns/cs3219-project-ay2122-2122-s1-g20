@@ -15,6 +15,7 @@ router
 router.route("/groups/:group_id").get(groupController.retrieveGroup);
 router.route("/groups/:group_id").delete(groupController.delete);
 router.route("/groups/users/:creator").get(groupController.getGroupsCreated);
+
 router.route("/messages").post(messageController.add);
 router.route("/messages/:group_id").get(messageController.retrieve);
 

@@ -75,3 +75,5 @@ cron.schedule("59 23 * * *", function () {
 });
 
 console.log(Date.now());
+
+module.exports = app;
