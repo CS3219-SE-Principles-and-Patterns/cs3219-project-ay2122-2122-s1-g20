@@ -78,6 +78,7 @@ const LoginForm = () => {
       ) : undefined}
       <form
         onSubmit={handleLogin}
+        name="login-form"
         className="space-y-6"
         action="#"
         method="POST"
@@ -90,6 +91,7 @@ const LoginForm = () => {
             Email address
           </label>
           <input
+            autoFocus
             onChange={handleEmailChange}
             type="email"
             name="email"
