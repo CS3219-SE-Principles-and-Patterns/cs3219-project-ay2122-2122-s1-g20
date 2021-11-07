@@ -52,9 +52,11 @@ const LoginForm = () => {
         setUser(responseData.user, responseData.token);
         cookies.set("token", responseData.token, {
           path: "/",
+          maxAge: 86400,
         });
         cookies.set("salt", responseData.user.jwtSalt, {
           path: "/",
+          maxAge: 86400,
         });
         setAlertMessage(responseData.message);
         setisError(false);
