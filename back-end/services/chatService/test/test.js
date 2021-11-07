@@ -30,7 +30,7 @@ const testMessage = new Message({
 describe("Groups", () => {
   describe("GET /groups", () => {
     // Test to get all groups
-    it("should get all groups record", () => {
+    it("should get all groups record", (done) => {
       chai
         .request(app)
         .get("/api/groups")
@@ -42,7 +42,7 @@ describe("Groups", () => {
   });
 
   describe("Create a new group", () => {
-    it("should post a new group", () => {
+    it("should post a new group", (done) => {
       chai
         .request(app)
         .post("/api/groups")
@@ -51,12 +51,13 @@ describe("Groups", () => {
           res.should.have.status(200);
           res.body.should.have
             .property("message")
-            .eql("Message successfully sent!");
+            .eql("Group successfully created!");
+          done();
         });
     });
 
     //it should delete  the group with given id
-    it("it should DELETE a group by the given id", () => {
+    it("it should DELETE a group by the given id", (done) => {
       chai
         .request(app)
         .del("/api/groups/" + testGroup._id)
@@ -73,7 +74,7 @@ describe("Groups", () => {
 });
 describe("Messages", () => {
   // Test to add a message
-  it("should add a new messages record", () => {
+  it("should add a new messages record", (done) => {
     chai
       .request(app)
       .post("/api/messages/")
