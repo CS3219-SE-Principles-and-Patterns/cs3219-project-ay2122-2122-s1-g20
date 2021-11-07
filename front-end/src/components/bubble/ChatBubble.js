@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const ChatBubble = ({ message, toggle }) => {
-  return toggle == "left" ? (
+  return toggle === "left" ? (
     <div>
       <div className="p-2">
         <img
