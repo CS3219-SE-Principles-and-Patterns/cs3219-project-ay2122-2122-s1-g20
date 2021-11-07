@@ -11,6 +11,8 @@ jobs:
   test: 
     runs-on: ubuntu-latest
     steps:
+      - run: echo "Switching directories"
+      - run: cd back-end/services/authService
       - run: echo "Installing dependencies"
       - run: npm i
       - run: echo "Starting tests for authService"
