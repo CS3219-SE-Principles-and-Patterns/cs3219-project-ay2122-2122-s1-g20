@@ -55,10 +55,13 @@ http.listen(PORT, () => {
   console.log("connected to port: " + PORT);
 });
 
-const DB = process.env.DATABASE.replace(
-  "<PASSWORD>",
-  process.env.DATABASE_PASSWORD
-);
+const DB =
+  app.settings.env == "test"
+    ? process.env.TEST_DATABASE.replace(
+        "<PASSWORD>",
+        process.env.DATABASE_PASSWORD
+      )
+    : process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
 
 mongoose
   .connect(DB, {
