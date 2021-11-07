@@ -1,4 +1,3 @@
-const Cookies = require("universal-cookie");
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
@@ -123,7 +122,6 @@ exports.checkToken = (req, res, next) => {
     return res.status(400).json({ message: "Token verification failed!" });
   } else {
     const data = jwt.verify(token, process.env.TOKEN_KEY + salt);
-    console.log(data);
     User.findById(data.userId).exec((err, user) => {
       if (err || !user) {
         return res.status(400).json({ error: "User not found!" });
