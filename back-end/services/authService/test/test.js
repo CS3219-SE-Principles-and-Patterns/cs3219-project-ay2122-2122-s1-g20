@@ -60,7 +60,6 @@ describe("TEST", () => {
             .post('/api/user/login')
             .send(user)
             .end((err, res) => {
-                console.log(res);
                 res.should.have.status(200);
                 res.body.should.be.a('object');
                 res.body.should.have.property('message').eql("User successfully logged in!");
