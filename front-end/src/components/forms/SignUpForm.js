@@ -74,8 +74,6 @@ const SignUpForm = () => {
             history.push("/signup/confirmation");
             console.log("route");
           }, 3000);
-
-          // history.push("/signup/confirmation");
         }
       }
     } catch (error) {
