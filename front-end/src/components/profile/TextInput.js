@@ -30,7 +30,7 @@ const TextInput = ({
           value={value}
           className={`${
             isDisabled ? "text-black text-opacity-50 bg-opacity-50" : ""
-          } appearance-none border-none w-56 sm:w-72 px-3 py-2 sm:py-3 text-xs sm:text-sm rounded-2xl bg-blue-light focus:outline-none focus:ring-purple-dark focus:border-purple-dark`}
+          } appearance-none border-none w-56 sm:w-72 px-3 py-2 sm:py-3 text-xs sm:text-sm rounded-lg bg-blue-light focus:outline-none focus:ring-purple-dark focus:border-purple-dark`}
         />
         {editButton}
       </span>

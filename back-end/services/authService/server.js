@@ -11,7 +11,7 @@ const profileRoutes = require("./routes/profileRoutes");
 const { verifyToken } = require("./middlewares/requireAuth");
 const groupRoutes = require("./routes/groupRoutes");
 
-dotenv.config({ path: "../../config.env" });
+dotenv.config({ path: "./config.env" });
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -45,10 +45,13 @@ app.use(
   })
 );
 
-const DB = process.env.DATABASE.replace(
-  "<PASSWORD>",
-  process.env.DATABASE_PASSWORD
-);
+const DB = (app.settings.env == 'test' ? (process.env.TEST_DATABASE.replace(
+    "<PASSWORD>",
+    process.env.DATABASE_PASSWORD
+  )) : (process.env.DATABASE.replace(
+    "<PASSWORD>",
+    process.env.DATABASE_PASSWORD
+  )));
 
 mongoose
   .connect(DB, {
@@ -68,3 +71,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => console.log("Server running on " + PORT));
+
+module.exports = app;

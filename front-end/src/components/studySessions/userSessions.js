@@ -1,5 +1,7 @@
 import YellowSessionCard from "./yellowSessionCard";
 import React, { useState } from "react";
+import { useContext } from "react";
+import { SessionContext } from "../../context/SessionContext";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -8,10 +10,12 @@ function classNames(...classes) {
 export default function UserSessions() {
   const [isTab0, setIsTab0] = useState(true);
   const [isTab1, setIsTab1] = useState(false);
+  const isCreatedSessions = true;
 
+  const { mySessions, joinedSessions } = useContext(SessionContext);
   const tabs = [
     { name: "Your created study sessions", current: isTab0 },
-    { name: "Your past sessions", current: isTab1 },
+    { name: "Your joined sessions", current: isTab1 },
   ];
 
   const handleTabNavigation = (tab, tabIdx) => {
@@ -24,10 +28,21 @@ export default function UserSessions() {
     }
   };
 
+  const renderCards = (sessions, isCreatedSessions) => {
+    return sessions.map((session) => (
+      <div key={session.title}>
+        <YellowSessionCard
+          studySession={session}
+          isCreatedSessions={isCreatedSessions}
+        />
+      </div>
+    ));
+  };
+
   return (
-    <div className="bg-blue-light pt-10 h-screen">
+    <div className="bg-blue-light z-0 pt-10 pb-10">
       <nav
-        className="flex ml-10 mr-10 mb-4 z-0 rounded-lg shadow divide-x divide-gray-200"
+        className="flex ml-10 mr-10 mb-4 rounded-lg shadow divide-x divide-gray-200"
         aria-label="Tabs"
       >
         {tabs.map((tab, tabIdx) => (
@@ -55,7 +70,11 @@ export default function UserSessions() {
           </a>
         ))}
       </nav>
-      <YellowSessionCard />
+      <div className="flex flex-col gap-y-3">
+        {isTab0
+          ? renderCards(mySessions, isCreatedSessions)
+          : renderCards(joinedSessions, !isCreatedSessions)}
+      </div>
     </div>
   );
 }

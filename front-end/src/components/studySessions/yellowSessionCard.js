@@ -1,17 +1,44 @@
 import React, { useState } from "react";
 import { FaTrash, FaPen, FaEye } from "react-icons/fa";
 import { BsChatDotsFill } from "react-icons/bs";
+import { ImExit } from "react-icons/im";
 import ConfirmationPopup from "../forms/ConfirmationPopup";
 import EditStudySession from "../forms/EditStudySession";
 import StudySessionDetails from "../forms/StudySessionDetails";
+import SessionCardTemplate from "./sessionCardTemplate";
+import { useContext, useEffect } from "react";
+import { SessionContext } from "../../context/SessionContext";
+import { AccountContext } from "../../context/AccountContext";
+import SessionAlerts from "../alerts/SessionAlerts";
 
-const YellowSessionCard = () => {
+const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openLeaveModal, setOpenLeaveModal] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
-  const handleDelete = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { deleteMySession, leaveSession } = useContext(SessionContext);
+  const { username } = useContext(AccountContext);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setAlertMessage({});
+      setIsError({});
+      setShow({});
+    };
+  }, []);
+
+  const handleDeletePopup = () => {
     setOpenDeleteModal(true);
   };
+
+  const handleLeavePopup = () => {
+    setOpenLeaveModal(true);
+  };
+
   const handleEdit = () => {
     setOpenEdit(true);
   };
@@ -20,76 +47,113 @@ const YellowSessionCard = () => {
   };
   const handleView = () => {
     setOpenDetails(true);
-    // open up details of study session
   };
-  // mock data
-  const studySession = {
-    title: "test1",
-    capacity: 5,
-    // members usernames stored in array
-    participants: ["sylviaokt", "andrea", "mabel", "haishan"],
-    isOnline: "online",
-    module: "CS3219",
-    date: "saturday",
-    time: {
-      start: "14:00",
-      end: "17:30",
-    },
-    timeLimit: 2,
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteMySession(studySession);
+      console.log(response);
+      setOpenDeleteModal(false);
+      setShow(true);
+      setAlertMessage(response);
+      setIsError(false);
+    } catch (err) {
+      setAlertMessage(err.message);
+      setIsError(true);
+    }
+    setIsLoading(false);
+  };
+
+  const handleLeave = async () => {
+    try {
+      const response = await leaveSession(username, studySession);
+      setOpenLeaveModal(false);
+      setShow(true);
+      setAlertMessage(response);
+      setIsError(false);
+    } catch (err) {
+      setShow(true);
+      setAlertMessage(err.message);
+      setIsError(true);
+      console.log(err.message);
+    }
+    setIsLoading(false);
+  };
+
+  const isPastSession = () => {
+    const dateArr = studySession.date.split("-");
+    const studySessionDate = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+    return studySessionDate < new Date();
   };
 
   return (
-    <div className="bg-yellow-light p-4 mx-8 rounded-xl relative">
-      <div className="absolute right-4 bottom-2">
-        <button onClick={handleView} className="mr-2">
-          <FaEye color="#8488A3" />
-        </button>
-        <button onClick={handleChat} className="mr-2">
-          <BsChatDotsFill color="#8488A3" />
-        </button>
-        <button onClick={handleEdit} className="mr-2">
-          <FaPen color="#8488A3" />
-        </button>
-        <button onClick={handleDelete}>
-          <FaTrash color="#8488A3" />
-        </button>
-      </div>
-      <ConfirmationPopup
-        title="Are you sure?"
-        text="Deleting study session is an irreversible action."
-        onClick={() => console.log("text")}
-        open={openDeleteModal}
-        setOpen={setOpenDeleteModal}
-      />
-      <EditStudySession
-        setOpen={setOpenEdit}
-        open={openEdit}
-        studySession={studySession}
-      />
-      <StudySessionDetails
-        setOpen={setOpenDetails}
-        open={openDetails}
-        studySession={studySession}
-      />
-      <div className="flex justify-between">
-        <div className="flex flex-col justify-center">
-          <div className="flex">
-            <span className=" text-purple-dark font-medium lg:text-2xl">
-              CHIONG CS3219 OTOT TASKS
-            </span>
-            <span className="pl-3 font-bold text-purple-dark lg:text-2xl">
-              #CS3219
-            </span>
-          </div>
-          <div className="flex flex-col items-start">
-            <p className="text-purple-dark lg:text-md">Capacity: 3/5</p>
-            <p className="text-purple-dark lg:text-md">
-              Date: 23/10/2021, Sunday
-            </p>
-            <p className="text-purple-dark lg:text-md">Time: 3-5pm</p>
-          </div>
+    <div>
+      <SessionCardTemplate studySession={studySession} theme="yellow">
+        <div className="absolute right-4 bottom-4 flex gap-x-2">
+          <button onClick={handleView}>
+            <FaEye color="#8488A3" />
+          </button>
+          <button onClick={handleChat}>
+            <BsChatDotsFill color="#8488A3" />
+          </button>
+          {isCreatedSessions ? (
+            <>
+              {!isPastSession() ? (
+                <button onClick={handleEdit}>
+                  <FaPen color="#8488A3" />
+                </button>
+              ) : null}
+              <button onClick={handleDeletePopup}>
+                <FaTrash color="#8488A3" />
+              </button>
+            </>
+          ) : (
+            <button onClick={handleLeavePopup} className="pt-0.5">
+              <ImExit color="#8488A3" />
+            </button>
+          )}
         </div>
-      </div>
+        <ConfirmationPopup
+          title="Are you sure?"
+          text="Deleting study session is an irreversible action."
+          onClick={() => {
+            setIsLoading(true);
+            handleDelete();
+          }}
+          open={openDeleteModal}
+          setOpen={setOpenDeleteModal}
+          isLoading={isLoading}
+        />
+        <ConfirmationPopup
+          title="Are you sure?"
+          text="Leaving this study session will kick you out of the corresponding chat group."
+          onClick={() => {
+            setIsLoading(true);
+            handleLeave();
+          }}
+          open={openLeaveModal}
+          setOpen={setOpenLeaveModal}
+          isLoading={isLoading}
+        />
+        <EditStudySession
+          setOpen={setOpenEdit}
+          open={openEdit}
+          studySession={studySession}
+        />
+        <StudySessionDetails
+          setOpen={setOpenDetails}
+          open={openDetails}
+          studySession={studySession}
+        />
+      </SessionCardTemplate>
+      {show ? (
+        <SessionAlerts
+          show={show}
+          setShow={setShow}
+          isError={isError}
+          message={alertMessage}
+        />
+      ) : undefined}
     </div>
   );
 };

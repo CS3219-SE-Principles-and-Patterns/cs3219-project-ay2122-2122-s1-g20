@@ -10,6 +10,7 @@ const SignUpForm = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [isError, setisError] = useState(false);
+  const [openAlert, setOpenAlert] = useState(true);
 
   let history = useHistory();
 
@@ -54,13 +55,27 @@ const SignUpForm = () => {
         if (response.status !== 200) {
           setAlertMessage(responseData.message);
           setisError(true);
+          setUsername("");
+          setPasswordConfirmation("");
+          setPassword("");
+          setEmail("");
           throw new Error(responseData.message);
         }
 
-        if (response.status == 200) {
+        if (response.status === 200) {
           setAlertMessage(responseData.message);
           setisError(false);
-          history.push("/signup/confirmation");
+          setUsername("");
+          setPasswordConfirmation("");
+          setPassword("");
+          setEmail("");
+
+          setTimeout(() => {
+            history.push("/signup/confirmation");
+            console.log("route");
+          }, 3000);
+
+          // history.push("/signup/confirmation");
         }
       }
     } catch (error) {
@@ -70,8 +85,13 @@ const SignUpForm = () => {
 
   return (
     <div className="py-6 align-middle justify-center mt-5">
-      {alertMessage !== "" ? (
-        <AlertMessage isError={isError} message={alertMessage} />
+      {alertMessage !== "" && openAlert ? (
+        <AlertMessage
+          open={openAlert}
+          setOpen={setOpenAlert}
+          isError={isError}
+          message={alertMessage}
+        />
       ) : undefined}
       <form
         onSubmit={handleSignUp}

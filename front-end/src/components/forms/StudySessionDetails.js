@@ -26,6 +26,13 @@ const StudySessionDetails = ({ setOpen, open, studySession }) => {
           <div className="grid grid-cols-2 items-center gap-2 mt-3">
             <div className="grid grid-cols-2 items-center gap-x-2">
               <span className="text-lg font-medium text-white justify-self-end">
+                Owner:
+              </span>
+              <span className="text-lg text-white ">{studySession.owner}</span>
+            </div>
+
+            <div className="grid grid-cols-2 items-center gap-x-2">
+              <span className="text-lg font-medium text-white justify-self-end">
                 Type:
               </span>
               <span className="text-lg text-white ">
@@ -81,7 +88,9 @@ const StudySessionDetails = ({ setOpen, open, studySession }) => {
                 Members:
               </span>
               <span className="col-span-3 text-lg text-white">
-                {studySession.participants.join(", ")}
+                {studySession.participants.length === 0
+                  ? "None"
+                  : studySession.participants.join(", ")}
               </span>
             </div>
           </div>

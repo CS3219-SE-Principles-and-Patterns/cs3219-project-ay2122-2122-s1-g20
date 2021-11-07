@@ -23,7 +23,6 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    console.log(token);
     if (token) {
       setIsLoggedIn(true);
     }
@@ -159,15 +158,15 @@ export default function Header() {
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navigation.map((item) => (
                 <a
+                  onClick={(e) => {
+                    //maintain context between tabs navigation
+                    e.preventDefault();
+                    history.push(item.href);
+                  }}
                   key={item.name}
                   href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block px-3 py-2 rounded-md text-base font-medium"
-                  )}
-                  aria-current={item.current ? "page" : undefined}
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white
+                    block px-3 py-2 rounded-md text-base font-medium"
                 >
                   {item.name}
                 </a>

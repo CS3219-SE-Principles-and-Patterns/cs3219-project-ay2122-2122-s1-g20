@@ -1,90 +1,118 @@
 import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
+import ClipLoader from "react-spinners/ClipLoader";
+import { api } from "../../utils/api";
+import { SearchIcon } from "@heroicons/react/solid";
 
-const GroupList = ({ account, setDisplayChat, tag }) => {
+const GroupList = ({
+  account,
+  setDisplayChat,
+  tag,
+  setEnable,
+  isLoading,
+  setIsLoading,
+  setDisabled,
+}) => {
   const [search, setSearchValue] = useState("");
   const [open, setOpen] = useState(false);
+  const [load, setLoad] = useState(false);
   const [groups, setGroups] = useState([]);
   const [display, setDisplay] = useState([]);
   const [groupsUserIsIn, setGroupsUserIsIn] = useState([]);
-  const [load, setLoad] = useState(false);
+  const [leave, setLeave] = useState(false);
+  const [newGroup, setNewGroup] = useState([]);
+  const [status, setStatus] = useState(false);
 
-  //use token to call authservices api
-  const getGroupsUserIsIn = async () => {
-    const res = await fetch(
-      `http://localhost:8080/api/user/account/groups/${account.email}`,
-      {
-        method: "GET",
-        headers: {
-          "x-access-token": account.token,
-        },
-      }
-    );
-
-    const data = await res.json();
-    loadData(data.groups);
-    console.log(groupsUserIsIn);
-  };
-
-  //loading data from group database
-  const loadData = async (arr) => {
-    var temp = [];
-    for (var i = 0; i < arr.length; i++) {
-      const group_id = arr[i];
-      const res = await fetch(`http://localhost:9000/api/groups/${group_id}`);
-      const data = await res.json();
-      if (i == 0) {
-        temp.push.apply(temp, data.info);
-      } else {
-        temp = temp.concat(data.info);
-      }
-    }
-    setGroupsUserIsIn(temp);
-  };
+  console.log(newGroup);
+  console.log(groups);
 
   const getAllGroups = async () => {
     const res = await fetch("http://localhost:9000/api/groups");
     const data = await res.json();
-    setGroups(data.groups);
+    const temp = data.groups.sort((a, b) => {
+      return b.lastModified - a.lastModified;
+    });
+    setGroups(temp);
+  };
+
+  const getGroupsUserIsIn = async () => {
+    await api
+      .get(`/user/account/groups/${account.email}`, {
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        const temp = groups
+          .filter((x) => res.data.groups.includes(x._id))
+          .sort((a, b) => {
+            return b.lastModified - a.lastModified;
+          });
+        setGroupsUserIsIn(temp);
+        if (tag == "Joined") {
+          setDisplay(temp);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  const check = async () => {
+    setIsLoading(true);
+    await getAllGroups();
+    await getGroupsUserIsIn();
+    if (tag == "All Chats") {
+      setDisplay(groups);
+    }
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    getGroupsUserIsIn();
-    setDisplay(groupsUserIsIn);
-
-    if (tag == "All Chats") {
-      getAllGroups();
-      setDisplay(groups);
-    } else {
-      if (tag != "Joined") {
-        const temp = groupsUserIsIn.filter((x) => x.hashtag == tag);
-        setDisplay(temp);
-      }
+    check();
+    if (tag == "Joined") {
+      setDisplay(groupsUserIsIn);
     }
-  }, [tag, load]);
+    if (tag != "Joined" && tag != "All Chats") {
+      console.log(groups);
+      const temp = groups.filter((x) => x.hashtag == tag);
+      setDisplay(temp);
+    }
+  }, [tag, leave]);
+
+  useEffect(() => {
+    getAllGroups();
+  }, [status]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setGroupsUserIsIn((prevState) => prevState.concat(newGroup));
+    setDisplay(display.concat(newGroup));
+    setIsLoading(false);
+    setGroups(groups.concat(newGroup));
+  }, [newGroup]);
 
   const handleSearch = (event) => {
-    setSearchValue(event.target.value);
+    const input = event.target.value;
+    setSearchValue(input);
+
     var temp;
-    const empty = search == "";
     if (tag == "All Chats") {
-      if (empty) {
+      if (!input) {
         temp = groups;
       } else {
         temp = groups.filter((x) => x.name.includes(search));
       }
     } else {
       if (tag != "Joined") {
-        if (empty) {
-          temp = groupsUserIsIn.filter((x) => x.hashtag == tag);
+        if (!input) {
+          temp = groups.filter((x) => x.hashtag == tag);
         } else {
-          temp = groupsUserIsIn.filter(
+          temp = groups.filter(
             (x) => x.hashtag == tag && x.name.includes(search)
           );
         }
       } else {
-        if (empty) {
+        if (!input) {
           temp = groupsUserIsIn;
         } else {
           temp = groupsUserIsIn.filter((x) => x.name.includes(search));
@@ -93,58 +121,77 @@ const GroupList = ({ account, setDisplayChat, tag }) => {
     }
     setDisplay(temp);
   };
+
   return (
-    <div>
-      <div className="pt-2 flex justify-center">
-        <form action="#" method="GET">
-          <div>
-            <label
-              htmlFor="search"
-              className="block flex text-sm font-medium text-gray-700"
-            ></label>
+    <div className="overflow-y-auto h-screen">
+      <div className="pt-4 grid gap-0 grid-cols-9 flex justify-center">
+        <div className="pl-10 col-span-7 md:pr-8 pr-2 pt-4 flex">
+          <label
+            htmlFor="search"
+            className="flex text-sm font-medium text-gray-700 "
+          ></label>
+          <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+            <div className="absolute p-3 inset-y-0 flex items-center pointer-events-none">
+              <SearchIcon className="h-5 w-5" aria-hidden="true" />
+            </div>
             <input
-              onChange={handleSearch}
-              type="text"
+              id="search-field"
+              className="block w-full bg-purple bg-opacity-50 h-full pl-10 pr-3 py-4 text-black placeholder-gray-500 rounded-xl focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent text-xs sm:text-sm"
+              placeholder="Search for group chats"
+              type="search"
               name="search"
-              id="search"
+              onChange={handleSearch}
               value={search}
-              placeholder="Search for chat groups"
-              className="mt-1 placeholder-white appearance-none py-3 sm:w-96 border-none  pl-3 py-2 sm:py-4 rounded-md bg-purple-misc focus:outline-none focus:ring-purple-dark text-xs focus:border-purple-dark sm:text-sm"
             />
           </div>
-        </form>
-
-        <div className="pl-4 pt-2">
-          <button
-            className="text-3xl rounded-full bg-purple-dark h-10 w-10 flex items-center justify-center"
-            onClick={() => {
-              setOpen(true);
-            }}
-          >
-            +
-          </button>
-          <ChatGroupCreationForm
-            setOpen={setOpen}
-            setLoad={setLoad}
-            open={open}
-            load={load}
-            userEmail={account.email}
-          />
         </div>
+        {tag == "All Chats" ? (
+          <div className="pt-3">
+            <button
+              className="text-white mt-3 rounded-full bg-purple-dark h-10 w-10 text-3xl flex items-center justify-center"
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              +
+            </button>
+            <ChatGroupCreationForm
+              setOpen={setOpen}
+              setLoad={setLoad}
+              open={open}
+              load={load}
+              userEmail={account.email}
+              setNewGroup={setNewGroup}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
-
-      <div className="w-full pl-4">
-        {display.map((group, index) => (
-          <GroupBubble
-            key={index}
-            group={group}
-            setDisplayChat={setDisplayChat}
-            userEmail={account.email}
-            token={account.token}
-            joined={groupsUserIsIn.includes(group)}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <ClipLoader loading={isLoading} size={10} />
+      ) : (
+        <div className="overflow-x-hidden pt-4 w-full relative mr-6 gap-0 justify-center">
+          {display.map((group, index) => (
+            <GroupBubble
+              key={index}
+              group={group}
+              setDisplayChat={setDisplayChat}
+              setEnable={setEnable}
+              userEmail={account.email}
+              profilePic={account.profilePic}
+              joined={tag == "Joined" ? true : groupsUserIsIn.includes(group)}
+              setLoad={setLoad}
+              load={load}
+              setDisabled={setDisabled}
+              leave={leave}
+              setLeave={setLeave}
+              status={status}
+              setStatus={setStatus}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

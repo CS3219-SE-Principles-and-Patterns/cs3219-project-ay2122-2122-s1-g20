@@ -6,6 +6,7 @@ const EmailConfirmationPage = () => {
   const [email, setEmail] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [isError, setisError] = useState(false);
+  const [openAlert, setOpenAlert] = useState(true);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -32,12 +33,14 @@ const EmailConfirmationPage = () => {
       if (response.status !== 200) {
         setAlertMessage(responseData.message);
         setisError(true);
+        setEmail("");
         throw new Error(responseData.message);
       }
 
       if (response.status === 200) {
         setAlertMessage(responseData.message);
         setisError(false);
+        setEmail("");
       }
     } catch (error) {
       setisError(true);
@@ -58,8 +61,13 @@ const EmailConfirmationPage = () => {
         method="POST"
       >
         <div>
-          {alertMessage !== "" ? (
-            <AlertMessage isError={isError} message={alertMessage} />
+          {alertMessage !== "" && openAlert ? (
+            <AlertMessage
+              open={openAlert}
+              setOpen={setOpenAlert}
+              isError={isError}
+              message={alertMessage}
+            />
           ) : undefined}
           <div className="flex justify-between">
             <label
