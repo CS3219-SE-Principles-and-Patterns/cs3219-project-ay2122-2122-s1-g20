@@ -1,0 +1,18 @@
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/auth-test.yml'
+      - 'back-end/services/authService/**/*'
+
+name: Auth Service
+
+jobs:
+  test: 
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Installing dependencies"
+      - run: npm i
+      - run: echo "Starting tests for authService"
+      - run: npm test
+      - run: echo "End of tests"
