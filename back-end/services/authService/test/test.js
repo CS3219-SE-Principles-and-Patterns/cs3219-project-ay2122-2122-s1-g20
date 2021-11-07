@@ -27,7 +27,6 @@ describe("TEST", () => {
 
     it("should get a user's groups", (done) => {
         newUser.save((err, user) => {
-            console.log(err);
             chai.request(app)
                     .get('/api/user/account/groups/' + 'test@gmail.com')
                     .set('x-access-token', token)
