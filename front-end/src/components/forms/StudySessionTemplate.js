@@ -181,7 +181,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
 
   return (
     <div className="w-10">
-      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
+      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={false}>
         <form
           className="bg-blue-dark px-24 py-10 rounded-2xl"
           onSubmit={(e) => e.preventDefault()}
