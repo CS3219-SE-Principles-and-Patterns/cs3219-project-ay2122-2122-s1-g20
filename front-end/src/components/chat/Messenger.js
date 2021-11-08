@@ -7,6 +7,7 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
   const [message, setMessage] = useState("");
   const [oldMessages, setOldMessages] = useState([]);
   const [toggle, setToggle] = useState(false); //update receiving of message whenever someone else send
+  const [anon, setAnon] = useState(false);
 
   const username = account.username;
   const profilePic = account.profilePic;
@@ -45,19 +46,24 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
+    const pic = anon
+      ? "https://res.cloudinary.com/studybuddy3219/image/upload/v1636382220/ydmcemc8sqsdttfvv5xe.png"
+      : profilePic;
+    const sdr = anon ? "anon" : username;
+
     if (message.trim().length != 0) {
       const messageForSocket = {
-        sender: username,
-        profilePic: profilePic,
+        sender: sdr,
+        profilePic: pic,
         content: message,
         email: account.email,
       };
       socket.emit("send-message", messageForSocket, group);
       const newMessage = {
         group_id: group,
-        sender: username,
+        sender: sdr,
         timestamp: Date.now(),
-        profilePic: profilePic,
+        profilePic: pic,
         content: message,
         email: messageForSocket.email,
       };
@@ -156,25 +162,33 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
                 <div ref={messagesEndRef} />
               </div>
               {enable ? (
-                <form
-                  onSubmit={handleSendMessage}
-                  action="#"
-                  method="POST"
-                  className="absolute inset-x-0 pt-4 bottom-0 flex flex-row h-16"
-                >
-                  <input
-                    onChange={setMessageChange}
-                    value={message}
-                    placeholder="Write a message"
-                    className="w-full pl-3 placeholder-white bg-purple border-black border-1 text-md"
-                  ></input>
+                <div className="flex flex-row">
                   <button
-                    className="pl-3 pr-3 text-white bg-purple-dark"
-                    onClick={handleSendMessage}
+                    className="absolute inset-x-0 bottom-0 mb-14 nt-1 w-16 text-black border-2 rounded-full border-black bg-yellow-dark"
+                    onClick={() => setAnon(!anon)}
                   >
-                    Send
+                    {anon ? "anon" : "public"}
                   </button>
-                </form>
+                  <form
+                    onSubmit={handleSendMessage}
+                    action="#"
+                    method="POST"
+                    className="absolute inset-x-0 pt-4 bottom-0 flex flex-row h-16"
+                  >
+                    <input
+                      onChange={setMessageChange}
+                      value={message}
+                      placeholder="Write a message"
+                      className="w-full pl-3 placeholder-white bg-purple border-black border-1 text-md"
+                    ></input>
+                    <button
+                      className="pl-3 pr-3 text-white bg-purple-dark"
+                      onClick={handleSendMessage}
+                    >
+                      Send
+                    </button>
+                  </form>
+                </div>
               ) : (
                 <div className="absolute text-white inset-x-0 bottom-0 flex flex-row h-16 pt-4 bg-purple justify-center">
                   Join the group to start chatting!

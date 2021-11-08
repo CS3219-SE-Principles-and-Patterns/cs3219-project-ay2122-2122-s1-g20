@@ -60,15 +60,15 @@ mongoose
   })
   .then(() => console.log("DB connection successful!"));
 
-app.use("/api/user", authRoutes);
-app.use(verifyToken);
-app.use("/api/profile", profileRoutes);
-app.use("/api/user/account", groupRoutes);
-
 app.get("/", (req, res) => {
   console.log("Test passed");
   res.send("Server is up and running.");
 });
+
+app.use("/api/user", authRoutes);
+app.use(verifyToken);
+app.use("/api/profile", profileRoutes);
+app.use("/api/user/account", groupRoutes);
 
 app.listen(PORT, () => console.log("Server running on " + PORT));
 
