@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FaTrash, FaPen, FaEye } from "react-icons/fa";
 import { BsChatDotsFill } from "react-icons/bs";
 import { ImExit } from "react-icons/im";
+import { useHistory } from "react-router-dom";
+
 import ConfirmationPopup from "../forms/ConfirmationPopup";
 import EditStudySession from "../forms/EditStudySession";
 import StudySessionDetails from "../forms/StudySessionDetails";
 import SessionCardTemplate from "./sessionCardTemplate";
-import { useContext, useEffect } from "react";
 import { SessionContext } from "../../context/SessionContext";
 import { AccountContext } from "../../context/AccountContext";
 import SessionAlerts from "../alerts/SessionAlerts";
@@ -23,6 +24,7 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [show, setShow] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     return () => {
@@ -45,7 +47,9 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   };
   const handleChat = () => {
     // route to chat group
+    history.push(`/chat/${studySession.gid}`);
   };
+
   const handleView = () => {
     setOpenDetails(true);
   };
@@ -82,7 +86,6 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
         email,
       });
       //remove chat group from user
-      console.log("gid:", gid);
       await api.post("/user/account/groups/remove", {
         email,
         groupId: gid,
