@@ -66,7 +66,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", authRoutes);
-// app.use(verifyToken);
+app.use(verifyToken);
 app.use("/api/profile", profileRoutes);
 app.use("/api/user/account", groupRoutes);
 
