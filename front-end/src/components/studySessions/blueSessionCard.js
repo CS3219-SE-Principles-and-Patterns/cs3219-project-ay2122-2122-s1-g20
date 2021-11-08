@@ -4,9 +4,10 @@ import { SessionContext } from "../../context/SessionContext";
 import ConfirmationPopup from "../forms/ConfirmationPopup";
 import SessionCardTemplate from "./sessionCardTemplate";
 import SessionAlerts from "../alerts/SessionAlerts";
+import { api, chatApi } from "../../utils/api";
 
 const BlueSessionCard = ({ studySession }) => {
-  const { username } = useContext(AccountContext);
+  const { username, email } = useContext(AccountContext);
   const { joinSession } = useContext(SessionContext);
 
   const [openConfirmation, setOpenConfirmation] = useState(false);
@@ -24,12 +25,32 @@ const BlueSessionCard = ({ studySession }) => {
     };
   }, []);
 
+  const joinChat = async (gid) => {
+    try {
+      // join chat group
+      await chatApi.post("/group/users", {
+        groupId: gid,
+        email,
+      });
+      //add chat group to user
+      await api.post("/user/account/groups", {
+        email,
+        groupId: gid,
+      });
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  };
+
   const handleJoin = async () => {
     try {
       const response = await joinSession(username, studySession, time);
+      // after joining session, join the chat group
+      console.log(response);
+      await joinChat(response.session.gid);
       setOpenConfirmation(false);
       setShow(true);
-      setAlertMessage(response);
+      setAlertMessage(response.message);
       setIsError(false);
     } catch (err) {
       setShow(true);
@@ -56,7 +77,7 @@ const BlueSessionCard = ({ studySession }) => {
           setTime={setTime}
           timeRange={studySession.time}
         />
-        {studySession.participants.length + 1 === studySession.capacity ? (
+        {studySession.participants.length === studySession.capacity ? (
           <p className="flex self-center mr-5 text-purple-dark font-bold text-xl">
             FULL
           </p>
