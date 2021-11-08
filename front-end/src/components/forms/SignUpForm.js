@@ -38,17 +38,20 @@ const SignUpForm = () => {
         setAlertMessage("Passwords do not match!");
         throw new Error("Passwords do not match!");
       } else {
-        const response = await fetch("http://localhost:8080/api/user/signup", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-            username: username,
-          }),
-        });
+        const response = await fetch(
+          "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/user/signup",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password,
+              username: username,
+            }),
+          }
+        );
 
         const responseData = await response.json();
 

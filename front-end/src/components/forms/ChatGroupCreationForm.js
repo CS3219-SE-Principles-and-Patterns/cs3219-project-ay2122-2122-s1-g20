@@ -37,20 +37,23 @@ const ChatGroupCreationForm = ({
     setError(false);
     try {
       const value = await checkHashTag();
-      const res = await fetch("http://localhost:9000/api/groups", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          hashtag: value,
-          name: groupName,
-          uid: [userEmail],
-          lastModified: Date.now(),
-          creator: userEmail,
-          state: "available",
-        }),
-      });
+      const res = await fetch(
+        "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/groups",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            hashtag: value,
+            name: groupName,
+            uid: [userEmail],
+            lastModified: Date.now(),
+            creator: userEmail,
+            state: "available",
+          }),
+        }
+      );
       console.log(res);
       const data = await res.json();
       console.log(data);

@@ -45,7 +45,7 @@ export default function Header() {
       .then(() => {
         if (logoutSuccess) {
           console.log("logout");
-          window.location.href = "http://localhost:3000/login";
+          window.location.href = "https://d22aqfk6uuuihz.cloudfront.net/login";
         }
       })
       .catch((err) => console.log(err));

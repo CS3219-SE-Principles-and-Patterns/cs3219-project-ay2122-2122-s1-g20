@@ -28,7 +28,9 @@ const GroupList = ({
   console.log(groups);
 
   const getAllGroups = async () => {
-    const res = await fetch("http://localhost:9000/api/groups");
+    const res = await fetch(
+      "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/groups"
+    );
     const data = await res.json();
     const temp = data.groups.sort((a, b) => {
       return b.lastModified - a.lastModified;

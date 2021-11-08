@@ -33,14 +33,17 @@ export const AccountProvider = ({ children }) => {
 
   const isAuthenticated = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/user/login", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": cookies.get("token", { path: "/" }),
-          "jwt-salt": cookies.get("salt", { path: "/" }),
-        },
-      });
+      const response = await fetch(
+        "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/user/login",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": cookies.get("token", { path: "/" }),
+            "jwt-salt": cookies.get("salt", { path: "/" }),
+          },
+        }
+      );
       console.log(response);
       return response;
     } catch (error) {
