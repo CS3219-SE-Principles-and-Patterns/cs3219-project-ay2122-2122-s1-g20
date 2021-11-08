@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-const ModuleButton = ({
-  moduleCode,
-  session,
-  setSession,
-  // addSelectedMods,
-  // removeSelectedMods,
-}) => {
-  // const [selected, setSelected] = useState(selectedMods.includes(moduleCode));
+const ModuleButton = ({ moduleCode, session, setSession }) => {
   const [selected, setSelected] = useState(session.module === moduleCode);
   useEffect(() => {
     if (session.module !== moduleCode) {

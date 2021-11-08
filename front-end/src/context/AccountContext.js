@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { setTokenHeader, setSaltHeader, api } from "../utils/api";
+import Cookies from "universal-cookie";
 
 export const AccountContext = React.createContext();
 
@@ -11,6 +12,8 @@ export const AccountProvider = ({ children }) => {
   const [modules, setModules] = useState([]);
   const [profilePic, setProfilePic] = useState("");
   const [jwtSalt, setJwtSalt] = useState("");
+
+  const cookies = new Cookies();
 
   const setUser = (user, token) => {
     setToken(token);
@@ -28,17 +31,37 @@ export const AccountProvider = ({ children }) => {
     }
   };
 
-  // useEffect(() => {
-  //   const token = JSON.parse(localStorage.getItem("token"));
-  //
-  //   if (token) {
-  //     setToken(token);
-  //   }
-  // }, []);
-  //
-  // useEffect(() => {
-  //   localStorage.setItem("token", JSON.stringify(token));
-  // }, [token]);
+  const isAuthenticated = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/user/login", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": cookies.get("token", { path: "/" }),
+          "jwt-salt": cookies.get("salt", { path: "/" }),
+        },
+      });
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadData = async () => {
+    isAuthenticated().then(async (res) => {
+      const data = await res.json();
+      if (res.error) {
+        console.log(res.error);
+      } else if (res.status == 200) {
+        setUser(data.user, data.token.token);
+      }
+    });
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const handleUpdateUsername = async (newUsername) => {
     await api

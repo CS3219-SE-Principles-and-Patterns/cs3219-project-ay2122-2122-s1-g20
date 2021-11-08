@@ -2,16 +2,15 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '.github/workflows/front_end-test.yml'
-      - 'front-end/**/*'
+      - '.github/workflows/auth-test.yml'
+      - 'back-end/services/authService/**/*'
 
-name: Frontend Cypress Tests
+name: Auth Service
 
 jobs:
-  build:
-
+  test: 
     runs-on: ubuntu-latest
-
+    
     strategy:
       matrix:
         node-version: [12.x]
@@ -19,12 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
       - name: Installing dependencies
-        working-directory: ./front-end
-        run: npm install
-      - name: Testing
-        working-directory: ./front-end
+        working-directory: ./back-end/services/authService
+        run: npm i
+      - name: Running tests
+        working-directory: ./back-end/services/authService
         run: npm test
+      - run: echo "End of tests"

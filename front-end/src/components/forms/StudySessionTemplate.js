@@ -276,12 +276,6 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
                 />
               </span>
             </div>
-            {/* <YellowButton
-                text="Add"
-                onClick={handleAddTime}
-                textSize="text-sm"
-                px="px-1"
-              /> */}
           </div>
           <div className="mt-2 grid grid-cols-6 items-center gap-x-2">
             <label className="text-lg text-white col-span-1 justify-self-end">
