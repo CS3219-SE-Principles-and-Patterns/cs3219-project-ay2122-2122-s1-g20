@@ -10,6 +10,7 @@ import { useContext, useEffect } from "react";
 import { SessionContext } from "../../context/SessionContext";
 import { AccountContext } from "../../context/AccountContext";
 import SessionAlerts from "../alerts/SessionAlerts";
+import { api, chatApi } from "../../utils/api";
 
 const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -18,7 +19,7 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [openDetails, setOpenDetails] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { deleteMySession, leaveSession } = useContext(SessionContext);
-  const { username } = useContext(AccountContext);
+  const { username, email } = useContext(AccountContext);
   const [alertMessage, setAlertMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [show, setShow] = useState(false);
@@ -49,10 +50,19 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
     setOpenDetails(true);
   };
 
+  const disableChat = async (gid) => {
+    try {
+      // disable chat group
+      await chatApi.post(`/group/users/update`, { groupId: gid });
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  };
+
   const handleDelete = async () => {
     try {
       const response = await deleteMySession(studySession);
-      console.log(response);
+      await disableChat(studySession.gid);
       setOpenDeleteModal(false);
       setShow(true);
       setAlertMessage(response);
@@ -64,9 +74,28 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
     setIsLoading(false);
   };
 
+  const leaveChat = async (gid) => {
+    try {
+      // leave chat group
+      await chatApi.post("/group/users/remove", {
+        groupId: gid,
+        email,
+      });
+      //remove chat group from user
+      console.log("gid:", gid);
+      await api.post("/user/account/groups/remove", {
+        email,
+        groupId: gid,
+      });
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  };
+
   const handleLeave = async () => {
     try {
       const response = await leaveSession(username, studySession);
+      await leaveChat(studySession.gid);
       setOpenLeaveModal(false);
       setShow(true);
       setAlertMessage(response);
