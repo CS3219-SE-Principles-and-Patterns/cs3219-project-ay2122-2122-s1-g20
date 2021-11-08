@@ -37,6 +37,10 @@ const SignUpForm = () => {
         setisError(true);
         setAlertMessage("Passwords do not match!");
         throw new Error("Passwords do not match!");
+      } else if (password.length < 8) {
+        setisError(true);
+        setAlertMessage("Password has to be at least 8 characters.");
+        throw new Error("Password has to be at least 8 characters.");
       } else {
         const response = await fetch("http://localhost:8080/api/user/signup", {
           method: "PUT",
