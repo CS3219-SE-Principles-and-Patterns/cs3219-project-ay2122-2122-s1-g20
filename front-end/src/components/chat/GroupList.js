@@ -27,12 +27,15 @@ const GroupList = ({
   console.log(newGroup);
   console.log(groups);
 
+  const isStudy = (tag) => {
+    return !["chitchat", "makan", "sports"].includes(tag);
+  };
   const getAllGroups = async () => {
     const res = await fetch(
       "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/groups"
     );
     const data = await res.json();
-    const temp = data.groups.sort((a, b) => {
+    var temp = data.groups.sort((a, b) => {
       return b.lastModified - a.lastModified;
     });
     setGroups(temp);
@@ -40,11 +43,7 @@ const GroupList = ({
 
   const getGroupsUserIsIn = async () => {
     await api
-      .get(`/user/account/${account.email}`, {
-        headers: {
-          "Cache-Control": "no-cache",
-        },
-      })
+      .get(`/user/account/${account.email}`)
       .then((res) => {
         console.log(res);
         const temp = groups
@@ -64,7 +63,8 @@ const GroupList = ({
     await getAllGroups();
     await getGroupsUserIsIn();
     if (tag == "All Chats") {
-      setDisplay(groups);
+      const temp = groups.filter((x) => !isStudy(x.hashtag));
+      setDisplay(temp);
     }
     setIsLoading(false);
   };
@@ -76,8 +76,18 @@ const GroupList = ({
     }
     if (tag != "Joined" && tag != "All Chats") {
       console.log(groups);
-      const temp = groups.filter((x) => x.hashtag == tag);
-      setDisplay(temp);
+
+      if (!isStudy(tag)) {
+        const temp = groups.filter((x) => x.hashtag == tag);
+        setDisplay(temp);
+      }
+      //study groups tag
+      else {
+        const temp = groups.filter(
+          (x) => isStudy(x.hashtag) && x.uid.includes(account.email)
+        );
+        setDisplay(temp);
+      }
     }
   }, [tag, leave]);
 
