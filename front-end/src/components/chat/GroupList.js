@@ -40,7 +40,7 @@ const GroupList = ({
 
   const getGroupsUserIsIn = async () => {
     await api
-      .get(`/user/account/groups/${account.email}`, {
+      .get(`/user/account/${account.email}`, {
         headers: {
           "Cache-Control": "no-cache",
         },

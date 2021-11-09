@@ -57,7 +57,7 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const disableChat = async (gid) => {
     try {
       // disable chat group
-      await chatApi.post(`/group/users/update`, { groupId: gid });
+      await chatApi.post(`/groups/users/update`, { groupId: gid });
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -81,12 +81,12 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const leaveChat = async (gid) => {
     try {
       // leave chat group
-      await chatApi.post("/group/users/remove", {
+      await chatApi.post("/groups/users/remove", {
         groupId: gid,
         email,
       });
       //remove chat group from user
-      await api.post("/user/account/groups/remove", {
+      await api.post("/user/account/remove", {
         email,
         groupId: gid,
       });

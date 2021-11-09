@@ -28,12 +28,12 @@ const BlueSessionCard = ({ studySession }) => {
   const joinChat = async (gid) => {
     try {
       // join chat group
-      await chatApi.post("/group/users", {
+      await chatApi.post("/groups/users", {
         groupId: gid,
         email,
       });
       //add chat group to user
-      await api.post("/user/account/groups", {
+      await api.post("/user/account", {
         email,
         groupId: gid,
       });

@@ -53,7 +53,7 @@ const GroupBubble = ({
       "Content-Type": "application/json",
     };
     const res = await api
-      .post("/user/account/groups", JSON.stringify(newGroupJoined), {
+      .post("/user/account", JSON.stringify(newGroupJoined), {
         headers: headers,
       })
       .catch((err) => console.log(err));
@@ -62,7 +62,7 @@ const GroupBubble = ({
 
     try {
       //add user to group
-      const res = fetch("http://localhost:9000/api/group/users", {
+      const res = fetch("http://localhost:9000/api/groups/users", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -84,7 +84,7 @@ const GroupBubble = ({
     setOpenDisable(false);
     setStatus(!status);
     //remove everyone from the group and remove messages?
-    const res = fetch("http://localhost:9000/api/group/users/update", {
+    const res = fetch("http://localhost:9000/api/groups/users/update", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -111,14 +111,14 @@ const GroupBubble = ({
       "Content-Type": "application/json",
     };
     await api
-      .post("/user/account/groups/remove", JSON.stringify(groupToLeave), {
+      .post("/user/account/remove", JSON.stringify(groupToLeave), {
         headers: headers,
       })
       .catch((err) => console.log(err));
 
     try {
       //remove user from group
-      const res = fetch("http://localhost:9000/api/group/users/remove", {
+      const res = fetch("http://localhost:9000/api/groups/users/remove", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
