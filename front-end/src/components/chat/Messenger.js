@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
-import { chatApi } from "../../utils/api";
+import { api } from "../../utils/api";
 
 const Messenger = ({ account, displayChat, enable, disabled }) => {
   const [message, setMessage] = useState("");
@@ -70,15 +70,15 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
       setMessage("");
       setOldMessages(oldMessages.concat(newMessage));
 
-      await chatApi
+      await api
         .post("/messages", {
           newMessage,
         })
         .catch((err) => console.log(err));
 
       //update last modified
-      await chatApi
-        .post(`/groups/${groups}`, newMessage)
+      await api
+        .post(`/groups/${group}`, newMessage)
         .catch((err) => console.log(err));
     }
   };

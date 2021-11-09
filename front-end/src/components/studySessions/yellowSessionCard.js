@@ -11,7 +11,7 @@ import SessionCardTemplate from "./sessionCardTemplate";
 import { SessionContext } from "../../context/SessionContext";
 import { AccountContext } from "../../context/AccountContext";
 import SessionAlerts from "../alerts/SessionAlerts";
-import { api, chatApi } from "../../utils/api";
+import { api } from "../../utils/api";
 
 const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -57,7 +57,7 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const disableChat = async (gid) => {
     try {
       // disable chat group
-      await chatApi.post(`/groups/users/update`, { groupId: gid });
+      await api.post(`/groups/users/update`, { groupId: gid });
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -81,7 +81,7 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   const leaveChat = async (gid) => {
     try {
       // leave chat group
-      await chatApi.post("/groups/users/remove", {
+      await api.post("/groups/users/remove", {
         groupId: gid,
         email,
       });

@@ -9,7 +9,7 @@ import TimeRangeSlider from "react-time-range-slider";
 import YellowButton from "../YellowButton";
 import SessionAlerts from "../alerts/SessionAlerts";
 import { SessionContext } from "../../context/SessionContext";
-import { api, chatApi, sessionApi } from "../../utils/api";
+import { api } from "../../utils/api";
 
 const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   const { updateMySessions, addMySession } = useContext(SessionContext);
@@ -131,7 +131,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   const createChat = async (sid) => {
     try {
       // create chat group
-      const response = await chatApi.post("/groups", {
+      const response = await api.post("/groups", {
         hashtag: session.module,
         name: session.title,
         uid: [email],
@@ -146,7 +146,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
         groupId: gid,
       });
       // update gid in session
-      await sessionApi.put(`/${sid}`, {
+      await api.put(`/session/${sid}`, {
         gid,
       });
     } catch (error) {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { sessionApi } from "../utils/api";
+import { api } from "../utils/api";
 import moment from "moment";
 
 export const SessionContext = React.createContext();
@@ -11,7 +11,7 @@ export const SessionProvider = ({ children }) => {
 
   const getMySessions = async (username) => {
     try {
-      const response = await sessionApi.get(`/my/${username}`);
+      const response = await api.get(`/session/my/${username}`);
       setMySessions(response.data.sessions);
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -20,7 +20,7 @@ export const SessionProvider = ({ children }) => {
 
   const addMySession = async (session) => {
     try {
-      const response = await sessionApi.post("/", session);
+      const response = await api.post("/session", session);
       setMySessions([...mySessions, response.data.session]);
       return response.data;
     } catch (error) {
@@ -40,7 +40,7 @@ export const SessionProvider = ({ children }) => {
         );
       }
       const newParticipants = [...session.participants, username];
-      const response = await sessionApi.put(`/${session._id}`, {
+      const response = await api.put(`/session/${session._id}`, {
         participants: newParticipants,
         time,
       });
@@ -67,7 +67,7 @@ export const SessionProvider = ({ children }) => {
       const newParticipants = session.participants.filter(
         (p) => p !== username
       );
-      await sessionApi.put(`/${session._id}`, {
+      await api.put(`/session/${session._id}`, {
         participants: newParticipants,
       });
       const index = joinedSessions.findIndex((s) => s._id === session._id);
@@ -83,7 +83,7 @@ export const SessionProvider = ({ children }) => {
 
   const updateMySessions = async (session) => {
     try {
-      const response = await sessionApi.put(`/${session._id}`, session);
+      const response = await api.put(`/session/${session._id}`, session);
       const index = mySessions.findIndex((s) => s._id === session._id);
       setMySessions([
         ...mySessions.slice(0, index),
@@ -98,7 +98,7 @@ export const SessionProvider = ({ children }) => {
 
   const deleteMySession = async (session) => {
     try {
-      const response = await sessionApi.delete(`/${session._id}`);
+      const response = await api.delete(`/session/${session._id}`);
       const updatedSessions = mySessions.filter((s) => s._id !== session._id);
       setMySessions(updatedSessions);
       return response.data.message;
@@ -109,7 +109,7 @@ export const SessionProvider = ({ children }) => {
 
   const getJoinedSessions = async (username) => {
     try {
-      const response = await sessionApi.get(`/joined/${username}`);
+      const response = await api.get(`/session/joined/${username}`);
       setJoinedSessions(response.data.sessions);
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -118,7 +118,7 @@ export const SessionProvider = ({ children }) => {
 
   const getUpcomingSessions = async (username) => {
     try {
-      const response = await sessionApi.get(`/upcoming/${username}`);
+      const response = await api.get(`/session/upcoming/${username}`);
       setUpcomingSessions(response.data.sessions);
     } catch (error) {
       throw new Error(error.response.data.message);

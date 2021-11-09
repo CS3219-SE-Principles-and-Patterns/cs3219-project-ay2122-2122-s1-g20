@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Popup from "reactjs-popup";
 import PropTypes from "prop-types";
 import { VscChromeClose } from "react-icons/vsc";
-import { api, chatApi } from "../../utils/api";
+import { api } from "../../utils/api";
 
 const ChatGroupCreationForm = ({
   setOpen,
@@ -47,7 +47,7 @@ const ChatGroupCreationForm = ({
         state: "available",
       };
 
-      const res = await chatApi.post("/groups", grp).catch((err) => {
+      const res = await api.post("/groups", grp).catch((err) => {
         if (err.status == 400) {
           setError(true);
           return;
