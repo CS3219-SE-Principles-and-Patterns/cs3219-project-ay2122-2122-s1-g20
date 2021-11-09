@@ -41,11 +41,7 @@ const GroupList = ({
 
   const getGroupsUserIsIn = async () => {
     await api
-      .get(`/user/account/${account.email}`, {
-        headers: {
-          "Cache-Control": "no-cache",
-        },
-      })
+      .get(`/user/account/${account.email}`)
       .then((res) => {
         console.log(res);
         const temp = groups
