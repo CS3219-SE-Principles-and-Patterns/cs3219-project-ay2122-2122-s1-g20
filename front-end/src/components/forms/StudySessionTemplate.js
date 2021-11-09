@@ -141,7 +141,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
       });
       // add chat group to user
       const gid = response.data.group._id;
-      await api.post("/user/account/groups", {
+      await api.post("/user/account", {
         email: email,
         groupId: gid,
       });
