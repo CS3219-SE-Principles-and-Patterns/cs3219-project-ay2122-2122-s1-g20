@@ -9,6 +9,7 @@ import TimeRangeSlider from "react-time-range-slider";
 import YellowButton from "../YellowButton";
 import SessionAlerts from "../alerts/SessionAlerts";
 import { SessionContext } from "../../context/SessionContext";
+import { api, chatApi, sessionApi } from "../../utils/api";
 
 const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   const { updateMySessions, addMySession } = useContext(SessionContext);
@@ -16,7 +17,7 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
   const capitalizeFirstLetter = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
-  const { modules, username } = useContext(AccountContext);
+  const { modules, username, email } = useContext(AccountContext);
   const [session, setSession] = useState(
     studySession
       ? studySession
@@ -134,10 +135,38 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
     setIsLoading(false);
   };
 
+  const createChat = async (sid) => {
+    try {
+      // create chat group
+      const response = await chatApi.post("/groups", {
+        hashtag: session.module,
+        name: session.title,
+        uid: [email],
+        lastModified: Date.now(),
+        creator: email,
+        state: "available",
+      });
+      // add chat group to user
+      const gid = response.data.group._id;
+      await api.post("/user/account/groups", {
+        email: email,
+        groupId: gid,
+      });
+      // update gid in session
+      await sessionApi.put(`/${sid}`, {
+        gid,
+      });
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  };
+
   const handleCreate = async () => {
     try {
       const response = await addMySession(session);
-      setAlertMessage(response);
+      // create chat group for study session
+      await createChat(response.session._id);
+      setAlertMessage(response.message);
       setIsError(false);
       setShow(true);
       setOpen(false);
@@ -152,8 +181,11 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
 
   return (
     <div className="w-10">
-      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={true}>
-        <form className="bg-blue-dark px-24 py-10 rounded-2xl" action="#">
+      <Popup open={open} modal closeOnDocumentClick={false} lockScroll={false}>
+        <form
+          className="bg-blue-dark px-24 py-10 rounded-2xl"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <button
             className="bg-purple-dark text-white mr-2 mt-2 absolute top-1 right-1 p-2 rounded-full"
             onClick={(event) => {

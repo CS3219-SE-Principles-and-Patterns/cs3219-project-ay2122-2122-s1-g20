@@ -42,9 +42,10 @@ exports.addGroup = async (req, res) => {
 exports.removeGroup = async (req, res) => {
   //req includes email and groupId
   try {
+    const gid = mongoose.Types.ObjectId(req.body.groupId);
     const user = await User.findOne({ email: req.body.email }).exec();
-    user.groups.pull(req.body.groupId);
-    await user.save();
+    user.groups.pull(gid);
+    await user.save(); // error occurs here :(
     res.status(200).send({ user: user, message: "User updated" });
     console.log("updated removal");
     return;

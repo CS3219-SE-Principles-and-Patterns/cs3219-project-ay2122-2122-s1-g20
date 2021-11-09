@@ -37,6 +37,10 @@ const SignUpForm = () => {
         setisError(true);
         setAlertMessage("Passwords do not match!");
         throw new Error("Passwords do not match!");
+      } else if (password.length < 8) {
+        setisError(true);
+        setAlertMessage("Password has to be at least 8 characters.");
+        throw new Error("Password has to be at least 8 characters.");
       } else {
         const response = await fetch(
           "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/user/signup",

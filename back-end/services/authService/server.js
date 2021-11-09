@@ -41,17 +41,17 @@ app.use(
     exposedHeaders: ["x-access-token", "jwt-salt", "set-cookie"],
     credentials: true,
     origin: true,
-    methods: ["OPTIONS", "GET", "HEAD" , "PUT", "PATCH" , "POST" ,"DELETE"],
+    methods: ["OPTIONS", "GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   })
 );
 
-const DB = (app.settings.env == 'test' ? (process.env.TEST_DATABASE.replace(
-    "<PASSWORD>",
-    process.env.DATABASE_PASSWORD
-  )) : (process.env.DATABASE.replace(
-    "<PASSWORD>",
-    process.env.DATABASE_PASSWORD
-  )));
+const DB =
+  app.settings.env == "test"
+    ? process.env.TEST_DATABASE.replace(
+        "<PASSWORD>",
+        process.env.DATABASE_PASSWORD
+      )
+    : process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
 
 mongoose
   .connect(DB, {
