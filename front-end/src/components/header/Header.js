@@ -44,8 +44,7 @@ export default function Header() {
       })
       .then(() => {
         if (logoutSuccess) {
-          console.log("logout");
-          window.location.href = "http://localhost:3000/login";
+          history.push("/login");
         }
       })
       .catch((err) => console.log(err));
