@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Popup from "reactjs-popup";
 import PropTypes from "prop-types";
 import { VscChromeClose } from "react-icons/vsc";
-import { api, chatApi } from "../../utils/api";
+import { api } from "../../utils/api";
 
 const ChatGroupCreationForm = ({
   setOpen,
@@ -37,38 +37,43 @@ const ChatGroupCreationForm = ({
     setError(false);
     try {
       const value = await checkHashTag();
-
-      const grp = {
-        hashtag: value,
-        name: groupName,
-        uid: [userEmail],
-        lastModified: Date.now(),
-        creator: userEmail,
-        state: "available",
-      };
-
-      const res = await chatApi.post("/groups", grp).catch((err) => {
-        if (err.status == 400) {
-          setError(true);
-          return;
+      const res = await fetch(
+        "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/groups",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            hashtag: value,
+            name: groupName,
+            uid: [userEmail],
+            lastModified: Date.now(),
+            creator: userEmail,
+            state: "available",
+          }),
         }
-      });
-
-      const data = res.data;
-
-      setNewGroup(data);
-      await api
-        .post("/user/account", {
-          email: userEmail,
-          groupId: data.group._id,
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => console.log(err));
-      handleReset();
-      setLoad(!load);
-      setOpen(false);
+      );
+      const data = await res.json();
+      if (res.status === 400) {
+        setError(true);
+        return;
+      }
+      if (res.status === 200) {
+        setNewGroup(data.group);
+        await api
+          .post("/user/account", {
+            email: userEmail,
+            groupId: data.group._id,
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => console.log(err));
+        handleReset();
+        setLoad(!load);
+        setOpen(false);
+      }
     } catch (error) {
       console.log(error);
     }
