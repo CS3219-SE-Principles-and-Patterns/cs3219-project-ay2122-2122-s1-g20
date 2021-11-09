@@ -18,7 +18,6 @@ exports.getUpcomingSessions = async (req, res, next) => {
   Session.find({ module: { $in: moduleList } })
     .find({ owner: { $ne: username } })
     .find({ participants: { $ne: username } })
-    // Convert date of type string to Date, and then filter for those with date greater than current date
     .find({
       $expr: {
         $gte: [

@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [main]
+    branches: [deploy-frontend]
     paths:
       - ".github/workflows/study-test.yml"
       - "back-end/services/studySessionService/**/*"

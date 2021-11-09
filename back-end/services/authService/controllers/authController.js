@@ -238,8 +238,7 @@ exports.updatePassword = async (req, res) => {
         });
     } catch (err) {
       return res.status(200).json({
-        message:
-          "Invalid password entered. Check that you entered the right passwords",
+        message: "Invalid password entered.",
         valid: false,
       });
     }

@@ -10,7 +10,7 @@ exports.create = async (req, res) => {
     const checkGroup = await Group.findOne({ name });
     if (checkGroup) {
       res.status(400).send({
-        message: "This name has been used. Please set a different name",
+        message: "This name has been used. Please set a different one!",
       });
       return;
     }

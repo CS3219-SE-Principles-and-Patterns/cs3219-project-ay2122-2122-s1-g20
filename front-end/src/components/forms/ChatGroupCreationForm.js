@@ -54,16 +54,13 @@ const ChatGroupCreationForm = ({
           }),
         }
       );
-      console.log(res);
       const data = await res.json();
-      console.log(data);
       if (res.status === 400) {
         setError(true);
         return;
       }
       if (res.status === 200) {
         setNewGroup(data.group);
-        //add group to user
         await api
           .post("/user/account/groups", {
             email: userEmail,

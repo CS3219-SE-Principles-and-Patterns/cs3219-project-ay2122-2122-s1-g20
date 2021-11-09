@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ main ]
+    branches: [ deploy-frontend ]
     paths:
       - '.github/workflows/auth-test.yml'
       - 'back-end/services/authService/**/*'
