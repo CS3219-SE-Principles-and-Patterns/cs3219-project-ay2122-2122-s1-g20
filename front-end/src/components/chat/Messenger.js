@@ -75,9 +75,7 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
 
       //update last modified
       try {
-        const res = await api.post(`/groups/${group}`, {
-          newMessage,
-        });
+        const res = await api.post(`/groups/${group}`, newMessage);
         console.log(res);
       } catch (err) {
         console.log(err);

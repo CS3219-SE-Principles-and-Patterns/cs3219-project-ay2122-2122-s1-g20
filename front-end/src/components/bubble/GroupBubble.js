@@ -62,9 +62,7 @@ const GroupBubble = ({
 
     try {
       //add user to group
-      const res = await api.post(`/groups/users`, {
-        newGroupJoined,
-      });
+      const res = await api.post(`/groups/users`, newGroupJoined);
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -111,9 +109,7 @@ const GroupBubble = ({
 
     try {
       //remove user from group
-      const res = await api.post(`/groups/users/remove`, {
-        groupToLeave,
-      });
+      const res = await api.post(`/groups/users/remove`, groupToLeave);
       console.log(res);
     } catch (err) {
       console.log(err);
