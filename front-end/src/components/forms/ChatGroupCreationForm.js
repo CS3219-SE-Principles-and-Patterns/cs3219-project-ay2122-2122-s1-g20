@@ -62,7 +62,7 @@ const ChatGroupCreationForm = ({
         setNewGroup(data.group);
         //add group to user
         await api
-          .post("/user/account/groups", {
+          .post("/user/account", {
             email: userEmail,
             groupId: data.group._id,
           })

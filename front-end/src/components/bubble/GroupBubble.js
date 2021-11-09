@@ -53,7 +53,7 @@ const GroupBubble = ({
       "Content-Type": "application/json",
     };
     const res = await api
-      .post("/user/account/groups", JSON.stringify(newGroupJoined), {
+      .post("/user/account", JSON.stringify(newGroupJoined), {
         headers: headers,
       })
       .catch((err) => console.log(err));
@@ -111,7 +111,7 @@ const GroupBubble = ({
       "Content-Type": "application/json",
     };
     await api
-      .post("/user/account/groups/remove", JSON.stringify(groupToLeave), {
+      .post("/user/account/remove", JSON.stringify(groupToLeave), {
         headers: headers,
       })
       .catch((err) => console.log(err));

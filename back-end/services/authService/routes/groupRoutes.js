@@ -7,8 +7,8 @@ const {
 
 const router = express.Router();
 
-router.get("/groups/:email", getGroups);
-router.post("/groups", addGroup);
-router.post("/groups/remove", removeGroup);
+router.get("/:email", getGroups);
+router.post("/", addGroup);
+router.post("/remove", removeGroup);
 
 module.exports = router;
