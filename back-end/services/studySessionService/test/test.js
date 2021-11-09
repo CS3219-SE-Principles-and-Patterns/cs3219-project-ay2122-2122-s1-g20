@@ -89,4 +89,7 @@ describe("Sessions", () => {
         });
     });
   });
+  after(function () {
+    User.findByIdAndRemove(newUser._id).exec();
+  });
 });

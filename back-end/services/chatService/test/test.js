@@ -32,23 +32,23 @@ const testMessage = new Message({
   profilePic: "na",
 });
 
-describe("Groups", () => {
-  const jwtSalt = bcrypt.genSaltSync(10);
-  const uniqueString = crypto.randomBytes(20).toString("hex");
-  const newUser = new User({
-    email: "test@gmail.com",
-    username: "test",
-    password: "123456",
-    groups: [],
-    jwtSalt: jwtSalt,
-    uniqueString: uniqueString,
-    isVerified: true,
-  });
-  const token = jwt.sign(
-    { userId: newUser._id },
-    process.env.TOKEN_KEY + jwtSalt
-  );
+const jwtSalt = bcrypt.genSaltSync(10);
+const uniqueString = crypto.randomBytes(20).toString("hex");
+const newUser = new User({
+  email: "test@gmail.com",
+  username: "test",
+  password: "123456",
+  groups: [],
+  jwtSalt: jwtSalt,
+  uniqueString: uniqueString,
+  isVerified: true,
+});
+const token = jwt.sign(
+  { userId: newUser._id },
+  process.env.TOKEN_KEY + jwtSalt
+);
 
+describe("Groups", () => {
   describe("GET /groups", () => {
     // Test to get all groups
     it("should get all groups record", (done) => {
