@@ -64,6 +64,10 @@ subClient.on("error", function (err) {
 
 io.adapter(redisAdapter(pubClient, subClient));
 
+io.of('/').adapter.on('error', function(err) {
+  console.log("Error " + err)
+});
+
 io.on("connection", (socket) => {
   console.log("user connected");
   console.log(socket.id);
