@@ -154,12 +154,23 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
               </div>
               {enable ? (
                 <div className="flex flex-row">
-                  <button
-                    className="absolute inset-x-0 bottom-0 mb-14 nt-1 w-16 text-black border-2 rounded-full border-black bg-yellow-dark"
-                    onClick={() => setAnon(!anon)}
-                  >
-                    {anon ? "anon" : "public"}
-                  </button>
+                  {[
+                    "chitchat",
+                    "sports",
+                    "makan",
+                    "Joined",
+                    "All Chats",
+                  ].includes(displayChat.hashtag) ? (
+                    <button
+                      className="absolute inset-x-0 bottom-0 mb-14 nt-1 w-16 text-black border-2 rounded-full border-black bg-yellow-dark"
+                      onClick={() => setAnon(!anon)}
+                    >
+                      {anon ? "anon" : "public"}
+                    </button>
+                  ) : (
+                    ""
+                  )}
+
                   <form
                     onSubmit={handleSendMessage}
                     action="#"
