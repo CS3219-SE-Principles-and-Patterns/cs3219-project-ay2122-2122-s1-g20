@@ -21,12 +21,13 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.use("/api", routes);
 app.get("/", (req, res) => {
   console.log("Test passed");
   res.send("Server is up and running.");
 });
 
+app.use("/api", routes);
+app.use(verifyToken);
 const http = require("http").createServer(app);
 const options = {
   cors: {
@@ -42,10 +43,14 @@ http.listen(PORT, () => {
 });
 
 const io = require("socket.io")(http, options);
-const { createClient } = require('redis');
-const redisAdapter = require('@socket.io/redis-adapter');
+const { createClient } = require("redis");
+const redisAdapter = require("@socket.io/redis-adapter");
+const { verifyToken } = require("./middlewares/requireAuth");
 
-const pubClient = createClient({ host: process.env.REDIS_ENDPOINT, port: 6379 });
+const pubClient = createClient({
+  host: process.env.REDIS_ENDPOINT,
+  port: 6379,
+});
 const subClient = pubClient.duplicate();
 
 io.adapter(redisAdapter(pubClient, subClient));
@@ -61,7 +66,6 @@ io.on("connection", (socket) => {
     socket.join(group);
   });
 });
-
 
 const DB =
   app.settings.env == "test"

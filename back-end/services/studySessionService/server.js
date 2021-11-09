@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
 const sessionRoutes = require("./routes/sessionRoutes");
+const { verifyToken } = require("./middlewares/requireAuth");
 
 dotenv.config({ path: "./config.env" });
 
@@ -41,12 +42,13 @@ mongoose
   })
   .then(() => console.log("DB connection successful!"));
 
-app.use("/api/session", sessionRoutes);
-
 app.get("/", (req, res) => {
   console.log("Test passed");
   res.send("Server is up and running.");
 });
+
+app.use(verifyToken);
+app.use("/api/session", sessionRoutes);
 
 app.listen(PORT, () => console.log("Server running on " + PORT));
 
