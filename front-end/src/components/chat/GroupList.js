@@ -31,11 +31,8 @@ const GroupList = ({
     return !["chitchat", "makan", "sports"].includes(tag);
   };
   const getAllGroups = async () => {
-    const res = await fetch(
-      "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/groups"
-    );
-    const data = await res.json();
-    var temp = data.groups.sort((a, b) => {
+    const res = await api.get(`/groups`);
+    var temp = res.data.groups.sort((a, b) => {
       return b.lastModified - a.lastModified;
     });
     setGroups(temp);

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
+import { api } from "../../utils/api";
 
 const Messenger = ({ account, displayChat, enable, disabled }) => {
   const [message, setMessage] = useState("");
@@ -83,16 +84,9 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
 
       //update last modified
       try {
-        const res = await fetch(
-          `https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/groups/${group}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-type": "application/json",
-            },
-            body: JSON.stringify(newMessage),
-          }
-        );
+        const res = await api.post(`/groups/${group}`, {
+          newMessage,
+        });
         console.log(res);
       } catch (err) {
         console.log(err);
