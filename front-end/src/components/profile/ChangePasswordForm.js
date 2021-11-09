@@ -41,6 +41,9 @@ const ChangePasswordForm = (email) => {
       if (!res.data.valid) {
         setAlertMessage(res.data.message);
         setIsError(true);
+      } else if (newpassword.length < 8) {
+        setIsError(true);
+        setAlertMessage("Password has to be at least 8 characters.");
       } else {
         setAlertMessage(res.data.message);
         setIsError(false);
