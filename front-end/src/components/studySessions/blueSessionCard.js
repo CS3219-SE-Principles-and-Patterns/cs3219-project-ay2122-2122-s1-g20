@@ -4,7 +4,7 @@ import { SessionContext } from "../../context/SessionContext";
 import ConfirmationPopup from "../forms/ConfirmationPopup";
 import SessionCardTemplate from "./sessionCardTemplate";
 import SessionAlerts from "../alerts/SessionAlerts";
-import { api, chatApi } from "../../utils/api";
+import { api } from "../../utils/api";
 
 const BlueSessionCard = ({ studySession }) => {
   const { username, email } = useContext(AccountContext);
@@ -28,7 +28,7 @@ const BlueSessionCard = ({ studySession }) => {
   const joinChat = async (gid) => {
     try {
       // join chat group
-      await chatApi.post("/groups/users", {
+      await api.post("/groups/users", {
         groupId: gid,
         email,
       });
