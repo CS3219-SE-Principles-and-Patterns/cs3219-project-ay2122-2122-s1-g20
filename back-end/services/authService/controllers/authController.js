@@ -21,7 +21,7 @@ const oAuth2Client = new google.auth.OAuth2(
   REDIRECT_URI
 );
 
-google.options({ auth: oAuth2Client }); // Apply the settings globally
+google.options({ auth: oAuth2Client });
 
 exports.signup = async (req, res) => {
   const { email, username, password } = req.body;
@@ -105,7 +105,7 @@ exports.checkToken = (req, res, next) => {
   const salt = req.headers["jwt-salt"];
 
   if (!token || !salt) {
-    return res.status(400).json({ message : "Please login!" });
+    return res.status(400).json({ message: "Please login!" });
   }
 
   try {
@@ -127,13 +127,7 @@ exports.checkToken = (req, res, next) => {
         return res.status(400).json({ error: "User not found!" });
       }
 
-      const {
-        username,
-        email,
-        modules,
-        profilePic,
-        jwtSalt
-      } = user;
+      const { username, email, modules, profilePic, jwtSalt } = user;
 
       return res.status(200).json({
         user: {
@@ -141,11 +135,11 @@ exports.checkToken = (req, res, next) => {
           email,
           modules,
           profilePic,
-          jwtSalt
+          jwtSalt,
         },
-        token : {
-          token
-        }
+        token: {
+          token,
+        },
       });
     });
   }
