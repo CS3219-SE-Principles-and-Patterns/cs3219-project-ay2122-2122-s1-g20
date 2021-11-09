@@ -44,8 +44,7 @@ export default function Header() {
       })
       .then(() => {
         if (logoutSuccess) {
-          console.log("logout");
-          window.location.href = "https://d22aqfk6uuuihz.cloudfront.net/login";
+          history.push("/login");
         }
       })
       .catch((err) => console.log(err));

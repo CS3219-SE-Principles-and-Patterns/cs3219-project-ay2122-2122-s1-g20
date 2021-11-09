@@ -68,6 +68,7 @@ function App() {
             </Switch>
             <PrivateRoute path="/profile" exact component={ProfilePage} />
             <PrivateRoute path="/chat" exact component={ChatPage} />
+            <PrivateRoute path="/chat/:gid" exact component={ChatPage} />
             <Route path="/error">
               <ErrorPage />
             </Route>
