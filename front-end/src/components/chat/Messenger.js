@@ -70,16 +70,7 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
       setMessage("");
       setOldMessages(oldMessages.concat(newMessage));
 
-      const res = await fetch(
-        "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/messages",
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(newMessage),
-        }
-      );
+      const res = await api.post(`/messages`, newMessage);
       console.log(res);
 
       //update last modified
@@ -107,12 +98,9 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
 
   useEffect(() => {
     const getOldMessages = async () => {
-      const res = await fetch(
-        `https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/messages/${group}`
-      );
-      const data = await res.json();
-      console.log(data.messages);
-      setOldMessages(data.messages);
+      const res = await api.get(`/messages/${group}`);
+      console.log(res.data.messages);
+      setOldMessages(res.data.messages);
     };
     getOldMessages();
     setToggle(!toggle);
