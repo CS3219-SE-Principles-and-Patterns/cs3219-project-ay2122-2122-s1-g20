@@ -2,10 +2,10 @@ name: Deploy to production
 
 on:
   push:
-    branches: [ deploy-frontend ]
+    branches: [deploy-frontend]
     paths:
-      - '.github/workflows/studySession-deploy.yml'
-      - 'back-end/services/studySessionService/**/*'
+      - ".github/workflows/studySession-deploy.yml"
+      - "back-end/services/studySessionService/**/*"
 
 env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
@@ -14,6 +14,9 @@ env:
   ECR_REPOSITORY: ${{ secrets.STUDY_REPO }}
   IMAGE_TAG: latest
   AWS_DEFAULT_OUTPUT: json
+  ECS_SERVICE: study-public
+  ECS_CLUSTER: ecs-fargate-cluster-cs3219
+  ECS_TASK_DEFINITION: ecs-fargate-cs3219-studysession
 
 jobs:
   build-and-push:
@@ -39,5 +42,16 @@ jobs:
           # Build and tag the image
           docker build -t $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG .
       - name: Push the image into ECR
-        run:
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+        run: docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Download task definition
+        run: aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --query taskDefinition --region ap-southeast-1 > task-definition.json
+
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@master
+        with:
+          task-definition: task-definition.json
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+          force-new-deployment: true
