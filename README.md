@@ -1,8 +1,6 @@
 # CS3219 Project: StudyBuddy (Group 20)
 
-
-
-##Team members
+## Team members
 | Member  | Matriculation number |
 | ------------- | ------------- |
 | Sylvia Ong Kai Ting  | A0204942J  |
@@ -19,6 +17,16 @@ can browse and join the fun!
 
 ## Architecture
 
-## Tech stack
+![Architecture diagram](./public/architecture.png)
+
+## How to run
+To run locally:
+
+1) Go to the main branch
+2) Navigate by running `cd back-end/services/authService`, `cd back-end/services/studySessionService`, 
+   `cd back-end/services/chatService`, followed by `npm start` to run each service in its directory. Ensure that authService is run first.
+   
+3) Navigate to the front-end directory by running `cd front-end`, followed by `npm start` to run the front-end.
+You will be navigated to http://localhost:3000.
 
 
