@@ -39,13 +39,16 @@ jobs:
           # Build and tag the image
           docker build -t $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG .
       - name: Push the image into ECR
-        run: docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+        id: push-image
+        run: |
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG"
 
       - name: Download task definition
         run: aws ecs describe-task-definition --task-definition ecs-fargate-cs3219-chatservice --query taskDefinition --region ap-southeast-1 > task-definition.json
 
       - name: Deploy to Amazon ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@master
         with:
           task-definition: task-definition.json
           service: chat-public
