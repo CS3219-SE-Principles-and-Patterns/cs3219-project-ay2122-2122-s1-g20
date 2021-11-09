@@ -38,3 +38,7 @@ jobs:
         working-directory: ./front-end
         run: aws s3 sync ./build s3://${{ secrets.S3_BUCKET }}
       
+      - name: Push changes to CloudFront
+        working-directory: ./front-end
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION }} --paths "/*" --no-cli-pager
+      
