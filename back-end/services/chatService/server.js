@@ -54,6 +54,14 @@ const pubClient = createClient({
 });
 const subClient = pubClient.duplicate();
 
+pubClient.on("error", function (err) {
+  console.log("Error " + err);
+});
+
+subClient.on("error", function (err) {
+  console.log("Error " + err);
+});
+
 io.adapter(redisAdapter(pubClient, subClient));
 
 io.on("connection", (socket) => {
