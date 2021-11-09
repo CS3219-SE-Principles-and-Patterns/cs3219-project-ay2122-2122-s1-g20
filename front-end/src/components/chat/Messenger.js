@@ -12,7 +12,6 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
   const username = account.username;
   const profilePic = account.profilePic;
   const group = displayChat._id;
-  console.log(disabled);
 
   /*
   socket.once("connect", () => {

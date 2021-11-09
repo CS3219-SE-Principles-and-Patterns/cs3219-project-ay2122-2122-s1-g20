@@ -47,8 +47,6 @@ const YellowSessionCard = ({ studySession, isCreatedSessions }) => {
   };
   const handleChat = () => {
     // route to chat group
-    console.log(studySession);
-    console.log(studySession.gid);
     history.push(`/chat/${studySession.gid}`);
   };
 
