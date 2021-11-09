@@ -59,7 +59,7 @@ exports.signup = async (req, res) => {
       subject: "Please verify your email for your StudyBuddy account!",
       html: `
         <p>Please verify your study buddy account!</p>
-        <p>Click this <a href="http://localhost:3000/signup/confirmation/verified/${uniqueString}">link</a> to verify your email.</p>
+        <p>Click this <a href="https://d22aqfk6uuuihz.cloudfront.net/signup/confirmation/verified/${uniqueString}">link</a> to verify your email.</p>
       `,
     };
 
@@ -326,7 +326,7 @@ exports.postReset = (req, res, next) => {
             subject: "Password reset",
             html: `
           <p>You requested a password reset for your StudyBuddy account!</p>
-          <p>Click this <a href="http://localhost:3000/resetPassword/${token}">link</a> to set a new password.</p>
+          <p>Click this <a href="https://d22aqfk6uuuihz.cloudfront.net/resetPassword/${token}">link</a> to set a new password.</p>
         `,
           };
 
