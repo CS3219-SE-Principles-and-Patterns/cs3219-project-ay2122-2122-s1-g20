@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const routes = require("./routes/routes");
 const cron = require("node-cron");
 const method = require("./controllers/groupController");
+const { verifyToken } = require("./middlewares/requireAuth");
 
 dotenv.config({ path: "config.env" });
 
@@ -26,8 +27,9 @@ app.get("/", (req, res) => {
   res.send("Server is up and running.");
 });
 
-app.use("/api", routes);
 app.use(verifyToken);
+app.use("/api", routes);
+
 const http = require("http").createServer(app);
 const options = {
   cors: {
@@ -45,7 +47,6 @@ http.listen(PORT, () => {
 const io = require("socket.io")(http, options);
 const { createClient } = require("redis");
 const redisAdapter = require("@socket.io/redis-adapter");
-const { verifyToken } = require("./middlewares/requireAuth");
 
 const pubClient = createClient({
   host: process.env.REDIS_ENDPOINT,
