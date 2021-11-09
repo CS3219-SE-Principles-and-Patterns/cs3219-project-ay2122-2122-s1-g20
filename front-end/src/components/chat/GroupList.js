@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import GroupBubble from "../bubble/GroupBubble";
 import ChatGroupCreationForm from "../forms/ChatGroupCreationForm";
 import ClipLoader from "react-spinners/ClipLoader";
-import { api } from "../../utils/api";
+import { api, chatApi } from "../../utils/api";
 import { SearchIcon } from "@heroicons/react/solid";
 
 const GroupList = ({
@@ -31,9 +31,8 @@ const GroupList = ({
     return !["chitchat", "makan", "sports"].includes(tag);
   };
   const getAllGroups = async () => {
-    const res = await fetch("http://localhost:9000/api/groups");
-    const data = await res.json();
-    var temp = data.groups.sort((a, b) => {
+    const res = await chatApi.get(`/groups`);
+    var temp = res.data.groups.sort((a, b) => {
       return b.lastModified - a.lastModified;
     });
     setGroups(temp);
