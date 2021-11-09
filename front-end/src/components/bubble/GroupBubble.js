@@ -62,9 +62,7 @@ const GroupBubble = ({
 
     try {
       //add user to group
-      const res = await chatApi.post(`/groups/users`, {
-        newGroupJoined,
-      });
+      const res = await chatApi.post(`/groups/users`, newGroupJoined);
       console.log(res);
     } catch (err) {
       console.log(err);

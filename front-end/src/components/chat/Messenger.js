@@ -69,16 +69,12 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
       };
       setMessage("");
       setOldMessages(oldMessages.concat(newMessage));
-      const res = await chatApi.post(`/messages`, {
-        newMessage,
-      });
+      const res = await chatApi.post(`/messages`, newMessage);
       console.log(res);
 
       //update last modified
       try {
-        const res = await chatApi.post(`/groups/${group}`, {
-          newMessage,
-        });
+        const res = await chatApi.post(`/groups/${group}`, newMessage);
         console.log(res);
       } catch (err) {
         console.log(err);
