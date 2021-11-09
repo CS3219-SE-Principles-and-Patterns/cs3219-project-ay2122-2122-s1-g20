@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const routes = require("./routes/routes");
 const cron = require("node-cron");
 const method = require("./controllers/groupController");
+const { verifyToken } = require("./middlewares/requireAuth");
 
 dotenv.config({ path: "config.env" });
 
@@ -21,11 +22,12 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.use("/api", routes);
 app.get("/", (req, res) => {
   console.log("Test passed");
   res.send("Server is up and running.");
 });
+app.use(verifyToken);
+app.use("/api", routes);
 
 const http = require("http").createServer(app);
 const options = {

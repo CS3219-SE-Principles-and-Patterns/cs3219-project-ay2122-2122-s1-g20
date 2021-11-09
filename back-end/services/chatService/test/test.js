@@ -6,6 +6,11 @@ const app = require("../server");
 const mongoose = require("mongoose");
 const Group = require("../model/group");
 const Message = require("../model/message");
+const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+require("dotenv").config();
+const bcrypt = require("bcrypt");
+const User = require("../model/user");
 
 chai.use(chaiHttp);
 chai.should();
@@ -27,6 +32,22 @@ const testMessage = new Message({
   profilePic: "na",
 });
 
+const jwtSalt = bcrypt.genSaltSync(10);
+const uniqueString = crypto.randomBytes(20).toString("hex");
+const newUser = new User({
+  email: "test@gmail.com",
+  username: "test",
+  password: "123456",
+  groups: [],
+  jwtSalt: jwtSalt,
+  uniqueString: uniqueString,
+  isVerified: true,
+});
+const token = jwt.sign(
+  { userId: newUser._id },
+  process.env.TOKEN_KEY + jwtSalt
+);
+
 describe("Groups", () => {
   describe("GET /groups", () => {
     // Test to get all groups
@@ -34,6 +55,8 @@ describe("Groups", () => {
       chai
         .request(app)
         .get("/api/groups")
+        .set("x-access-token", token)
+        .set("jwt-salt", jwtSalt)
         .end((err, res) => {
           res.should.have.status(200);
           done();
@@ -46,6 +69,8 @@ describe("Groups", () => {
       chai
         .request(app)
         .post("/api/groups")
+        .set("x-access-token", token)
+        .set("jwt-salt", jwtSalt)
         .send(testGroup)
         .end((err, res) => {
           res.should.have.status(200);
@@ -61,6 +86,8 @@ describe("Groups", () => {
       chai
         .request(app)
         .del("/api/groups/" + testGroup._id)
+        .set("x-access-token", token)
+        .set("jwt-salt", jwtSalt)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have
@@ -78,6 +105,8 @@ describe("Messages", () => {
     chai
       .request(app)
       .post("/api/messages/")
+      .set("x-access-token", token)
+      .set("jwt-salt", jwtSalt)
       .send(testMessage)
       .end((err, res) => {
         res.should.have.status(200);

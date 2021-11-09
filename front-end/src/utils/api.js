@@ -13,14 +13,32 @@ export let api = axios.create({
   baseURL: "http://localhost:8080/api",
 });
 
-export const setTokenHeader = (token) =>
+export const setTokenHeader = (token) => {
   api.interceptors.request.use(async (config) => {
     config.headers.common["x-access-token"] = token;
     return config;
   });
+  sessionApi.interceptors.request.use(async (config) => {
+    config.headers.common["x-access-token"] = token;
+    return config;
+  });
+  chatApi.interceptors.request.use(async (config) => {
+    config.headers.common["x-access-token"] = token;
+    return config;
+  });
+};
 
-export const setSaltHeader = (salt) =>
+export const setSaltHeader = (salt) => {
   api.interceptors.request.use(async (config) => {
     config.headers.common["jwt-salt"] = salt;
     return config;
   });
+  sessionApi.interceptors.request.use(async (config) => {
+    config.headers.common["jwt-salt"] = salt;
+    return config;
+  });
+  chatApi.interceptors.request.use(async (config) => {
+    config.headers.common["jwt-salt"] = salt;
+    return config;
+  });
+};
