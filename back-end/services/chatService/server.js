@@ -30,14 +30,25 @@ app.get("/", (req, res) => {
 const http = require("http").createServer(app);
 const options = {
   cors: {
-    origin: "http://localhost:3000",
+    origin: true,
   },
   transports: ["websocket"],
   pingInterval: 1000 * 60 * 5,
   pingTimeout: 1000 * 60 * 3,
 };
 
+http.listen(PORT, () => {
+  console.log("connected to port: " + PORT);
+});
+
 const io = require("socket.io")(http, options);
+const { createClient } = require('redis');
+const redisAdapter = require('@socket.io/redis-adapter');
+
+const pubClient = createClient({ host: process.env.REDIS_ENDPOINT, port: 6379 });
+const subClient = pubClient.duplicate();
+
+io.adapter(redisAdapter(pubClient, subClient));
 
 io.on("connection", (socket) => {
   console.log("user connected");
@@ -51,9 +62,6 @@ io.on("connection", (socket) => {
   });
 });
 
-http.listen(PORT, () => {
-  console.log("connected to port: " + PORT);
-});
 
 const DB =
   app.settings.env == "test"
