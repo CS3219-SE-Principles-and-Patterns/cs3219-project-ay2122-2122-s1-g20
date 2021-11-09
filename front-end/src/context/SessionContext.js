@@ -22,7 +22,7 @@ export const SessionProvider = ({ children }) => {
     try {
       const response = await sessionApi.post("/", session);
       setMySessions([...mySessions, response.data.session]);
-      return response.data.message;
+      return response.data;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -50,7 +50,10 @@ export const SessionProvider = ({ children }) => {
         ...upcomingSessions.slice(0, index),
         ...upcomingSessions.slice(index + 1),
       ]);
-      return "You have joined this study session!";
+      return {
+        session: response.data.session,
+        message: "You have joined this study session!",
+      };
     } catch (error) {
       throw new Error(
         "Your indicated time range is less than the time limit set by the creator of this study session!"

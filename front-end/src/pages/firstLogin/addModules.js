@@ -8,9 +8,7 @@ const AddModulesPage = () => {
       <div className="text-3xl sm:text-4xl font-bold pt-7 mb-3">
         What modules are you taking this semester?
       </div>
-      <EditModules
-        nextPage="/home" // update nextPage to home page
-      />
+      <EditModules nextPage="/home" />
     </div>
   );
 };

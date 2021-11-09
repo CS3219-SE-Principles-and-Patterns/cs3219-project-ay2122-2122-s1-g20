@@ -2,6 +2,7 @@ import React, { useContext, useState, useCallback } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { AccountContext } from "../../context/AccountContext";
 import AlertMessage from "../alerts/AlertMessage";
+import Cookies from "universal-cookie";
 
 const LoginForm = () => {
   const { setUser } = useContext(AccountContext);
@@ -11,6 +12,8 @@ const LoginForm = () => {
   const [isRevealPassword, setIsRevealPassword] = useState(false);
   const [isError, setisError] = useState(false);
   const [openAlert, setOpenAlert] = useState(true);
+
+  const cookies = new Cookies();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -23,16 +26,19 @@ const LoginForm = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/api/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+      const response = await fetch(
+        "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
 
       const responseData = await response.json();
 
@@ -46,9 +52,15 @@ const LoginForm = () => {
       }
 
       if (response.status === 200) {
-        // update user information in account context
         setUser(responseData.user, responseData.token);
-        // if first login, route to /profilePic, if not route to home page
+        cookies.set("token", responseData.token, {
+          path: "/",
+          maxAge: 86400,
+        });
+        cookies.set("salt", responseData.user.jwtSalt, {
+          path: "/",
+          maxAge: 86400,
+        });
         setAlertMessage(responseData.message);
         setisError(false);
         setEmail("");
@@ -80,6 +92,7 @@ const LoginForm = () => {
       ) : undefined}
       <form
         onSubmit={handleLogin}
+        name="login-form"
         className="space-y-6"
         action="#"
         method="POST"
@@ -92,6 +105,7 @@ const LoginForm = () => {
             Email address
           </label>
           <input
+            autoFocus
             onChange={handleEmailChange}
             type="email"
             name="email"

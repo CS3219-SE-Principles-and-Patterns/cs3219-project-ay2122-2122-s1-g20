@@ -11,15 +11,18 @@ const EmailVerification = () => {
 
   useEffect(() => {
     async function verifyEmail() {
-      const response = await fetch("http://localhost:8080/api/user/verified", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uniqueString: uniqueString,
-        }),
-      });
+      const response = await fetch(
+        "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/user/verified",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uniqueString: uniqueString,
+          }),
+        }
+      );
       try {
         const responseData = await response.json();
         if (response.status !== 200) {
@@ -29,9 +32,7 @@ const EmailVerification = () => {
         }
 
         if (response.status === 200) {
-          // Route to home page
           setAlertMessage(responseData.message);
-          console.log(responseData.message);
         }
       } catch (err) {
         setisError(true);

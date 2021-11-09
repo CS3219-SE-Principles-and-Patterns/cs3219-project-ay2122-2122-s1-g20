@@ -1,21 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const moment = require("moment");
-
+const User = require("../model/user");
 const Session = require("../model/session");
 
 const today = moment().startOf("day");
 
 // Get upcoming study session
-exports.getUpcomingSessions = (req, res, next) => {
+exports.getUpcomingSessions = async (req, res, next) => {
   const username = req.params.username;
-  // get list of modules [{moduleCode: "", title: ""}]
-  // mock data ---- to be replaced after gateway api is implemented
-  const modules = [
-    { moduleCode: "CS3219", title: "test" },
-    { moduleCode: "CS2102", title: "edad" },
-  ];
-  const moduleList = modules.map((mod) => mod.moduleCode);
+  const currentUser = await User.findOne({ username });
+  if (!currentUser) {
+    return res.status(200).json({ length: 0, sessions: [] });
+  }
+  const moduleList = currentUser.modules.map((mod) => mod.moduleCode);
 
   Session.find({ module: { $in: moduleList } })
     .find({ owner: { $ne: username } })
@@ -62,7 +60,6 @@ exports.getMySessions = (req, res, next) => {
     });
 };
 
-// Get my created study session
 exports.getJoinedSessions = (req, res, next) => {
   // remove USERNAME from params after gateway api is implemented
   const username = req.params.username;

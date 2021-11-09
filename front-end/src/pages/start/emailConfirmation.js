@@ -16,7 +16,7 @@ const EmailConfirmationPage = () => {
     event.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:8080/api/user/emailConfirmation",
+        "https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/user/emailConfirmation",
         {
           method: "POST",
           headers: {

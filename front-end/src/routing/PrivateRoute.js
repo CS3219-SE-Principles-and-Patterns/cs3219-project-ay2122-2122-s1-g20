@@ -10,8 +10,9 @@ function PrivateRoute({ component: Component, ...rest }) {
 
   useEffect(() => {
     setIsLoading(true);
+    console.log(token);
     const authenticate = async () => {
-      if (token != "") {
+      if (token !== "") {
         await api
           .post("/user/authentication")
           .then((res) => {
@@ -27,7 +28,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     };
     const timer = setTimeout(() => {
       authenticate();
-    }, 100);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [token]);
 

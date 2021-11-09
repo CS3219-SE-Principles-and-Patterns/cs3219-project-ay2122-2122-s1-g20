@@ -5,18 +5,18 @@ const dotenv = require("dotenv");
 
 const sessionRoutes = require("./routes/sessionRoutes");
 
-dotenv.config({ path: "../../config.env" });
+dotenv.config({ path: "./config.env" });
 
 const app = express();
 const PORT = process.env.STUDY_PORT || config.port;
 
 app.use(cors());
-app.use(express.json({ limit: "15360mb" }));
+app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
-    limit: "15360mb",
-    parameterLimit: 500000000,
+    // limit: "15360mb",
+    // parameterLimit: 500000000,
   })
 );
 
@@ -26,10 +26,13 @@ app.use(
   })
 );
 
-const DB = process.env.DATABASE.replace(
-  "<PASSWORD>",
-  process.env.DATABASE_PASSWORD
-);
+const DB =
+  app.settings.env == "test"
+    ? process.env.TEST_DATABASE.replace(
+        "<PASSWORD>",
+        process.env.DATABASE_PASSWORD
+      )
+    : process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
 
 mongoose
   .connect(DB, {
@@ -46,3 +49,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => console.log("Server running on " + PORT));
+
+module.exports = app;

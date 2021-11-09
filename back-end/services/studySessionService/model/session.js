@@ -2,7 +2,7 @@ const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 
 const studySessionSchema = mongoose.Schema({
-  cid: {
+  gid: {
     type: String,
   },
   capacity: {
