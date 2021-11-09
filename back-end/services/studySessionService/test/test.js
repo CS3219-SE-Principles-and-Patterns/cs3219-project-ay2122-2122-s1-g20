@@ -16,14 +16,14 @@ chai.should();
 const testSession = new Session({
   capacity: 4,
   title: "testing",
-  timeLimit: 1000,
+  timeLimit: 2,
   time: {
-    start: "start",
-    end: "end",
+    start: "11:00",
+    end: "13:00",
   },
-  date: "10 January 2022",
-  module: "mod",
-  participants: ["one"],
+  date: "2022-01-02",
+  module: "CS3219",
+  participants: ["me"],
   isOnline: "online",
 });
 

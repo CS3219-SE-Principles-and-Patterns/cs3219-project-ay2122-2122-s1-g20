@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
 const sessionRoutes = require("./routes/sessionRoutes");
-const { verifyToken } = require("../chatService/middlewares/requireAuth");
+const { verifyToken } = require("./middlewares/requireAuth");
 
 dotenv.config({ path: "./config.env" });
 
@@ -23,7 +23,9 @@ app.use(
 
 app.use(
   cors({
-    exposedHeaders: ["x-access-token"],
+    exposedHeaders: ["x-access-token", "jwt-salt"],
+    credentials: true,
+    origin: true,
   })
 );
 
