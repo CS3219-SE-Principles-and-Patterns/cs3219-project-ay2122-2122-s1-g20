@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import StudyHeader from "../header/StudyHeader";
 import ChatBubble from "../bubble/ChatBubble";
 import { socket } from "./Socket";
+import { chatApi } from "../../utils/api";
 
 const Messenger = ({ account, displayChat, enable, disabled }) => {
   const [message, setMessage] = useState("");
@@ -69,28 +70,16 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
       setMessage("");
       setOldMessages(oldMessages.concat(newMessage));
 
-      const res = await fetch("http://localhost:9000/api/messages", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(newMessage),
-      });
-      console.log(res);
+      await chatApi
+        .post("/messages", {
+          newMessage,
+        })
+        .catch((err) => console.log(err));
 
       //update last modified
-      try {
-        const res = await fetch(`http://localhost:9000/api/groups/${group}`, {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(newMessage),
-        });
-        console.log(res);
-      } catch (err) {
-        console.log(err);
-      }
+      await chatApi
+        .post(`/groups/${groups}`, newMessage)
+        .catch((err) => console.log(err));
     }
   };
 
@@ -107,7 +96,9 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
 
   useEffect(() => {
     const getOldMessages = async () => {
-      const res = await fetch(`http://localhost:9000/api/messages/${group}`);
+      const res = await fetch(
+        `https://39t21kptu5.execute-api.ap-southeast-1.amazonaws.com/v1/api/messages/${group}`
+      );
       const data = await res.json();
       console.log(data.messages);
       setOldMessages(data.messages);
