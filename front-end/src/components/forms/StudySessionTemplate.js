@@ -43,13 +43,6 @@ const StudySessionTemplate = ({ setOpen, open, studySession }) => {
       : null
   );
 
-  // const addSelectedMods = (moduleCode) => {
-  //   setSelectedMod([...selectedMod, moduleCode]);
-  // };
-
-  // const removeSelectedMods = (moduleCode) => {
-  //   setSelectedMod(selectedMod.filter((mod) => mod != moduleCode));
-  // };
   const [isLoading, setIsLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [show, setShow] = useState(false);
