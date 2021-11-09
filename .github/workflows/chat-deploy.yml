@@ -2,10 +2,10 @@ name: Deploy to production
 
 on:
   push:
-    branches: [ deploy-frontend ]
+    branches: [deploy-frontend]
     paths:
-      - '.github/workflows/chat-deploy.yml'
-      - 'back-end/services/chatService/**/*'
+      - ".github/workflows/chat-deploy.yml"
+      - "back-end/services/chatService/**/*"
 
 env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
@@ -39,5 +39,16 @@ jobs:
           # Build and tag the image
           docker build -t $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG .
       - name: Push the image into ECR
-        run:
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+        run: docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Download task definition
+        run: aws ecs describe-task-definition --task-definition ecs-fargate-cs3219-chatservice --query taskDefinition --region ap-southeast-1 > task-definition.json
+
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          service: chat-public
+          cluster: ecs-fargate-cluster-cs3219
+          wait-for-service-stability: true
+          force-new-deployment: true
