@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 
 export const socket = io(
-  "https://internal-studybuddy-alb-69068856.ap-southeast-1.elb.amazonaws.com",
+  "http://internal-studybuddy-alb-69068856.ap-southeast-1.elb.amazonaws.com",
   {
     transports: ["websocket"],
     upgrade: false,
