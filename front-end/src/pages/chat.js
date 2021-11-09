@@ -3,7 +3,7 @@ import Category from "../components/chat/Category";
 import Messenger from "../components/chat/Messenger";
 import { AccountContext } from "../context/AccountContext";
 import { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const ChatPage = () => {
   const [displayChat, setDisplayChat] = useState([]);
@@ -11,7 +11,9 @@ const ChatPage = () => {
   const [tag, setTag] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  // const { gid } = useParams();
+  const { gid } = useParams();
+  console.log(gid);
+  console.log(useParams());
   // --> display gid chat if gid is not null
 
   useEffect(() => {
