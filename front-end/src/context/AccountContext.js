@@ -50,11 +50,13 @@ export const AccountProvider = ({ children }) => {
 
   const loadData = async () => {
     isAuthenticated().then(async (res) => {
-      const data = await res.json();
-      if (res.error) {
-        console.log(res.error);
-      } else if (res.status == 200) {
-        setUser(data.user, data.token.token);
+      if (res) {
+        if (res.error) {
+          console.log(res.error);
+        } else if (res.status == 200) {
+          const data = await res.json();
+          setUser(data.user, data.token.token);
+        }
       }
     });
   };
