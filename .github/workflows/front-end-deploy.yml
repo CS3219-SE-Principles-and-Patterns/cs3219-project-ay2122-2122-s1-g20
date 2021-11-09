@@ -2,22 +2,18 @@ name: Deploy to production
 
 on:
   push:
-    branches: [ main ]
+    branches: [ deploy-frontend ]
     paths:
       - '.github/workflows/front-end-deploy.yml'
       - 'front-end/**/*'
 
 env:
-  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  ECR_REPOSITORY: ${{ secrets.FRONTEND_REPO }}
-  IMAGE_TAG: latest
-  AWS_DEFAULT_OUTPUT: json
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_S3 }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_S3 }}
 
 jobs:
   build-and-push:
-    name: Push Front-end to ECR
+    name: Push Front-end to S3
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,18 +22,19 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_S3 }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_S3 }}
           aws-region: ap-southeast-1
 
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build and tag the image
+      - name: Installing dependencies
         working-directory: ./front-end
-        run:
-          # Build and tag the image
-          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG .
-      - name: Push the image into ECR
-        run:
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+        run: npm i
+      
+      - name: Build
+        working-directory: ./front-end
+        run: npm run build
+        
+      - name: Deploy
+        working-directory: ./front-end
+        run: aws s3 sync ./build s3://${{ secrets.S3_BUCKET }}
+      
