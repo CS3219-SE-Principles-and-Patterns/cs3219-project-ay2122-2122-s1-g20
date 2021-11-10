@@ -58,7 +58,7 @@ exports.signup = async (req, res) => {
       to: email,
       subject: "Please verify your email for your StudyBuddy account!",
       html: `
-        <p>Please verify your study buddy account!</p>
+        <p>Please verify your StudyBuddy account!</p>
         <p>Click this <a href="http://localhost:3000/signup/confirmation/verified/${uniqueString}">link</a> to verify your email.</p>
       `,
     };
@@ -105,7 +105,7 @@ exports.checkToken = (req, res, next) => {
   const salt = req.headers["jwt-salt"];
 
   if (!token || !salt) {
-    return res.status(400).json({ message : "Please login!" });
+    return res.status(400).json({ message: "Please login!" });
   }
 
   try {
@@ -127,13 +127,7 @@ exports.checkToken = (req, res, next) => {
         return res.status(400).json({ error: "User not found!" });
       }
 
-      const {
-        username,
-        email,
-        modules,
-        profilePic,
-        jwtSalt
-      } = user;
+      const { username, email, modules, profilePic, jwtSalt } = user;
 
       return res.status(200).json({
         user: {
@@ -141,11 +135,11 @@ exports.checkToken = (req, res, next) => {
           email,
           modules,
           profilePic,
-          jwtSalt
+          jwtSalt,
         },
-        token : {
-          token
-        }
+        token: {
+          token,
+        },
       });
     });
   }

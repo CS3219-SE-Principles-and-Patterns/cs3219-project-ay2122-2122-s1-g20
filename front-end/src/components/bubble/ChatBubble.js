@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const ChatBubble = ({ message, toggle }) => {
   return toggle === "left" ? (
     <div>
-      <div className="p-2">
+      <div className="p-2 flex">
         <img
           className="h-12 w-12 rounded-full"
           src={message.profilePic}
@@ -14,7 +14,7 @@ const ChatBubble = ({ message, toggle }) => {
           {message.sender} says:
         </div>
       </div>
-      <div className="p-2 w-4/6 rounded-b-2xl rounded-tr-2xl ml-16 mb-2 rounded-tr-bl-br text-left bg-purple-light">
+      <div className="p-2 w-4/6 -mt-6 rounded-b-2xl rounded-tr-2xl ml-16 mb-2 rounded-tr-bl-br text-left bg-purple-light">
         <div className="object-contain bg-purple-light text-sm p-3">
           {message.content}
         </div>
@@ -61,8 +61,8 @@ const ChatBubble = ({ message, toggle }) => {
 };
 
 ChatBubble.propTypes = {
-  sender: PropTypes.string,
-  content: PropTypes.string,
+  message: PropTypes.object,
+  toggle: PropTypes.string,
 };
 
 export default ChatBubble;

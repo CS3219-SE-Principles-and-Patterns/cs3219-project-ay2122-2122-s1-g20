@@ -24,7 +24,7 @@ To run locally:
 
 1) Go to the main branch
 2) Navigate by running `cd back-end/services/authService`, `cd back-end/services/studySessionService`, 
-   `cd back-end/services/chatService`, followed by `npm start` to run each service in its directory. Ensure that authService is run first.
+   `cd back-end/services/chatService`, followed by `npm start` to run each service in its directory. Ensure that authService is run first. Else, this may result in being unable to get past the error page if user did not log out previously before stopping the application, due to the usage of cookies for authentication. 
    
 3) Navigate to the front-end directory by running `cd front-end`, followed by `npm start` to run the front-end.
 You will be navigated to http://localhost:3000.

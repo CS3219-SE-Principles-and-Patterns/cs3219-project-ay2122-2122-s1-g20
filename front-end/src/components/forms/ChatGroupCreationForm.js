@@ -116,9 +116,9 @@ const ChatGroupCreationForm = ({
         </Popup>
       </div>
       <form onSubmit={handleSubmit} action="#" method="POST">
-        <div className="bg-blue-dark sm:p-10 p-2">
+        <div className="bg-blue-dark px-24 py-10 rounded-2xl">
           <button
-            className="bg-white absolute right-8 top-4 p-0.5 rounded-full"
+            className="bg-purple-dark text-white mr-2 mt-2 absolute top-1 right-1 p-2 rounded-full"
             onClick={() => {
               handleReset();
               setOpen(false);
@@ -126,7 +126,7 @@ const ChatGroupCreationForm = ({
           >
             <VscChromeClose className="m-1" />
           </button>
-          <div className="text-3xl text-grey-whitetinge py-5">
+          <div className="text-3xl font-semibold text-grey-whitetinge mb-6">
             Create a new chat
           </div>
           <div className="my-3">
@@ -139,14 +139,14 @@ const ChatGroupCreationForm = ({
               id="groupName"
               name="groupName"
               required
-              className={"p-2 mx-10 rounded-md"}
+              className={"p-3 rounded-2xl ml-4"}
             />
           </div>
-          <label className="text-lg text-white my-3">Hashtag Identifier</label>
+          <label className="text-lg text-white mt-10">Hashtag Identifier</label>
           <div className="flex space-x-4 mx-6 my-3">
             <button
               className={
-                "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
+                "text-purple-dark p-4 w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-2xl shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
                 (chitchat ? "bg-purple-200" : "bg-purple-light")
               }
               onClick={() => {
@@ -158,7 +158,7 @@ const ChatGroupCreationForm = ({
             </button>
             <button
               className={
-                "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
+                "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-2xl shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
                 (makan ? "bg-purple-200" : "bg-purple-light")
               }
               onClick={() => {
@@ -170,7 +170,7 @@ const ChatGroupCreationForm = ({
             </button>
             <button
               className={
-                "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
+                "text-purple-dark w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-2xl shadow-sm font-medium hover:bg-opacity-75 mt-6 " +
                 (sports ? "bg-purple-200" : "bg-purple-light")
               }
               onClick={() => {
@@ -183,7 +183,7 @@ const ChatGroupCreationForm = ({
           </div>
           <div className="flex justify-center m-4">
             <button
-              className="w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-md shadow-sm font-medium text-black bg-yellow-dark hover:bg-opacity-75 mt-6"
+              className="w-54 text-sm sm:text-md justify-center py-3 px-10 border-transparent rounded-2xl shadow-sm font-medium text-black bg-yellow-dark hover:bg-opacity-75 mt-6"
               type="submit"
             >
               Create
