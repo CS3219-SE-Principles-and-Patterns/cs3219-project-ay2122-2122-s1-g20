@@ -9,6 +9,7 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
   const [oldMessages, setOldMessages] = useState([]);
   const [toggle, setToggle] = useState(false); //update receiving of message whenever someone else send
   const [anon, setAnon] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   const username = account.username;
   const profilePic = account.profilePic;
@@ -41,6 +42,12 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
       socket.removeAllListeners("receive-message");
       socket.removeAllListeners("join-room");
     };
+  }, []);
+
+  useEffect(() => {
+    setInterval(function () {
+      setRefresh(!refresh);
+    }, 2000);
   }, []);
 
   const handleSendMessage = async (e) => {
@@ -102,7 +109,7 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
     };
     getOldMessages();
     setToggle(!toggle);
-  }, [displayChat]);
+  }, [displayChat, refresh]);
 
   const setMessageChange = (event) => {
     setMessage(event.target.value);
