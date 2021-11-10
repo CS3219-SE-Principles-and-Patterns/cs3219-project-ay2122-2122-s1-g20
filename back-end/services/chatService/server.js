@@ -26,20 +26,47 @@ app.get("/", (req, res) => {
   console.log("Test passed");
   res.send("Server is up and running.");
 });
+
 app.use(verifyToken);
 app.use("/api", routes);
 
 const http = require("http").createServer(app);
 const options = {
   cors: {
-    origin: "http://localhost:3000",
+    origin: true,
   },
   transports: ["websocket"],
   pingInterval: 1000 * 60 * 5,
   pingTimeout: 1000 * 60 * 3,
 };
 
+http.listen(PORT, () => {
+  console.log("connected to port: " + PORT);
+});
+
 const io = require("socket.io")(http, options);
+const { createClient } = require("redis");
+const redisAdapter = require("@socket.io/redis-adapter");
+
+const pubClient = createClient({
+  host: process.env.REDIS_ENDPOINT,
+  port: 6379,
+});
+const subClient = pubClient.duplicate();
+
+pubClient.on("error", function (err) {
+  console.log("Error " + err);
+});
+
+subClient.on("error", function (err) {
+  console.log("Error " + err);
+});
+
+io.adapter(redisAdapter(pubClient, subClient));
+
+io.of('/').adapter.on('error', function(err) {
+  console.log("Error " + err)
+});
 
 io.on("connection", (socket) => {
   console.log("user connected");
@@ -51,10 +78,6 @@ io.on("connection", (socket) => {
   socket.on("join-room", (group) => {
     socket.join(group);
   });
-});
-
-http.listen(PORT, () => {
-  console.log("connected to port: " + PORT);
 });
 
 const DB =
