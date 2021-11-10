@@ -24,9 +24,6 @@ const GroupList = ({
   const [newGroup, setNewGroup] = useState([]);
   const [status, setStatus] = useState(false);
 
-  console.log(newGroup);
-  console.log(groups);
-
   const isStudy = (tag) => {
     return !["chitchat", "makan", "sports"].includes(tag);
   };

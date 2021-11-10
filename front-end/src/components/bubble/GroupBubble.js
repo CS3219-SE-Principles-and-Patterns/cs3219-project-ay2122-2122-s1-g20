@@ -21,7 +21,6 @@ const GroupBubble = ({
   const id = group._id;
   const isCreator = group.creator == userEmail ? true : false;
   const state = group.state;
-  console.log(isCreator);
   const [join, setJoin] = useState(joined);
   const [open, setOpen] = useState(false); //popout of leaving confirmation
   const [openDisable, setOpenDisable] = useState(false);
@@ -77,7 +76,6 @@ const GroupBubble = ({
     setDisabled(true);
     setOpenDisable(false);
     setStatus(!status);
-    //remove everyone from the group and remove messages?
     const res = await chatApi.post(`/groups/users/update`, { groupId: id });
     console.log(res);
   };

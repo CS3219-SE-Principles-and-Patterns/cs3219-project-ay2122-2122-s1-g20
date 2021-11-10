@@ -61,8 +61,8 @@ const ChatBubble = ({ message, toggle }) => {
 };
 
 ChatBubble.propTypes = {
-  sender: PropTypes.string,
-  content: PropTypes.string,
+  message: PropTypes.object,
+  toggle: PropTypes.string,
 };
 
 export default ChatBubble;

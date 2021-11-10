@@ -22,7 +22,6 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
   useEffect(() => {
     socket.on("receive-message", (messageFromSocket) => {
       console.log("receive by client");
-      console.log(messageFromSocket);
       const newMessage = {
         group_id: group,
         sender: messageFromSocket.sender,
@@ -96,7 +95,6 @@ const Messenger = ({ account, displayChat, enable, disabled }) => {
   useEffect(() => {
     const getOldMessages = async () => {
       const res = await chatApi.get(`/messages/${group}`);
-      console.log(res.data.messages);
       setOldMessages(res.data.messages);
     };
     getOldMessages();
