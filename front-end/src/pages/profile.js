@@ -10,8 +10,8 @@ const ProfilePage = () => {
     useContext(AccountContext);
 
   return (
-    <div className="p-5">
-      <p className="text-4xl flex flex-row mx-auto font-bold text-black mt-16  lg:flex-nowrap justify-center">
+    <div className="p-4">
+      <p className="text-4xl flex flex-row mx-auto font-bold text-black mt-16 lg:flex-nowrap justify-center">
         Your Account Details
       </p>
       <div className="flex gap-x-10 flex-row mx-auto mt-5 lg:mt-16 max-w-screen-lg flex-wrap lg:flex-nowrap justify-center">
