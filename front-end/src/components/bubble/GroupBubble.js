@@ -112,7 +112,7 @@ const GroupBubble = ({
   };
 
   return (
-    <div className="bg-purple-light mb-1 px-5 py-2 md:px-10 md:py-5 block lg:grid lg:grid-cols-7 mt-3 pb-5 ml-10 mr-5 rounded-xl">
+    <div className="bg-purple-light mb-1 py-2 md:px-10 md:py-5 block lg:grid lg:grid-cols-7 mt-3 pb-5 ml-10 mr-10 rounded-xl">
       <button
         onClick={handlePreview}
         className="lg:col-span-6  md:w-auto w-full md:text-xl text-l text-purple-dark flex md:flex-row flex-col-reverse text-left appearance-none w-80 sm:w-96 border-none block focus:outline-none"
@@ -126,7 +126,7 @@ const GroupBubble = ({
       </button>
 
       {isDisabled ? (
-        <div className=" text-red-500 text-lg"> DISABLED </div>
+        <div className=" text-red-500 pt-1 pr-3 text-lg"> Disabled </div>
       ) : (
         <div className="justify-center flex flex-col md:pt-0  pt-2 md:p-0 object-contain w-full">
           {isCreator ? (
@@ -177,14 +177,19 @@ const GroupBubble = ({
             lockScroll={true}
           >
             <div className="flex flex-col bg-blue-dark p-10">
-              Confirm to leave? {open}
+              <p className="font-semibold text-xl text-grey-whitetinge">
+                Confirm to leave? {open}
+              </p>
               <button
-                className="p-2 bg-red-400"
+                className="rounded-2xl shadow-sm p-3 font-medium text-black bg-yellow-dark hover:bg-opacity-75 mt-6"
                 onClick={() => handleLeaveChat()}
               >
                 Yes
               </button>
-              <button className="p-2 bg-grey" onClick={() => setOpen(false)}>
+              <button
+                className="rounded-2xl p-3 shadow-sm font-medium text-black bg-purple-light hover:bg-opacity-75 mt-6"
+                onClick={() => setOpen(false)}
+              >
                 No
               </button>
             </div>
