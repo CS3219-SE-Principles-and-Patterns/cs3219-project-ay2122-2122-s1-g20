@@ -16,7 +16,7 @@ const ProfilePage = () => {
       </p>
       <div className="flex gap-x-10 flex-row mx-auto mt-5 lg:mt-16 max-w-screen-lg flex-wrap lg:flex-nowrap justify-center">
         <div className="mb-6">
-          <ProfilePic size="72" uploadButton="Change" doneButton="Save" />
+          <ProfilePic size="40" uploadButton="Change" doneButton="Save" />
         </div>
         <div className="mb-10 flex gap-y-5  flex-col h-full justify-center items-stretch w-8/12 mx-auto">
           <div className="flex flex-row justify-between flex-wrap">
